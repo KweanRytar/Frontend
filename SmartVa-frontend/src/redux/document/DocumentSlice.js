@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const documentApi = createApi({
   reducerPath: "documentApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/document",
+    baseUrl: "https://smartva-backend-file.onrender.com/document",
     credentials: "include", // optional if you need cookies
   }),
   tagTypes: ["DOCUMENT"],
@@ -13,7 +13,7 @@ const documentApi = createApi({
    getDocuments: builder.query({
   query: (params = {}) => ({
     url: "/getAllDocuments",
-    params, // page, limit, filters all go here
+    params, // 
   }),
   providesTags: (result) =>
     result?.data
@@ -86,16 +86,11 @@ const documentApi = createApi({
 
 export const {
   useGetDocumentsQuery,
-
-
   useUpdateDocumentMutation,
   useGetDocumentByIdQuery,
   useDeleteDocumentMutation,
   useAddDocumentResponseMutation,
- 
   useCreateNewDocumentMutation,
-  
-  
 } = documentApi;
 
 export default documentApi;
