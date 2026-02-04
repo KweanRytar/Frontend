@@ -14,7 +14,7 @@ const ResetPassword = () => {
   const requestReset = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/user/request-reset-password", { email });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/request-reset-password`, { email });
       setMessage(res.data.message);
       setStep(2);
     } catch (error) {
@@ -27,7 +27,7 @@ const ResetPassword = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/user/confirm-reset-token",
+        `${VITE_API_BASE_URL}/user/confirm-reset-token`,
         { token },
         { withCredentials: true }
       );
@@ -43,7 +43,7 @@ const ResetPassword = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/user/reset-password",
+        `${import.meta.env.VITE_API_BASE_URL}/user/reset-password`,
         { newPassword },
         { withCredentials: true }
       );

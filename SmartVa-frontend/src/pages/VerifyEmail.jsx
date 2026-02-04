@@ -10,7 +10,7 @@ const VerifyEmail = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/user/verify-email", { token }, { withCredentials: true });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/user/verify-email`, { token }, { withCredentials: true });
       setMessage(res.data.message);
 
       // ✅ Redirect after short delay

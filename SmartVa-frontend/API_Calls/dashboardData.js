@@ -2,7 +2,7 @@ import axios from "axios";
 // import { LOGIN_SUCCESS, SET_USER } from "./userTypes";
 
 const api = axios.create({
-  baseURL: "https://smartva-backend-file.onrender.com",
+  baseURL: import.meta.env.VITE_API_BASE_URL ,
   withCredentials: true, // always send cookies/session
 });
 

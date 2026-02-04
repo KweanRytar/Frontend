@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const noteApi = createApi({
     reducerPath: "noteApi",
     baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/notes",
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/notes`,
     credentials: 'include',
 }),
 

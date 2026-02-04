@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { Meta, useNavigate } from "react-router";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -25,7 +25,7 @@ const EditProfile = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/user/getUser",
+          `${import.meta.env.VITE_API_BASE_URL}/user/getUser`,
           { withCredentials: true }
         );
 
@@ -78,7 +78,7 @@ const EditProfile = () => {
       };
 
       const res = await axios.put(
-        "http://localhost:5000/user/updateUser",
+        `${import.meta.env.VITE_API_BASE_URL}/user/updateUser`,
         payload,
         { withCredentials: true }
       );
