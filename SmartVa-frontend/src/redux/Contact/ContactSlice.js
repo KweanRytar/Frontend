@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const contactApi = createApi({
   reducerPath: 'contactApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/contact',
+    baseUrl: 'https://smartva-backend-file.onrender.com/contact',
     credentials: 'include',
   }),
   tagTypes: ['Contact'],
