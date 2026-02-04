@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const eventApi = createApi({
   reducerPath: "eventApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/events/", 
+  baseQuery: fetchBaseQuery({ baseUrl: "https://smartva-backend-file.onrender.com/events/", 
     credentials: "include"
   }
 
