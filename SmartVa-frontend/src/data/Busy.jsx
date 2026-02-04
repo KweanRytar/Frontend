@@ -17,7 +17,7 @@ const Busy  = () => {
   const fetchEventsInRange = async (start, end) => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/events?start=${start}&end=${end}`, {withCredentials: true});
+      const res = await axios.get(`https://smartva-backend-file.onrender.com?start=${start}&end=${end}`, {withCredentials: true});
       const map = res.data.events.map(e => ({
         id: e._id,
         title: e.title,
