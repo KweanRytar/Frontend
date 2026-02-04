@@ -13,7 +13,7 @@ const documentApi = createApi({
    getDocuments: builder.query({
   query: (params = {}) => ({
     url: "/getAllDocuments",
-    params, // page, limit, filters all go here
+    params, // 
   }),
   providesTags: (result) =>
     result?.data
@@ -86,16 +86,11 @@ const documentApi = createApi({
 
 export const {
   useGetDocumentsQuery,
-
-
   useUpdateDocumentMutation,
   useGetDocumentByIdQuery,
   useDeleteDocumentMutation,
   useAddDocumentResponseMutation,
- 
   useCreateNewDocumentMutation,
-  
-  
 } = documentApi;
 
 export default documentApi;

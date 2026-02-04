@@ -6,9 +6,9 @@ export const overviewApi = createApi({
     baseUrl: `${import.meta.env.VITE_API_BASE_URL}`,
     credentials: 'include',
   }),
-  tagTypes: ['Task', 'Event', 'Document', 'Notification'], // ✅ Declare tag types
+  tagTypes: ['Task', 'Event', 'Document', 'Notification'], //  Declare tag types
   endpoints: (builder) => ({
-    // 🔔 Notifications
+    //  Notifications
    getAllNotifications: builder.query({
   query: () => 'events/notify/',
   providesTags: (result) =>
@@ -34,7 +34,7 @@ export const overviewApi = createApi({
 }),
 
 
-    // 👥 Visitors
+   // Visitors
     createVisitors: builder.mutation({
       query: (newVisitor) => ({
         url: 'Visitors',
@@ -43,7 +43,7 @@ export const overviewApi = createApi({
       }),
     }),
 
-    // ✅ Tasks
+   // Tasks
     createNewTask: builder.mutation({
       query: (newTask) => ({
         url: 'task',
@@ -78,7 +78,7 @@ export const overviewApi = createApi({
       providesTags: [{ type: 'Task', id: 'EMERGENCY' }],
     }),
 
-    // 📝 Notes
+    //  Notes
     createNewNote: builder.mutation({
       query: (newNote) => ({
         url: 'notes/createnote',
@@ -91,7 +91,7 @@ export const overviewApi = createApi({
       query: () => 'notes/getallnotes',
     }),
 
-    // 📅 Events
+    //  Events
     createNewEvent: builder.mutation({
       query: (newEvent) => ({
         url: 'events',
@@ -118,7 +118,7 @@ export const overviewApi = createApi({
 
   
 
-    // 📁 Documents
+    //  Documents
     CreateNewDocument: builder.mutation({
       query: (newDocument) => ({
         url: 'document/',
@@ -133,7 +133,7 @@ export const overviewApi = createApi({
       providesTags: [{ type: 'Document', id: 'LIST' }],
     }),
 
-    // 📇 Contacts & Visitors
+    // Contacts & Visitors
     getAllContacts: builder.query({
       query: () => 'contact/getAllContacts',
       keepUnusedDataFor: 600,
@@ -147,7 +147,7 @@ export const overviewApi = createApi({
       query: (day) => `visitors/day/${day}`,
     }),
 
-    // 👤 User Info
+    //  User Info
     getUserInfo: builder.query({
       query: () => 'user/getUser',
     }),
@@ -156,7 +156,7 @@ export const overviewApi = createApi({
 
 
 export const {useGetTotalContactsQuery, useGetTotalTasksQuery, useGetTotalNotesQuery, useGetTotalDocumentsQuery, useGetTotalVisitorsQuery, useGetEmergencyTasksQuery, useGetOverdueTasksQuery, useGetTaskDueIn3DaysQuery, useGetPendingTasksQuery, useGetEventForTodayQuery, useGetVisitors4DayQuery, useGetAllNotificationsQuery, useGetUserInfoQuery, useCreateNewEventMutation, useCreateNewTaskMutation, useCreateVisitorsMutation,
-useCreateNewNoteMutation, useCreateNewDocumentMutation, useCreateContactMutation, useGetAllContactsQuery , useDeleteNotificationMutation} = overviewApi;
+useCreateNewNoteMutation, useCreateNewDocumentMutation, useCreateContactMutation, useGetAllContactsQuery, useDeleteNotificationMutation} = overviewApi;
 
 export default overviewApi;
 

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const visitorApi = createApi({
   reducerPath: "visitorApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/visitors",
+    baseUrl: "https://smartva-backend-file.onrender.com/visitors",
     credentials: "include",
   }),
   tagTypes: ["VISITOR"],
