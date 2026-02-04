@@ -19,7 +19,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/user/register", formData);
+      const res = await axios.post("https://smartva-backend-file.onrender.com/user/register", formData);
       setMessage(res.data.message);
 
       if(res.status === 201){
