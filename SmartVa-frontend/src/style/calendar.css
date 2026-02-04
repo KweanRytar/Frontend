@@ -1,0 +1,90 @@
+/* Style all FullCalendar header buttons */
+.fc .fc-button {
+  background-color: #00B86B; /* Green background */
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+/* Add hover effect */
+.fc .fc-button:hover {
+  background-color: #019658;
+}
+
+/* Default light mode */
+.fc-day-header {
+  color: #374151; /* Tailwind gray-700 */
+}
+
+/* Dark mode */
+.dark .fc-day-header {
+  color: #1367bc; /* Tailwind gray-200 */
+}
+
+/* Style the active (selected) button differently if needed */
+.fc .fc-button.fc-button-active {
+  background-color: #007A4D;
+  color: white;
+}
+@media (max-width: 768px) {
+  /* Make calendar fit mobile screen */
+  .fc {
+    font-size: 12px;
+    padding: 0 5px;
+  }
+
+  .fc-toolbar {
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1rem;
+  }
+
+  .fc-header-toolbar .fc-button-group {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .fc-daygrid-day-number,
+  .fc-timegrid-slot-label {
+    font-size: 0.75rem;
+  }
+
+  .fc-daygrid-event,
+  .fc-timegrid-event {
+    font-size: 0.7rem;
+    padding: 1px 2px;
+  }
+
+  /* Ensure scrollability on small screens */
+  .fc-scroller-harness,
+  .fc-scroller {
+    overflow-x: auto !important;
+  }
+
+  .fc .fc-daygrid-body,
+  .fc .fc-timegrid-body {
+    min-width: 100%;
+  }
+
+  .fc .fc-scrollgrid-section-header,
+  .fc .fc-scrollgrid-section-body {
+    min-width: 100%;
+  }
+
+  .fc .fc-daygrid-day-frame {
+    padding: 2px;
+  }
+}
+
+.calendar-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
