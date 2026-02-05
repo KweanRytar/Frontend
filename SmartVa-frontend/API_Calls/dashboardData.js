@@ -28,7 +28,7 @@ export const loginUser = async (
     setUserName(userRes.data.user.userName);
 
     // Navigate after 2s
-    setTimeout(() => navigate("/"), 2000);
+    setTimeout(() => navigate("/dashboard"), 2000);
  
 
     return true; // indicate success
