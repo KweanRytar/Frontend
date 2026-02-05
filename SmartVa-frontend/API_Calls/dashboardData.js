@@ -24,7 +24,7 @@ export const loginUser = async (
     localStorage.setItem("isLoggedIn", "true");
 
     // Fetch user data
-    const userRes = await api.get("/user/getUser", { withCredentials: true });
+    const userRes = await api.get("user/getUser", { withCredentials: true });
     setUserName(userRes.data.user.userName);
 
     // Navigate after 2s
