@@ -18,7 +18,7 @@ import {
   COMMAND_PRIORITY_LOW,
 } from "lexical";
 
-import Toolbar from "./Toolbar";
+import ToolBar from './ToolBar';
 import INSERT_HEADING_COMMAND from "../commands/headingCommand";
 import "../style/editor.css";
 
@@ -129,7 +129,7 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="bg-green-400 dark:bg-gray-700 p-6 rounded-2xl shadow-md mx-auto mt-40 w-11/12 md:w-3/4 lg:w-1/2">
-        <Toolbar />
+        <ToolBar />
 
         <RichTextPlugin
           contentEditable={
