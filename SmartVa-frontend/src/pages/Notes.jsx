@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { noteData } from '../data/noteData';
+
 import { Link } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa6';
 import { useGetTotalNotesQuery } from '../redux/dashboard/OverviewSlice';
