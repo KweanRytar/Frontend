@@ -65,7 +65,7 @@ const navigate = useNavigate();
         <div className='flex justify-between p-4 bg-white dark:bg-[#1E293B] text-gray-800 dark:text-gray-200'>
           <div className='flex items-center space-x-4'>
             <MdOutlineDashboard />
-            <NavLink to='/' className='text-2xl font-bold font-inter text-green-500'>
+            <NavLink to='/dashboard' className='text-2xl font-bold font-inter text-green-500'>
               SmartVa
             </NavLink>
           </div>
@@ -107,7 +107,7 @@ const navigate = useNavigate();
         <div className='fixed top-0 left-0 mt-14 px-4 py-2 bg-white dark:bg-gray-800 shadow-md md:hidden z-50'>
           <ul className='flex flex-col space-y-2 text-gray-700 dark:text-gray-100 gap-6'>
             <NavLink
-              to="/"
+              to="/dashboard"
               className={({ isActive }) => isActive ? activeClass : 'hover:text-blue-500'}
               onClick={() => setDisplayMenu(false)}
             >
@@ -196,7 +196,7 @@ handleLogout();
         <div className='flex items-center gap-2'>
           <MdDashboardCustomize />
           <NavLink
-            to="/"
+            to="/dashboard"
             className='text-2xl font-bold font-inter' 
           >
             SmartVa
@@ -205,7 +205,7 @@ handleLogout();
 
         <nav className='flex items-center gap-4'>
           <NavLink
-            to="/"
+            to="/dashboard"
             className={({ isActive }) => isActive ? activeClass : 'ml-4 hover:text-blue-500'}
           >
             <MdDashboardCustomize className='lg:hidden inline mr-2 ' />

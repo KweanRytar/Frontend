@@ -66,7 +66,7 @@ function App() {
 
         {/* -------- PROTECTED ROUTES -------- */}
         <Route element={<ProtectedRouteFallback />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/task" element={<Task />} />
           <Route path="/note" element={<Notes />} />
           <Route path="/document" element={<Documents />} />
