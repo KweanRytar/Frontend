@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { noteData } from "../data/noteData";
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
