@@ -4,7 +4,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useGetVisitorByIdQuery,useDeleteVisitorMutation } from "../redux/visitor/visitorSlice";
 import EditVisitor from "../components/EditVisitor";
 import DeleteModal from "../components/DeleteModal";
-import { mockVisitors } from "../data/visitorData"; // mock visitor data
+
 
 const VisitorDetails = () => {
 
