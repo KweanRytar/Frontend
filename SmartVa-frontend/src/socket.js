@@ -1,22 +1,8 @@
 // socket.js
 import { io } from "socket.io-client";
 
-const socket_url = "https://smartva-services.up.railway.app";
-
-export const socket = io(socket_url, {
+export const socket = io(import.meta.env.VITE_API_BASE_URL, {
   withCredentials: true,
   autoConnect: false,
-});
-
-// 🔥 DEBUG LISTENERS (VERY IMPORTANT)
-socket.on("connect", () => {
-  console.log("✅ Socket CONNECTED:", socket.id);
-});
-
-socket.on("disconnect", (reason) => {
-  console.log("❌ Socket DISCONNECTED:", reason);
-});
-
-socket.on("connect_error", (err) => {
-  console.error("🚨 Socket connection error:", err.message);
+  transports: ["websocket"],
 });

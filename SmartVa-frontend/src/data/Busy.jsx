@@ -17,7 +17,7 @@ const Busy  = () => {
   const fetchEventsInRange = async (start, end) => {
     try {
       setLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}?start=${start}&end=${end}`, {withCredentials: true});
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/?start=${start}&end=${end}`, {withCredentials: true});
       const map = res.data.events.map(e => ({
         id: e._id,
         title: e.title,
