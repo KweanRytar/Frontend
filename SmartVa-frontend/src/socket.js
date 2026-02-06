@@ -1,7 +1,7 @@
 // socket.js
 import { io } from "socket.io-client";
 
-const socket_url = "http://localhost:5000";
+const socket_url = "https://smartva-services.up.railway.app";
 
 export const socket = io(socket_url, {
   withCredentials: true,
