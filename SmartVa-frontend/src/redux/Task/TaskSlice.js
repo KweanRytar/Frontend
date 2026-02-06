@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery  } from '@reduxjs/toolkit/query/react';
 export const taskApi = createApi({
   reducerPath: 'taskApi',
   baseQuery: fetchBaseQuery({
-    baseUrl:'https://smartva-services.up.railway.app',
+    baseUrl:`${import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '')}/task`,
     credentials: 'include'
   }),
   tagTypes: ['Task'],

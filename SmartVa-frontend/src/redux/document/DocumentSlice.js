@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const documentApi = createApi({
   reducerPath: "documentApi",
   baseQuery: fetchBaseQuery({
-    baseUrl:`${import.meta.env.VITE_API_BASE_URL}/document`,
+    baseUrl:`${import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '')}/document`,
     credentials: "include", // optional if you need cookies
   }),
   tagTypes: ["DOCUMENT"],

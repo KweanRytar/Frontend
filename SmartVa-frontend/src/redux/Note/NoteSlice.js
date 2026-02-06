@@ -4,7 +4,7 @@ export const noteApi = createApi({
     reducerPath: "noteApi",
     baseQuery: fetchBaseQuery({
 
-    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/notes`,
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '')}/notes`,
     credentials: 'include',
 }),
 

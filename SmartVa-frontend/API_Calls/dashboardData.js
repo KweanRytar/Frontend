@@ -2,7 +2,7 @@ import axios from "axios";
 // import { LOGIN_SUCCESS, SET_USER } from "./userTypes";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ,
+  baseURL: import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, ''), // remove trailing slash if any
   withCredentials: true, // always send cookies/session
 });
 

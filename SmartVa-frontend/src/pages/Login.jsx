@@ -7,6 +7,9 @@ import { useGetUserInfoQuery } from "../redux/dashboard/OverviewSlice";
 
 import { loginUser } from "../../API_Calls/dashboardData";
 
+// call getUserinfo query
+const{ data: userInfo, isLoading } = useGetUserInfoQuery();
+
 
 
 const Login = () => {
@@ -40,6 +43,7 @@ const handleSubmit = async (e) => {
   if (success) {
      
     localStorage.setItem("isLoggedIn", "true");
+
    
     setLogin(true)
     // local UI effect only
