@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getFullURL } from "./baseURL.JS";
 // import { LOGIN_SUCCESS, SET_USER } from "./userTypes";
 
 const api = axios.create({
@@ -16,7 +17,7 @@ export const loginUser = async (
   
 ) => {
   try {
-    const res = await api.post("user/login", formData);
+    const res = await api.post(getFullURL('/user/login'), formData);
     setMessage(res.data.message);
 
     if (res.status === 200) {
@@ -24,7 +25,7 @@ export const loginUser = async (
     localStorage.setItem("isLoggedIn", "true");
 
     // Fetch user data
-    const userRes = await api.get("user/getUser", { withCredentials: true });
+    const userRes = await api.get(getFullURL('/user/getUser'), { withCredentials: true });
     setUserName(userRes.data.user.userName);
 
     // Navigate after 2s

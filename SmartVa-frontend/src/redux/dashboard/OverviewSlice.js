@@ -1,52 +1,52 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { getFullURL } from '../../../API_Calls/baseURL.JS';
 
 export const overviewApi = createApi({
   reducerPath: 'overviewApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/`,
+    // No trailing slash here — getFullURL will handle it
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
     credentials: 'include',
   }),
-  tagTypes: ['Task', 'Event', 'Document', 'Notification'], //  Declare tag types
+  tagTypes: ['Task', 'Event', 'Document', 'Notification', 'Contact'], // added 'Contact'
+
   endpoints: (builder) => ({
-    //  Notifications
-   getAllNotifications: builder.query({
-  query: () => 'events/notify/',
-  providesTags: (result) =>
-    result?.notifications
-      ? [
-          ...result.notifications.map((n) => ({
-            type: 'Notification',
-            id: n._id,
-          })),
-          { type: 'Notification', id: 'LIST' },
-        ]
-      : [{ type: 'Notification', id: 'LIST' }],
-}),
+    // Notifications
+    getAllNotifications: builder.query({
+      query: () => getFullURL('/events/notify/'),
+      providesTags: (result) =>
+        result?.notifications
+          ? [
+              ...result.notifications.map((n) => ({
+                type: 'Notification',
+                id: n._id,
+              })),
+              { type: 'Notification', id: 'LIST' },
+            ]
+          : [{ type: 'Notification', id: 'LIST' }],
+    }),
 
-   
-     //  DELETE notification
-   deleteNotification: builder.mutation({
-  query: (id) => ({
-    url: `profile/notification/${id}`,
-    method: "DELETE",
-  }),
-  invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
-}),
+    deleteNotification: builder.mutation({
+      query: (id) => ({
+        url: getFullURL(`/profile/notification/${id}`),
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
+    }),
 
-
-   // Visitors
+    // Visitors
     createVisitors: builder.mutation({
       query: (newVisitor) => ({
-        url: 'Visitors',
+        url: getFullURL('/Visitors'),
         method: 'POST',
         body: newVisitor,
       }),
     }),
 
-   // Tasks
+    // Tasks
     createNewTask: builder.mutation({
       query: (newTask) => ({
-        url: 'task',
+        url: getFullURL('/task'),
         method: 'POST',
         body: newTask,
       }),
@@ -54,47 +54,47 @@ export const overviewApi = createApi({
     }),
 
     getTotalTasks: builder.query({
-      query: () => 'task/getAllTasks/',
+      query: () => getFullURL('/task/getAllTasks/'),
       providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getOverdueTasks: builder.query({
-      query: () => 'task/overdue',
+      query: () => getFullURL('/task/overdue'),
       providesTags: [{ type: 'Task', id: 'OVERDUE' }],
     }),
 
     getTaskDueIn3Days: builder.query({
-      query: () => 'task/due-in-next-72-hours',
+      query: () => getFullURL('/task/due-in-next-72-hours'),
       providesTags: [{ type: 'Task', id: 'DUE_SOON' }],
     }),
 
     getPendingTasks: builder.query({
-      query: () => 'task/pending',
+      query: () => getFullURL('/task/pending'),
       providesTags: [{ type: 'Task', id: 'PENDING' }],
     }),
 
     getEmergencyTasks: builder.query({
-      query: () => 'task/emergency/emergencyTasks',
+      query: () => getFullURL('/task/emergency/emergencyTasks'),
       providesTags: [{ type: 'Task', id: 'EMERGENCY' }],
     }),
 
-    //  Notes
+    // Notes
     createNewNote: builder.mutation({
       query: (newNote) => ({
-        url: 'notes/createnote',
+        url: getFullURL('/notes/createnote'),
         method: 'POST',
         body: newNote,
       }),
     }),
 
     getTotalNotes: builder.query({
-      query: () => 'notes/getallnotes',
+      query: () => getFullURL('/notes/getallnotes'),
     }),
 
-    //  Events
+    // Events
     createNewEvent: builder.mutation({
       query: (newEvent) => ({
-        url: 'events',
+        url: getFullURL('/events'),
         method: 'POST',
         body: newEvent,
       }),
@@ -102,26 +102,23 @@ export const overviewApi = createApi({
     }),
 
     getEventForToday: builder.query({
-      query: () => 'events/events4DDay',
+      query: () => getFullURL('/events/events4DDay'),
       providesTags: [{ type: 'Event', id: 'TODAY' }],
     }),
 
     CreateContact: builder.mutation({
       query: (newContact) => ({
-        url: 'contact/',
+        url: getFullURL('/contact/'),
         method: 'POST',
-        body:   newContact,
-
+        body: newContact,
       }),
-      invalidatesTags: [{type: 'Contact', id: 'LIST'}]
+      invalidatesTags: [{ type: 'Contact', id: 'LIST' }],
     }),
 
-  
-
-    //  Documents
+    // Documents
     CreateNewDocument: builder.mutation({
       query: (newDocument) => ({
-        url: 'document/',
+        url: getFullURL('/document/'),
         method: 'POST',
         body: newDocument,
       }),
@@ -129,35 +126,53 @@ export const overviewApi = createApi({
     }),
 
     getTotalDocuments: builder.query({
-      query: () => 'document/getAllDocuments',
+      query: () => getFullURL('/document/getAllDocuments'),
       providesTags: [{ type: 'Document', id: 'LIST' }],
     }),
 
     // Contacts & Visitors
     getAllContacts: builder.query({
-      query: () => 'contact/getAllContacts',
+      query: () => getFullURL('/contact/getAllContacts'),
       keepUnusedDataFor: 600,
     }),
 
     getTotalVisitors: builder.query({
-      query: () => 'visitors/getVisitors',
+      query: () => getFullURL('/visitors/getVisitors'),
     }),
 
     getVisitors4Day: builder.query({
-      query: (day) => `visitors/day/${day}`,
+      query: (day) => getFullURL(`/visitors/day/${day}`),
     }),
 
-    //  User Info
+    // User Info
     getUserInfo: builder.query({
-      query: () => 'user/getUser',
+      query: () => getFullURL('/user/getUser'),
     }),
   }),
 });
 
-
-export const {useGetTotalContactsQuery, useGetTotalTasksQuery, useGetTotalNotesQuery, useGetTotalDocumentsQuery, useGetTotalVisitorsQuery, useGetEmergencyTasksQuery, useGetOverdueTasksQuery, useGetTaskDueIn3DaysQuery, useGetPendingTasksQuery, useGetEventForTodayQuery, useGetVisitors4DayQuery, useGetAllNotificationsQuery, useGetUserInfoQuery, useCreateNewEventMutation, useCreateNewTaskMutation, useCreateVisitorsMutation,
-useCreateNewNoteMutation, useCreateNewDocumentMutation, useCreateContactMutation, useGetAllContactsQuery, useDeleteNotificationMutation} = overviewApi;
+export const {
+  useGetTotalContactsQuery,
+  useGetTotalTasksQuery,
+  useGetTotalNotesQuery,
+  useGetTotalDocumentsQuery,
+  useGetTotalVisitorsQuery,
+  useGetEmergencyTasksQuery,
+  useGetOverdueTasksQuery,
+  useGetTaskDueIn3DaysQuery,
+  useGetPendingTasksQuery,
+  useGetEventForTodayQuery,
+  useGetVisitors4DayQuery,
+  useGetAllNotificationsQuery,
+  useGetUserInfoQuery,
+  useCreateNewEventMutation,
+  useCreateNewTaskMutation,
+  useCreateVisitorsMutation,
+  useCreateNewNoteMutation,
+  useCreateNewDocumentMutation,
+  useCreateContactMutation,
+  useGetAllContactsQuery,
+  useDeleteNotificationMutation,
+} = overviewApi;
 
 export default overviewApi;
-
-
