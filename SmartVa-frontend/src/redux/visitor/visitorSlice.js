@@ -1,91 +1,99 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const visitorApi = createApi({
-  reducerPath: "visitorApi",
+ const getFullURL = (endpoint = '') => {
+  const base = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+  
+  // If no endpoint or it's just query params, don't add extra slash
+  const cleanEndpoint = endpoint ? endpoint.replace(/^\/+/, '') : '';
+  
+  return new URL(cleanEndpoint, base).toString();
+};
+export const visitorApi = createApi({
+  reducerPath: 'visitorApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://smartva-backend-file.onrender.com/visitors",
-    credentials: "include",
+    // No baseUrl here — full URLs are built with getFullURL
+    credentials: 'include',
   }),
-  tagTypes: ["VISITOR"],
-  endpoints: (builder) => ({
+  tagTypes: ['Visitor'],
 
+  endpoints: (builder) => ({
     // ✅ Get all visitors
     getAllVisitors: builder.query({
-      query: () => "/getVisitors",
+      query: () => getFullURL('/visitors/getVisitors'),
       providesTags: (result) =>
         result?.data
           ? [
               ...result.data.map((item) => ({
-                type: "VISITOR",
-                id: item._id, // MongoDB _id
+                type: 'Visitor',
+                id: item._id,
               })),
-              { type: "VISITOR", id: "LIST" },
+              { type: 'Visitor', id: 'LIST' },
             ]
-          : [{ type: "VISITOR", id: "LIST" }],
+          : [{ type: 'Visitor', id: 'LIST' }],
     }),
 
     // ✅ Get visitor by ID
     getVisitorById: builder.query({
-      query: (id) => `/${id}`,
-      providesTags: (result, error, id) => [{ type: "VISITOR", id }],
+      query: (id) => getFullURL(`/visitors/${id}`),
+      providesTags: (result, error, id) => [{ type: 'Visitor', id }],
     }),
 
     // ✅ Create visitor
     createVisitor: builder.mutation({
       query: (newVisitor) => ({
-        url: "/",
-        method: "POST",
+        url: getFullURL('/visitors/'),
+        method: 'POST',
         body: newVisitor,
       }),
-      invalidatesTags: [{ type: "VISITOR", id: "LIST" }],
+      invalidatesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
     // ✅ Update visitor
     updateVisitor: builder.mutation({
       query: ({ id, updatedBody }) => ({
-        url: `/${id}`,
-        method: "PUT",
+        url: getFullURL(`/visitors/${id}`),
+        method: 'PUT',
         body: updatedBody,
       }),
       invalidatesTags: (result, error, { id }) => [
-        { type: "VISITOR", id },
-        { type: "VISITOR", id: "LIST" },
+        { type: 'Visitor', id },
+        { type: 'Visitor', id: 'LIST' },
       ],
     }),
 
     // ✅ Get visitor by month
     getVisitorByMonth: builder.query({
-      query: (month) => `/month/${month}`,
-      providesTags: [{ type: "VISITOR", id: "LIST" }],
+      query: (month) => getFullURL(`/visitors/month/${month}`),
+      providesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
-    // ✅ Get visitor by day (fixed route)
+    // ✅ Get visitor by day
     getVisitorByDay: builder.query({
-      query: (day) => `/day/${day}`,
-      providesTags: [{ type: "VISITOR", id: "LIST" }],
+      query: (day) => getFullURL(`/visitors/day/${day}`),
+      providesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
     // ✅ Get visitors by week
     getVisitorByWeek: builder.query({
-      query: () => `/week`,
-      providesTags: [{ type: "VISITOR", id: "LIST" }],
+      query: () => getFullURL('/visitors/week'),
+      providesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
     // ✅ Get visitor by name
     getVisitorsByName: builder.query({
-      query: (name) => `/name/${name}`,
-      providesTags: [{ type: "VISITOR", id: "LIST" }],
+      query: (name) => getFullURL(`/visitors/name/${name}`),
+      providesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
     // ✅ Delete visitor
     deleteVisitor: builder.mutation({
       query: (id) => ({
-        url: `/${id}`,
-        method: "DELETE",
+        url: getFullURL(`/visitors/${id}`),
+        method: 'DELETE',
       }),
       invalidatesTags: (result, error, id) => [
-        { type: "VISITOR", id },
-        { type: "VISITOR", id: "LIST" },
+        { type: 'Visitor', id },
+        { type: 'Visitor', id: 'LIST' },
       ],
     }),
   }),
