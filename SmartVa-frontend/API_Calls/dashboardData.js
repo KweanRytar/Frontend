@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getFullURL } from "./baseURL.JS";
+import { getFullURL } from "./baseURL.js";
 // import { LOGIN_SUCCESS, SET_USER } from "./userTypes";
 
 const api = axios.create({

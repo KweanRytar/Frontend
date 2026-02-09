@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { getFullURL } from '../../../API_Calls/baseURL.JS';
+import {getFullURL} from '../../../API_Calls/baseURL.js';
 
 export const overviewApi = createApi({
   reducerPath: 'overviewApi',
