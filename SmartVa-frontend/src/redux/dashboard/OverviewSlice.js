@@ -1,5 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {getFullURL} from '../../../API_Calls/baseURL.js';
+
+
+
+ const getFullURL = (endpoint = '') => {
+  const base = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+  
+  // If no endpoint or it's just query params, don't add extra slash
+  const cleanEndpoint = endpoint ? endpoint.replace(/^\/+/, '') : '';
+  
+  return new URL(cleanEndpoint, base).toString();
+};
 
 export const overviewApi = createApi({
   reducerPath: 'overviewApi',
