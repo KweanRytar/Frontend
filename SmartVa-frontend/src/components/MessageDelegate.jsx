@@ -13,13 +13,26 @@ const MessageDelegate = ({onClose, taskId, delegateEmail}) => {
             toast.error("Message cannot be empty");
             return;
         }
+
+  if (!subject.trim()) {
+    toast.warn("Subject is empty – proceeding anyway");
+  
+  }
+
+
         try{
-            const response = await messageDelegate({ message, delegateEmail, subject}).unwrap();
+            const response = await messageDelegate({ message, delegateEmail, subject: subject.trim() || "Message from SmartVA"}).unwrap();
             toast.success(response?.message);
             setMessage("");
+            setSubject("");
             onClose();
         } catch(error){
-            toast.error(error?.data?.message || "Error sending message");
+             const errMsg = error?.data?.message 
+      || error?.message 
+      || "Failed to send message. Please try again.";
+
+            toast.error(errMsg );
+            console.error("Error sending message to delegate:", error);
         }
     }
   return (
