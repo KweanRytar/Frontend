@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { SlCalender } from "react-icons/sl";
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import '../style/TodayTask.css'
 
 const TodayTask = ({title, dueDate, id}) => {
+    const navigate = useNavigate();
     const [isOn, setIsOn] = useState(true);
 
     const toggleSwitch = () => {
@@ -23,7 +24,7 @@ const TodayTask = ({title, dueDate, id}) => {
     <input type="checkbox" checked={isOn} onChange={toggleSwitch} />
     <span className='slider round'></span>
 </label>
-<Link to={`task-details/${id}`} className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</Link>
+<button onClick={()=>navigate('/task-details/${id}')}  className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</button>
        </div>
        
     </div>
