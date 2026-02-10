@@ -24,7 +24,7 @@ const TodayTask = ({title, dueDate, id}) => {
     <input type="checkbox" checked={isOn} onChange={toggleSwitch} />
     <span className='slider round'></span>
 </label>
-<button onClick={()=>navigate('/task-details/${id}')}  className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</button>
+<button onClick={()=>navigate(`/task-details/${id}`)}  className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</button>
        </div>
        
     </div>
