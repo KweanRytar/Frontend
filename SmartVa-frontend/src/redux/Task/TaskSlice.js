@@ -78,7 +78,7 @@ export const taskApi = createApi({
     // Update task (using dynamic url from argument)
     updateTask: builder.mutation({
       query: ({ url, payload }) => ({
-        url: getFullURL(`/task/${url}`), // assuming url is already a path like '/task/123'
+        url: getFullURL(`/task${url}`), // assuming url is already a path like '/task/123'
         method: 'PUT',
         body: payload,
       }),
