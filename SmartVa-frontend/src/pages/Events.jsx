@@ -5,7 +5,7 @@ import CreateEvent from "../components/CreateEvent";
 import EditEvent from "../components/EditEvent";
 import {
   useGetEventsQuery,
-  useGetEventsByDayQuery,
+  useGetEventsForTodayQuery,
   useGetEventByNameQuery,
   useCancelEventMutation
 } from '../redux/event/EventSlice'
@@ -22,7 +22,7 @@ const Events = () => {
 
   // Fetch events depending on filterType / search
   const { data: allEvents, isLoading, isError } = useGetEventsQuery();
-  const { data: todayEvents } =  useGetEventsByDayQuery();
+  const { data: todayEvents } =    useGetEventsForTodayQuery();
   const { data: searchResult } = useGetEventByNameQuery(searchTerm, {
     skip: !searchTerm, // Skip if searchTerm is empty
   });
