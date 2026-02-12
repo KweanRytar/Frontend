@@ -7,12 +7,11 @@ import EditTasks from "../components/EditTasks.jsx";
 import { Link } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal.jsx";
 import DelegatesView from "../components/DelegatesView.jsx";
+
 import {
   useGetEmergencyTasksQuery,
-} from "../redux/dashboard/OverviewSlice.js";
-import {
   useGetTasksDueTodayQuery,
-useGetTasksDueTodayQuery,
+
   useGetTasksDueIn72HoursQuery,
 
 
