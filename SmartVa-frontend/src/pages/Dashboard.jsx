@@ -27,7 +27,7 @@ import { useGetAllContactsQuery } from '../redux/Contact/ContactSlice'
 import { useGetDocumentsQuery } from '../redux/document/DocumentSlice'
 import { useGetEventsForTodayQuery } from '../redux/event/EventSlice'
 import { useGetNotesQuery } from '../redux/Note/NoteSlice'
-import { useGetEmergencyTasksQuery, useGetOverdueTasksQuery, useGetTaskDueIn3DaysQuery, useGetPendingTasksQuery, useGetTotalTasksQuery } from '../redux/Task/TaskSlice'
+import { useGetEmergencyTasksQuery, useGetOverdueTasksQuery,  useGetPendingTasksQuery, useGetTasksDueIn72HoursQuery, useGetAllTasksQuery } from '../redux/Task/TaskSlice'
 import { useGetAllVisitorsQuery, useGetVisitorsByDayQuery } from '../redux/visitor/visitorSlice'
 
 import { useNavigate } from 'react-router-dom'
@@ -89,13 +89,13 @@ const Dashboard = () => {
   // ====== API HOOKS ======
   const {data: allContactsData} = useGetAllContactsQuery()
   // const { data: totalContactsData } = useGetTotalContactsQuery()
-  const { data: totalTaskData } = useGetTotalTasksQuery()
+  const { data: totalTaskData } = useGetAllTasksQuery()
   const { data: totalNotesData } = useGetNotesQuery()
   const { data: totalDocumentData } = useGetDocumentsQuery()
   const { data: totalVisitorsData } = useGetAllVisitorsQuery()
   const { data: emergencyTasksData } = useGetEmergencyTasksQuery()
   const { data: overdueTasksData } = useGetOverdueTasksQuery()
-  const { data: tasksDueIn3DaysData } = useGetTaskDueIn3DaysQuery()
+  const { data: tasksDueIn3DaysData } = useGetTasksDueIn72HoursQuery()
   const { data: pendingTasksData } = useGetPendingTasksQuery()
   const { data: eventForTodayData } = useGetEventsForTodayQuery()
   const { data: visitors4DayData } = useGetVisitorsByDayQuery(

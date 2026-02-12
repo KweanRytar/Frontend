@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 import ConfirmAction from "../components/ConfirmAction";
 import DeleteModal from "../components/DeleteModal";
 
-import { useGetAllContactsQuery } from "../redux/dashboard/OverviewSlice";
+
 import {
+  useGetAllContactsQuery,
   useGetContactByCompanyNameQuery,
   useGetContactByNameQuery,
   useDeleteContactMutation,

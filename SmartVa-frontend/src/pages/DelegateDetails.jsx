@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useGetDelegatesDetailsQuery, useMarkTaskCompletedMutation, useDeleteTaskMutation } from "../redux/Task/TaskSlice.js";
+import { useGetDelegateDetailsQuery , useMarkTaskCompletedMutation, useDeleteTaskMutation } from "../redux/Task/TaskSlice.js";
 import { useNavigate } from "react-router-dom";
 import { getDelegateBg } from "../utils/delegateDetailsUtils.js";
 import { useParams, Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const DelegateDetails = () => {
   const [receiverEmail, setDelegateEmail] = useState("");
 
   const { email } = useParams();
-  const { data: delegateDetails, error, isLoading } = useGetDelegatesDetailsQuery(email);
+  const { data: delegateDetails, error, isLoading } = useGetDelegateDetailsQuery(email);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [markTaskCompleted, { isLoading: isUpdating }] = useMarkTaskCompletedMutation();
   const [filter, setFilter] = useState("all");

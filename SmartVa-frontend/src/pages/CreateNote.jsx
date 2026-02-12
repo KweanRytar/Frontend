@@ -1,7 +1,7 @@
 // src/pages/Note.jsx (or CreateNote.jsx depending on your structure)
 import React, { useState } from "react";
 import Editor from "../components/Editor";
-import { useCreateNewNoteMutation } from "../redux/dashboard/OverviewSlice";
+import { useCreateNoteMutation } from "../redux/Note/NoteSlice";
 import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router";
@@ -15,7 +15,7 @@ const CreateNote = () => {
   });
 
   const navigate = useNavigate();
-  const [createNewNote] = useCreateNewNoteMutation( );
+  const [createNewNote] = useCreateNoteMutation( );
 
   const handleEditorChange = (content) => {
     setNoteData((prev) => ({

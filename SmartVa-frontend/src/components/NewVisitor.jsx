@@ -1,7 +1,7 @@
 // NewVisitor.jsx
 import { useState } from "react";
 import React from "react";
-import { useCreateVisitorsMutation } from "../redux/dashboard/OverviewSlice";
+import { useCreateVisitorMutation } from "../redux/visitor/visitorSlice";
 import { toast } from "react-toastify";
 
 const NewVisitor = ({ close }) => {

@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 
 import { Link } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa6';
-import { useGetTotalNotesQuery } from '../redux/dashboard/OverviewSlice';
-import { useGetNoteByTitleQuery } from '../redux/Note/NoteSlice';
+
+import { useGetNoteByTitleQuery , useGetNotesQuery} from '../redux/Note/NoteSlice';
 import { useNavigate } from 'react-router-dom';
 import NoteDetails from '../components/NoteDetails';
 import { useDeleteNoteMutation } from '../redux/Note/NoteSlice';
@@ -23,7 +23,7 @@ const Note = () => {
 
 
 
-  const { data: totalNotesData, isLoading: isTotalNotesLoading } = useGetTotalNotesQuery();
+  const { data: totalNotesData, isLoading: isTotalNotesLoading } = useGetNotesQuery();
 
   const [deleteNote, {isLoading: deletingNote}] = useDeleteNoteMutation()
 

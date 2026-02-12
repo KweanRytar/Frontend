@@ -70,6 +70,11 @@ export const taskApi = createApi({
       providesTags: (result) =>
         result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
     }),
+    // get pending task
+
+    getPendingTasks: builder.query({
+      query: () => getFullURL('/task/pending'), 
+      providesTags: (result) => result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [], }),
 
     getTasksByName: builder.query({
       query: (title) => getFullURL(`/task/title/${title}`),
@@ -181,6 +186,7 @@ export const {
   useGetTasksByNameQuery,
   useGetTasksDueTodayQuery,
   useGetOverdueTasksQuery,
+  useGetPendingTasksQuery,
   useGetTasksDueIn72HoursQuery,
   useGetEmergencyTasksQuery,
   useGetAllDelegatesQuery,
