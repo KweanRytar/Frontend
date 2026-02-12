@@ -17,42 +17,86 @@ export const contactApi = createApi({
   }),
   tagTypes: ['Contact'],
 
-  endpoints: (builder) => ({
+   endpoints: (builder) => ({
+
+    // ===========================
+    // GET ALL CONTACTS
+    // ===========================
+    getAllContacts: builder.query({
+      query: () => getFullURL('/contact/getAllContacts'),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({ type: 'Contact', id: _id })),
+              { type: 'Contact', id: 'LIST' },
+            ]
+          : [{ type: 'Contact', id: 'LIST' }],
+      keepUnusedDataFor: 600,
+    }),
+
+    // ===========================
+    // CREATE CONTACT
+    // ===========================
+    createContact: builder.mutation({
+      query: (newContact) => ({
+        url: getFullURL('/contact/'),
+        method: 'POST',
+        body: newContact,
+      }),
+      invalidatesTags: [{ type: 'Contact', id: 'LIST' }],
+    }),
+
+    // ===========================
     // UPDATE CONTACT
-    UpdateContact: builder.mutation({
+    // ===========================
+    updateContact: builder.mutation({
       query: ({ id, updatedBody }) => ({
         url: getFullURL(`/contact/${id}`),
         method: 'PUT',
         body: updatedBody,
       }),
-      invalidatesTags: [{ type: 'Contact', id: 'LIST' }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Contact', id },
+        { type: 'Contact', id: 'LIST' },
+      ],
     }),
 
-    // GET CONTACT BY NAME
-    GetContactByName: builder.query({
-      query: (name) => getFullURL(`/contact/name/${name}`),
-      providesTags: [{ type: 'Contact', id: 'LIST' }],
-    }),
-
-    // GET CONTACT BY COMPANY NAME
-    getContactByCompanyName: builder.query({
-      query: (companyName) => getFullURL(`/contact/company/${companyName}`),
-      providesTags: [{ type: 'Contact', id: 'LIST' }],
-    }),
-
+    // ===========================
     // DELETE CONTACT
+    // ===========================
     deleteContact: builder.mutation({
       query: (id) => ({
         url: getFullURL(`/contact/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'Contact', id: 'LIST' }],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Contact', id },
+        { type: 'Contact', id: 'LIST' },
+      ],
+    }),
+
+    // ===========================
+    // GET CONTACT BY NAME
+    // ===========================
+    getContactByName: builder.query({
+      query: (name) => getFullURL(`/contact/name/${name}`),
+      providesTags: [{ type: 'Contact', id: 'LIST' }],
+    }),
+
+    // ===========================
+    // GET CONTACT BY COMPANY
+    // ===========================
+    getContactByCompanyName: builder.query({
+      query: (companyName) => getFullURL(`/contact/company/${companyName}`),
+      providesTags: [{ type: 'Contact', id: 'LIST' }],
     }),
   }),
 });
 
 // Hooks export
 export const {
+  useGetAllContactsQuery,
+  useCreateContactMutation,
   useUpdateContactMutation,
   useDeleteContactMutation,
   useGetContactByCompanyNameQuery,

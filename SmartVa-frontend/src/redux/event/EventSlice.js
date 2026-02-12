@@ -19,54 +19,104 @@ export const eventApi = createApi({
   tagTypes: ['Event'],
 
   endpoints: (builder) => ({
-    // Get all events
+
+
+    // ===========================
+    // CREATE EVENT
+    // ===========================
+    createEvent: builder.mutation({
+      query: (newEvent) => ({
+        url: getFullURL('/events'),
+        method: 'POST',
+        body: newEvent,
+      }),
+      invalidatesTags: [{ type: 'Event', id: 'LIST' }],
+    }),
+
+    // ===========================
+    // GET ALL EVENTS
+    // ===========================
     getEvents: builder.query({
-      query: () => getFullURL('/events/allEvents/'),
-      providesTags: ['Event'],
+      query: () => getFullURL('/events/'),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({ type: 'Event', id: _id })),
+              { type: 'Event', id: 'LIST' },
+            ]
+          : [{ type: 'Event', id: 'LIST' }],
+      keepUnusedDataFor: 600, // keeps data in cache for 10 mins
     }),
 
-    // Get events for today
-    getEventsForDay: builder.query({
-      query: () => getFullURL('/events/events4DDay/'),
-      providesTags: ['Event'],
+    // ===========================
+    // GET EVENTS FOR TODAY
+    // ===========================
+    getEventsForToday: builder.query({
+      query: () => getFullURL('/events/events4DDay'),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({ type: 'Event', id: _id })),
+              { type: 'Event', id: 'TODAY' },
+            ]
+          : [{ type: 'Event', id: 'TODAY' }],
     }),
 
-    // Get event by name (for search)
+    // ===========================
+    // GET EVENT BY NAME (SEARCH)
+    // ===========================
     getEventByName: builder.query({
       query: (name) => getFullURL(`/events/eventName/${name}`),
-      providesTags: ['Event'],
+      providesTags: (result) =>
+        result ? [{ type: 'Event', id: result._id }] : [],
     }),
 
-    // Get single event by ID
+    // ===========================
+    // GET SINGLE EVENT BY ID
+    // ===========================
     getEventById: builder.query({
       query: (id) => getFullURL(`/events/${id}`),
-      providesTags: ['Event'],
+      providesTags: (result, error, id) => [{ type: 'Event', id }],
     }),
 
-    // Update event
+    // ===========================
+    // UPDATE EVENT
+    // ===========================
     updateEvent: builder.mutation({
       query: ({ id, data }) => ({
         url: getFullURL(`/events/${id}`),
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ['Event'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Event', id },
+        { type: 'Event', id: 'LIST' },
+        { type: 'Event', id: 'TODAY' },
+      ],
     }),
 
-    // Cancel event
+    // ===========================
+    // CANCEL / DELETE EVENT
+    // ===========================
     cancelEvent: builder.mutation({
       query: (id) => ({
         url: getFullURL(`/events/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: ['Event'],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Event', id },
+        { type: 'Event', id: 'LIST' },
+        { type: 'Event', id: 'TODAY' },
+      ],
     }),
   }),
 });
 
+
 export const {
+  useCreateEventMutation,
   useGetEventsQuery,
-  useGetEventsForDayQuery,
+  useGetEventsForTodayQuery,
   useGetEventByNameQuery,
   useGetEventByIdQuery,
   useUpdateEventMutation,

@@ -17,38 +17,44 @@ export const visitorApi = createApi({
   tagTypes: ['Visitor'],
 
   endpoints: (builder) => ({
-    // ✅ Get all visitors
-    getAllVisitors: builder.query({
-      query: () => getFullURL('/visitors/getVisitors'),
-      providesTags: (result) =>
-        result?.data
-          ? [
-              ...result.data.map((item) => ({
-                type: 'Visitor',
-                id: item._id,
-              })),
-              { type: 'Visitor', id: 'LIST' },
-            ]
-          : [{ type: 'Visitor', id: 'LIST' }],
-    }),
-
-    // ✅ Get visitor by ID
-    getVisitorById: builder.query({
-      query: (id) => getFullURL(`/visitors/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Visitor', id }],
-    }),
-
-    // ✅ Create visitor
+    
+    // ===========================
+    // CREATE VISITOR
+    // ===========================
     createVisitor: builder.mutation({
       query: (newVisitor) => ({
-        url: getFullURL('/visitors/'),
+        url: getFullURL('/visitors'),
         method: 'POST',
         body: newVisitor,
       }),
       invalidatesTags: [{ type: 'Visitor', id: 'LIST' }],
     }),
 
-    // ✅ Update visitor
+    // ===========================
+    // GET ALL VISITORS
+    // ===========================
+    getAllVisitors: builder.query({
+      query: () => getFullURL('/visitors/getVisitors'),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Visitor', id: _id })),
+              { type: 'Visitor', id: 'LIST' },
+            ]
+          : [{ type: 'Visitor', id: 'LIST' }],
+    }),
+
+    // ===========================
+    // GET VISITOR BY ID
+    // ===========================
+    getVisitorById: builder.query({
+      query: (id) => getFullURL(`/visitors/${id}`),
+      providesTags: (result, error, id) => [{ type: 'Visitor', id }],
+    }),
+
+    // ===========================
+    // UPDATE VISITOR
+    // ===========================
     updateVisitor: builder.mutation({
       query: ({ id, updatedBody }) => ({
         url: getFullURL(`/visitors/${id}`),
@@ -61,31 +67,9 @@ export const visitorApi = createApi({
       ],
     }),
 
-    // ✅ Get visitor by month
-    getVisitorByMonth: builder.query({
-      query: (month) => getFullURL(`/visitors/month/${month}`),
-      providesTags: [{ type: 'Visitor', id: 'LIST' }],
-    }),
-
-    // ✅ Get visitor by day
-    getVisitorByDay: builder.query({
-      query: (day) => getFullURL(`/visitors/day/${day}`),
-      providesTags: [{ type: 'Visitor', id: 'LIST' }],
-    }),
-
-    // ✅ Get visitors by week
-    getVisitorByWeek: builder.query({
-      query: () => getFullURL('/visitors/week'),
-      providesTags: [{ type: 'Visitor', id: 'LIST' }],
-    }),
-
-    // ✅ Get visitor by name
-    getVisitorsByName: builder.query({
-      query: (name) => getFullURL(`/visitors/name/${name}`),
-      providesTags: [{ type: 'Visitor', id: 'LIST' }],
-    }),
-
-    // ✅ Delete visitor
+    // ===========================
+    // DELETE VISITOR
+    // ===========================
     deleteVisitor: builder.mutation({
       query: (id) => ({
         url: getFullURL(`/visitors/${id}`),
@@ -96,19 +80,66 @@ export const visitorApi = createApi({
         { type: 'Visitor', id: 'LIST' },
       ],
     }),
+
+    // ===========================
+    // FILTER VISITORS
+    // ===========================
+    getVisitorsByDay: builder.query({
+      query: (day) => getFullURL(`/visitors/day/${day}`),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Visitor', id: _id })),
+              { type: 'Visitor', id: 'LIST' },
+            ]
+          : [{ type: 'Visitor', id: 'LIST' }],
+    }),
+
+    getVisitorsByWeek: builder.query({
+      query: () => getFullURL('/visitors/week'),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Visitor', id: _id })),
+              { type: 'Visitor', id: 'LIST' },
+            ]
+          : [{ type: 'Visitor', id: 'LIST' }],
+    }),
+
+    getVisitorsByMonth: builder.query({
+      query: (month) => getFullURL(`/visitors/month/${month}`),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Visitor', id: _id })),
+              { type: 'Visitor', id: 'LIST' },
+            ]
+          : [{ type: 'Visitor', id: 'LIST' }],
+    }),
+
+    getVisitorsByName: builder.query({
+      query: (name) => getFullURL(`/visitors/name/${name}`),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Visitor', id: _id })),
+              { type: 'Visitor', id: 'LIST' },
+            ]
+          : [{ type: 'Visitor', id: 'LIST' }],
+    }),
   }),
 });
 
 export const {
-  useGetAllVisitorsQuery,
+   useGetAllVisitorsQuery,
   useGetVisitorByIdQuery,
   useCreateVisitorMutation,
   useUpdateVisitorMutation,
-  useGetVisitorByMonthQuery,
-  useGetVisitorByDayQuery,
-  useGetVisitorByWeekQuery,
-  useGetVisitorsByNameQuery,
   useDeleteVisitorMutation,
+  useGetVisitorsByDayQuery,
+  useGetVisitorsByWeekQuery,
+  useGetVisitorsByMonthQuery,
+  useGetVisitorsByNameQuery,
 
 } = visitorApi;
 

@@ -114,33 +114,33 @@ const EditDocument = ({ document, onCancel }) => {
 
   // Submit updated document
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const updatedBody = {
-      ...formData,
-      responseStatus: formData.resStatus ? "responded" : "not_required",
-      responses: responseList.map((r) => ({
-        title: r.title,
-        summary: r.summary,
-        ref: r.ref || undefined,
-        type: ["incoming", "outgoing"].includes(r.type) ? r.type : "outgoing",
-        resStatus: Boolean(r.resStatus),
-        receptionMode: r.receptionMode,
-        fileCategory:
-          r.receptionMode === "in-person" ? r.fileCategory || "" : undefined,
-        respondedAt: r.respondedAt ? new Date(r.respondedAt) : new Date(),
-      })),
-    };
-
-    try {
-      await updateDocument({ id: _id, updatedBody }).unwrap();
-      toast.success("Document updated successfully!");
-      onCancel();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to update document. Please try again.");
-    }
+  const updatedBody = {
+    ...formData,
+    responseStatus: formData.resStatus ? "responded" : "not_required",
+    responses: responseList.map((r) => ({
+      title: r.title,
+      summary: r.summary,
+      ref: r.ref || undefined,
+      type: ["incoming", "outgoing"].includes(r.type) ? r.type : "outgoing",
+      resStatus: Boolean(r.resStatus),
+      receptionMode: r.receptionMode,
+      fileCategory: r.receptionMode === "in-person" ? r.fileCategory || undefined : undefined,
+      respondedAt: r.respondedAt ? new Date(r.respondedAt) : new Date(),
+    })),
   };
+
+  try {
+    await updateDocument({ id: _id, ...updatedBody }).unwrap(); // Spread updatedBody
+    toast.success("Document updated successfully!");
+    onCancel();
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to update document. Please try again.");
+  }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

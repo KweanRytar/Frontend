@@ -11,9 +11,9 @@ import DeleteModal from "../components/DeleteModal";
 import {
   useGetAllVisitorsQuery,
   useDeleteVisitorMutation,
-  useGetVisitorByDayQuery,
-  useGetVisitorByMonthQuery,
-  useGetVisitorByWeekQuery,
+  useGetVisitorsByDayQuery,
+  useGetVisitorsByMonthQuery,
+  useGetVisitorsByWeekQuery,
   useGetVisitorsByNameQuery,
 } from "../redux/visitor/visitorSlice";
 
@@ -33,13 +33,13 @@ const Visitors = () => {
 
   // BACKEND FILTER QUERIES
   const visitorsByName = useGetVisitorsByNameQuery(searchTerm, { skip: !searchTerm });
-  const visitorsByDay = useGetVisitorByDayQuery(filterValue, {
+  const visitorsByDay = useGetVisitorsByDayQuery(filterValue, {
     skip: filterType !== "day" || !filterValue,
   });
-  const visitorsByMonth = useGetVisitorByMonthQuery(filterValue, {
+  const visitorsByMonth = useGetVisitorsByMonthQuery(filterValue, {
     skip: filterType !== "month" || !filterValue,
   });
-  const visitorsByWeek = useGetVisitorByWeekQuery(undefined, {
+  const visitorsByWeek = useGetVisitorsByWeekQuery(undefined, {
     skip: filterType !== "week",
   });
 

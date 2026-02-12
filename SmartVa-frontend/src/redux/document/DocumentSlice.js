@@ -19,26 +19,28 @@ export const documentApi = createApi({
   tagTypes: ['Document'],
 
   endpoints: (builder) => ({
-    // ✅ Get all documents
+  
+   // GET ALL DOCUMENTS
+    // ===========================
     getDocuments: builder.query({
       query: (params = {}) => ({
         url: getFullURL('/document/getAllDocuments'),
-        params, // pass query params if provided
+        params,
       }),
       providesTags: (result) =>
         result?.data
           ? [
-              ...result.data.map(({ _id }) => ({
-                type: 'Document',
-                id: _id,
-              })),
+              ...result.data.map(({ _id }) => ({ type: 'Document', id: _id })),
               { type: 'Document', id: 'LIST' },
             ]
           : [{ type: 'Document', id: 'LIST' }],
+      keepUnusedDataFor: 600,
     }),
 
-    // 📁 Create new document
-    CreateNewDocument: builder.mutation({
+    // ===========================
+    // CREATE NEW DOCUMENT
+    // ===========================
+    createDocument: builder.mutation({
       query: (newDocument) => ({
         url: getFullURL('/document/'),
         method: 'POST',
@@ -47,13 +49,17 @@ export const documentApi = createApi({
       invalidatesTags: [{ type: 'Document', id: 'LIST' }],
     }),
 
-    // Get single document by ID
+    // ===========================
+    // GET DOCUMENT BY ID
+    // ===========================
     getDocumentById: builder.query({
       query: (id) => getFullURL(`/document/${id}`),
       providesTags: (result, error, id) => [{ type: 'Document', id }],
     }),
 
-    // Add response to document
+    // ===========================
+    // ADD RESPONSE TO DOCUMENT
+    // ===========================
     addDocumentResponse: builder.mutation({
       query: ({ id, responseBody }) => ({
         url: getFullURL(`/document/response/${id}`),
@@ -66,11 +72,13 @@ export const documentApi = createApi({
       ],
     }),
 
-    // ✅ Update a document
+    // ===========================
+    // UPDATE DOCUMENT
+    // ===========================
     updateDocument: builder.mutation({
       query: ({ id, updatedBody }) => ({
         url: getFullURL(`/document/${id}`),
-        method: 'PUT', // or 'PATCH' — keep whatever your backend expects
+        method: 'PUT',
         body: updatedBody,
       }),
       invalidatesTags: (result, error, { id }) => [
@@ -79,24 +87,32 @@ export const documentApi = createApi({
       ],
     }),
 
-    // Delete document
+    // ===========================
+    // DELETE DOCUMENT
+    // ===========================
     deleteDocument: builder.mutation({
       query: (id) => ({
         url: getFullURL(`/document/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Document', id }],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Document', id },
+        { type: 'Document', id: 'LIST' },
+      ],
     }),
   }),
 });
 
+
 export const {
+
   useGetDocumentsQuery,
   useUpdateDocumentMutation,
   useGetDocumentByIdQuery,
   useDeleteDocumentMutation,
   useAddDocumentResponseMutation,
-  useCreateNewDocumentMutation,
+  useCreateDocumentMutation,
+ 
 } = documentApi;
 
 export default documentApi;

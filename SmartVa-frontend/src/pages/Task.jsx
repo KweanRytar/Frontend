@@ -11,16 +11,17 @@ import {
   useGetEmergencyTasksQuery,
 } from "../redux/dashboard/OverviewSlice.js";
 import {
-  useGetTaskDueTodayQuery,
-  useGetOverdueTasksQuery,
-  useGetTaskDueIn72HoursQuery,
-  useGetTaskByStatusQuery,
-  useGetTaskByPriorityQuery,
-  useGetTaskByNameQuery,
+  useGetTasksDueTodayQuery,
+useGetTasksDueTodayQuery,
+  useGetTasksDueIn72HoursQuery,
+
+
+  useGetTasksByNameQuery,
  
   useDeleteTaskMutation,
   useGetAllTasksQuery,
 } from "../redux/Task/TaskSlice.js";
+import { toast } from "react-toastify";
 
 const Task = () => {
   // Pagination state
@@ -32,8 +33,8 @@ const Task = () => {
 
   // === API Calls ===
   const { data: allTaskData, isLoading: allTaskLoading } = useGetAllTasksQuery({ page, limit });
-  const { data: dueTodayData } = useGetTaskDueTodayQuery(today);
-  const { data: dueIn72HoursData } = useGetTaskDueIn72HoursQuery();
+  const { data: dueTodayData } = useGetTasksDueTodayQuery(today);
+  const { data: dueIn72HoursData } = useGetTasksDueIn72HoursQuery();
   const { data: overdueData } = useGetOverdueTasksQuery();
   const { data: emergencyData } = useGetEmergencyTasksQuery();
   
@@ -41,7 +42,7 @@ const Task = () => {
 
   // Live search API (auto fetches as user types)
   const [searchTerm, setSearchTerm] = useState("");
-  const { data: taskByNameData } = useGetTaskByNameQuery(searchTerm, {
+  const { data: taskByNameData } = useGetTasksByNameQuery(searchTerm, {
     skip: !searchTerm, // Skip API call if no search term
   });
 
@@ -111,7 +112,12 @@ const Task = () => {
   const handlingDelete = async (taskId) => {
   try {
     const res = await deleteTask(taskId).unwrap();
-    return res.message;  // ✔️ unwrap() gives correct response.body
+    toast.success(res.message || "Task deleted successfully");
+
+
+
+
+
   } catch (error) {
     return error?.data?.message || "Failed to delete";
   }

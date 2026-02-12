@@ -1,56 +1,90 @@
-import React from "react";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
-const DeleteModal = ({ handlingDelete, dialogMessage}) => {
+const DeleteModal = ({ handlingDelete, dialogMessage }) => {
   const deleteDialog = useRef(null);
 
-  // open the delete dialogue
-  const openDeleteDialogu = () => {
+  const openDeleteDialog = () => {
     deleteDialog.current.showModal();
   };
 
-  // close the delete Dialogu
-  const closeDeleteDialogu = () => {
-     
+  const closeDeleteDialog = () => {
     deleteDialog.current.close();
   };
 
-  // hangle delete dialogu
   const handleDelete = async () => {
-  const message =  await handlingDelete();
+    const message = await handlingDelete();
     toast.success(message);
-    closeDeleteDialogu();
+    closeDeleteDialog();
   };
+
   return (
     <>
+      {/* Trigger Button */}
       <button
-        onClick={openDeleteDialogu}
-        className="rounded-md cursor-pointer border-2 border-red-500 dark:text-white p-2 hover:text-white hover:bg-red-500 mt-2 mr-2"
+        onClick={openDeleteDialog}
+        className="px-4 py-2 rounded-lg border border-red-500 
+                   text-red-500 hover:bg-red-500 hover:text-white 
+                   transition duration-200 text-sm font-medium"
       >
-        delete
+        Delete
       </button>
 
-
+      {/* Modal */}
       <dialog
         ref={deleteDialog}
-        className="p-6 rounded-2xl bg-green-500 dark:bg-gray-800 shadow-lg w-80  top-6/12 left-1/2 transform -translate-x-1/2 translate-y-1/2"
+        className="rounded-2xl p-0 w-[90%] max-w-md 
+                   backdrop:bg-black/50 backdrop:backdrop-blur-sm"
       >
-        <p className=" font-bold text-red-600 mb-4 mt-6 p-6 text-center">{dialogMessage}</p>
-        <div className=" flex justify-between">
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
-          >
-            yes
-          </button>
+        <div className="bg-white dark:bg-gray-900 
+                        rounded-2xl shadow-2xl 
+                        border border-gray-200 dark:border-gray-700 
+                        overflow-hidden">
 
-          <button
-            onClick={closeDeleteDialogu}
-            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-700 hover:text-white"
-          >
-            Cancel
-          </button>
+          {/* Header */}
+          <div className="px-6 pt-6 pb-4 text-center">
+            <div className="mx-auto mb-4 w-12 h-12 
+                            flex items-center justify-center 
+                            rounded-full bg-red-100 dark:bg-red-900/30">
+              <span className="text-red-600 text-xl font-bold">!</span>
+            </div>
+
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+              Confirm Deletion
+            </h2>
+          </div>
+
+          {/* Message */}
+          <div className="px-6 pb-6 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {dialogMessage}
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-center gap-4 
+                          px-6 pb-6">
+            <button
+              onClick={handleDelete}
+              className="px-5 py-2 rounded-xl 
+                         bg-red-600 hover:bg-red-700 
+                         text-white font-medium 
+                         transition duration-200 shadow-md"
+            >
+              Yes, Delete
+            </button>
+
+            <button
+              onClick={closeDeleteDialog}
+              className="px-5 py-2 rounded-xl 
+                         bg-gray-200 hover:bg-gray-300 
+                         dark:bg-gray-700 dark:hover:bg-gray-600
+                         text-gray-800 dark:text-white 
+                         font-medium transition duration-200"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </dialog>
     </>

@@ -23,7 +23,7 @@ setVisitorData({
 })
   }
 
-const [createVisitor ] = useCreateVisitorsMutation()
+const [createVisitor, {isLoading} ] = useCreateVisitorsMutation()
 
 const handleSubmit = async (e)=>{
   e.preventDefault();
@@ -41,6 +41,7 @@ const handleSubmit = async (e)=>{
       email: "",
       message: ""
     })
+    close()
   } catch (error) {
     toast.error(error?.message)
   }
@@ -116,8 +117,9 @@ const handleSubmit = async (e)=>{
             <button
               type="submit"
               className="bg-green-500 text-white p-2 rounded-md flex-1"
+              disabled={isLoading}
             >
-              Save Visitor
+           {   isLoading ? "Saving..." : "Save "}
             </button>
             <button
               type="reset"

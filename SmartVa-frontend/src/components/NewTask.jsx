@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCreateNewTaskMutation } from "../redux/dashboard/OverviewSlice";
+import { useCreateTaskMutation } from "../redux/Task/TaskSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
@@ -25,7 +25,7 @@ const NewTask = ({ close }) => {
     ],
   });
 
-  const [createNewTask, { isLoading }] = useCreateNewTaskMutation();
+  const [createNewTask, { isLoading }] = useCreateTaskMutation();
 
   // Main task changes
   const handleChange = (e) => {

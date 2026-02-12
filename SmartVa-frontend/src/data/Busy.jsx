@@ -12,13 +12,14 @@ import { toast } from "react-toastify";
 const Busy  = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const baseurl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
 
   // Fetch events for the visible range
   const fetchEventsInRange = async (start, end) => {
     try {
       setLoading(true);
       const res = await axios.get(
-  `${import.meta.env.VITE_API_BASE_URL}/allEvents?start=${start}&end=${end}`,
+  `${baseurl}/allEvents?start=${start}&end=${end}`,
   { withCredentials: true }
 );
 ;
@@ -40,8 +41,8 @@ const Busy  = () => {
 
   // Triggered whenever view or month/week/day changes
   const handleDatesSet = (arg) => {
-    const start = dayjs(arg.start).format('YYYY-MM-DD');
-    const end = dayjs(arg.end).format('YYYY-MM-DD');
+    const start = dayjs(arg.start).toISOString();
+    const end = dayjs(arg.end).toISOString();
     fetchEventsInRange(start, end);
   };
 

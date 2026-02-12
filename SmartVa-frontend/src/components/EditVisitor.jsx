@@ -107,6 +107,7 @@ const handleSubmit = async (e) => {
             <button
               type="submit"
               className="bg-green-500 text-white p-2 rounded-md flex-1"
+              disabled={isLoading}
             >
               {isLoading? 'Updating...': 'update Visitor'}
             </button>

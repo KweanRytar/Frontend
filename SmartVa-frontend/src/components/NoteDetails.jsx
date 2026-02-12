@@ -1,35 +1,117 @@
-import React from 'react';
+import React, { useEffect, useRef } from "react";
 
 const NoteDetails = ({ note, close }) => {
+  const modalRef = useRef(null);
+
+  // Prevent background scroll + ESC close
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        close();
+      }
+    };
+
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.body.style.overflow = "auto";
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [close]);
+
+  // Close when clicking outside modal
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      close();
+    }
+  };
+
   if (!note) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <p className="text-red-500">Note not found.</p>
+      <div
+        className="fixed inset-0 flex items-center justify-center 
+                   bg-black/40 backdrop-blur-sm z-50 p-4"
+        onClick={handleOutsideClick}
+      >
+        <div
+          ref={modalRef}
+          className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-2xl"
+        >
+          <p className="text-red-500 font-medium">Note not found.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 overflow-auto p-4 ">
-      <div className="bg-red-300 dark:bg-gray-800 p-12 rounded-lg shadow-lg max-w-full  mt-auto w-fit">
-        <h2 className="text-2xl font-bold text-green-500 mb-4 ">{note.title}</h2>
-        <div className="text-gray-700 dark:text-gray-300 mb-4 break-words overflow-x-auto">
+    <div
+      className="fixed inset-0 flex items-center justify-center 
+                 bg-black/40 backdrop-blur-sm z-50 p-3 sm:p-6"
+      onClick={handleOutsideClick}
+    >
+      <div
+        ref={modalRef}
+        className="bg-white dark:bg-gray-900 
+                   w-full max-w-3xl 
+                   max-h-[90vh] 
+                   overflow-hidden
+                   rounded-2xl shadow-2xl 
+                   border border-gray-200 dark:border-gray-700
+                   flex flex-col"
+      >
+
+        {/* Header */}
+        <div className="px-5 sm:px-8 pt-6 pb-4 
+                        border-b border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl sm:text-2xl font-semibold 
+                         text-blue-600 dark:text-blue-400 break-words">
+            {note.title}
+          </h2>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="px-5 sm:px-8 py-5 
+                        overflow-y-auto overflow-x-auto
+                        text-gray-700 dark:text-gray-300 
+                        leading-relaxed text-sm sm:text-base">
+
           {note.contentHtml ? (
-            <div dangerouslySetInnerHTML={{ __html: note.contentHtml }} />
+            <div
+              className="prose dark:prose-invert max-w-none break-words"
+              dangerouslySetInnerHTML={{ __html: note.contentHtml }}
+            />
           ) : (
-            <p className='break-words'>{note.contentText || note.content}</p>
+            <p className="break-words whitespace-pre-wrap">
+              {note.contentText || note.content}
+            </p>
           )}
         </div>
-        <div className="text-sm text-gray-500">
-          Created: {new Date(note.createdAt).toLocaleDateString()} | Updated: {new Date(note.updatedAt).toLocaleDateString()}
+
+        {/* Footer */}
+        <div className="px-5 sm:px-8 py-4 
+                        border-t border-gray-200 dark:border-gray-700 
+                        flex flex-col sm:flex-row 
+                        sm:items-center sm:justify-between gap-3">
+
+          <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            Created: {new Date(note.createdAt).toLocaleDateString()} <br />
+            Updated: {new Date(note.updatedAt).toLocaleDateString()}
+          </div>
+
+          <button
+            onClick={close}
+            className="px-4 py-2 rounded-xl 
+                       bg-blue-600 hover:bg-blue-700 
+                       text-white text-sm sm:text-base
+                       font-medium transition duration-200 shadow-md"
+          >
+            Close
+          </button>
         </div>
-         <button className="rounded-md cursor-pointer border-2 border-gray-500 dark:text-white p-2 hover:bg-gray-500 hover:text-white mt-2 mr-2 bg-green-500"
-         onClick={()=>close()}
-         >Close</button>
+
       </div>
-     
     </div>
   );
 };

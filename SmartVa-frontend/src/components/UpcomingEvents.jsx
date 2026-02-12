@@ -17,7 +17,7 @@ const UpcomingEvents = ({title, date, venue, id}) => {
  {`${date}`} </small>
 <small> <FaLocationArrow className=' inline mr-4 md:mr-2' />
 {venue}</small>
-<button  onClick={()=>navigate('/event-details/${id}')}  className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</button>
+<button  onClick={()=>navigate(`/event-details/${id}`)}  className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'>View</button>
 </div>
 
     </div>

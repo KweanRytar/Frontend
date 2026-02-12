@@ -18,104 +18,149 @@ export const taskApi = createApi({
   tagTypes: ['Task'],
 
   endpoints: (builder) => ({
-    // Get task due today
-    getTaskDueToday: builder.query({
-      query: (dueDate) => getFullURL(`/task/due-date/${dueDate}`),
-      providesTags: [{ type: 'Task', id: 'DUE_TODAY' }],
+    
+    // ===========================
+    // CREATE TASK
+    // ===========================
+    createTask: builder.mutation({
+      query: (newTask) => ({
+        url: getFullURL('/task'),
+        method: 'POST',
+        body: newTask,
+      }),
+      invalidatesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
-    // Get overdue tasks
-    getOverdueTasks: builder.query({
-      query: () => getFullURL('/task/overdue'),
-      providesTags: [{ type: 'Task', id: 'OVERDUE' }],
+    // ===========================
+    // GET ALL TASKS (paginated)
+    // ===========================
+    getAllTasks: builder.query({
+      query: ({ page = 1, limit = 10 } = {}) => ({
+        url: getFullURL('/task/getAllTasks'),
+        params: { page, limit },
+      }),
+      providesTags: (result) =>
+        result?.data
+          ? [
+              ...result.data.map(({ _id }) => ({ type: 'Task', id: _id })),
+              { type: 'Task', id: 'LIST' },
+            ]
+          : [{ type: 'Task', id: 'LIST' }],
     }),
 
-    // Get tasks due in 72 hours
-    getTaskDueIn72Hours: builder.query({
-      query: () => getFullURL('/task/due-in-next-72-hours'),
-      providesTags: [{ type: 'Task', id: 'DUE_IN_72_HOURS' }],
-    }),
-
-    // Get tasks by status
-    getTaskByStatus: builder.query({
-      query: (status) => getFullURL(`/task/status/${status}`),
-      providesTags: [{ type: 'Task', id: 'BY_STATUS' }],
-    }),
-
-    // Get tasks by priority
-    getTaskByPriority: builder.query({
-      query: (priority) => getFullURL(`/task/priority/${priority}`),
-      providesTags: [{ type: 'Task', id: 'BY_PRIORITY' }],
-    }),
-
-    // Get task by name/title
-    getTaskByName: builder.query({
-      query: (title) => getFullURL(`/task/title/${title}`),
-      providesTags: [{ type: 'Task', id: 'BY_TITLE' }],
-    }),
-
-    // Get single task by ID
+    // ===========================
+    // GET TASK BY ID
+    // ===========================
     getTaskById: builder.query({
       query: (id) => getFullURL(`/task/${id}`),
       providesTags: (result, error, id) => [{ type: 'Task', id }],
     }),
 
-    // Get all delegates
+    // ===========================
+    // GET TASKS BY FILTERS
+    // ===========================
+    getTasksByStatus: builder.query({
+      query: (status) => getFullURL(`/task/status/${status}`),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getTasksByPriority: builder.query({
+      query: (priority) => getFullURL(`/task/priority/${priority}`),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getTasksByName: builder.query({
+      query: (title) => getFullURL(`/task/title/${title}`),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getTasksDueToday: builder.query({
+      query: (dueDate) => getFullURL(`/task/due-date/${dueDate}`),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getOverdueTasks: builder.query({
+      query: () => getFullURL('/task/overdue'),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getTasksDueIn72Hours: builder.query({
+      query: () => getFullURL('/task/due-in-next-72-hours'),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    getEmergencyTasks: builder.query({
+      query: () => getFullURL('/task/emergency/emergencyTasks'),
+      providesTags: (result) =>
+        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+    }),
+
+    // ===========================
+    // TASK DELEGATES
+    // ===========================
     getAllDelegates: builder.query({
       query: () => getFullURL('/task/delegates/allDelegates'),
       providesTags: [{ type: 'Task', id: 'ALL_DELEGATES' }],
     }),
 
-    // Mark task as completed
-    markTaskCompleted: builder.mutation({
-      query: (id) => ({
-        url: getFullURL(`/task/${id}/mark-completed`),
-        method: 'PATCH',
-      }),
-      invalidatesTags: (result, error, id) => [{ type: 'Task', id }],
-    }),
-
-    // Update task (using dynamic url from argument)
-    updateTask: builder.mutation({
-      query: ({ url, payload }) => ({
-        url: getFullURL(`/task${url}`), // assuming url is already a path like '/task/123'
-        method: 'PUT',
-        body: payload,
-      }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Task', id }],
-    }),
-
-    // Delete task
-    deleteTask: builder.mutation({
-      query: (id) => ({
-        url: getFullURL(`/task/${id}`),
-        method: 'DELETE',
-      }),
-      invalidatesTags: (result, error, id) => [{ type: 'Task', id }],
-    }),
-
-    // Get all tasks (with pagination)
-    getAllTasks: builder.query({
-      query: ({ page = 1, limit = 10 }) => ({
-        url: getFullURL('/task/getAllTasks'),
-        params: { page, limit },
-        method: 'GET',
-      }),
-      providesTags: [{ type: 'Task', id: 'LIST' }],
-    }),
-
-    // Get delegate details
-    getDelegatesDetails: builder.query({
+    getDelegateDetails: builder.query({
       query: (delegateEmail) => getFullURL(`/task/delegates/details/${delegateEmail}`),
+      providesTags: [{ type: 'Task', id: 'DELEGATE_DETAILS' }],
     }),
 
-    // Get all delegated tasks
     getAllDelegateTasks: builder.query({
       query: () => getFullURL('/task/delegates/allTask'),
       providesTags: [{ type: 'Task', id: 'DELEGATED_TASKS' }],
     }),
 
-    // Message delegate
+    delegateDetailsById: builder.query({
+      query: (id) => getFullURL(`/task/delegate/${id}`),
+      providesTags: (result, error, id) => [{ type: 'Task', id }],
+    }),
+
+    // ===========================
+    // UPDATE / DELETE / COMPLETE TASK
+    // ===========================
+    updateTask: builder.mutation({
+      query: ({ id, payload }) => ({
+        url: getFullURL(`/task/${id}`),
+        method: 'PUT',
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Task', id },
+        { type: 'Task', id: 'LIST' },
+      ],
+    }),
+
+    markTaskCompleted: builder.mutation({
+      query: (id) => ({
+        url: getFullURL(`/task/${id}/mark-completed`),
+        method: 'PATCH',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'Task', id },
+        { type: 'Task', id: 'LIST' },
+      ],
+    }),
+
+    deleteTask: builder.mutation({
+      query: (id) => ({
+        url: getFullURL(`/task/${id}`),
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'Task', id },
+        { type: 'Task', id: 'LIST' },
+      ],
+    }),
+
     messageDelegate: builder.mutation({
       query: ({ subject, message, delegateEmail }) => ({
         url: getFullURL('/task/delegate/message'),
@@ -123,33 +168,32 @@ export const taskApi = createApi({
         body: { subject, message, delegateEmail },
       }),
     }),
-
-    // Get delegate by ID
-    delegateDetails: builder.query({
-      query: (id) => getFullURL(`/task/delegate/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Task', id }],
-    }),
   }),
 });
 
 
 export const {
-  useGetTaskDueTodayQuery,
-  useMessageDelegateMutation,
-  useGetOverdueTasksQuery,
-  useGetTaskDueIn72HoursQuery,
-  useGetTaskByStatusQuery,
-  useGetTaskByPriorityQuery,
-  useGetTaskByNameQuery,
-  useGetTaskByIdQuery,
-  useUpdateTaskMutation,
-  useDeleteTaskMutation,
+ useCreateTaskMutation,
   useGetAllTasksQuery,
-  useGetAllDelegateTasksQuery,
-  useDelegateDetailsQuery,
+  useGetTaskByIdQuery,
+  useGetTasksByStatusQuery,
+  useGetTasksByPriorityQuery,
+  useGetTasksByNameQuery,
+  useGetTasksDueTodayQuery,
+  useGetOverdueTasksQuery,
+  useGetTasksDueIn72HoursQuery,
+  useGetEmergencyTasksQuery,
   useGetAllDelegatesQuery,
-  useGetDelegatesDetailsQuery,
+  useGetAllDelegateTasksQuery,
+  useGetDelegateDetailsQuery,
+  useDelegateDetailsByIdQuery,
+  useUpdateTaskMutation,
   useMarkTaskCompletedMutation,
+  useDeleteTaskMutation,
+  useMessageDelegateMutation,
+  
+
+
 } = taskApi;
 
 

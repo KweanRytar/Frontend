@@ -23,22 +23,13 @@ import { Navigate } from 'react-router-dom'
 
 
 // Redux queries (RTK Query hooks)
-import {
-  useGetTotalContactsQuery,
-  useGetTotalTasksQuery,
-  useGetTotalNotesQuery,
-  useGetTotalDocumentsQuery,
-  useGetTotalVisitorsQuery,
-  useGetEmergencyTasksQuery,
-  useGetOverdueTasksQuery,
-  useGetTaskDueIn3DaysQuery,
-  useGetPendingTasksQuery,
-  useGetEventForTodayQuery,
-  useGetVisitors4DayQuery,
-  useGetAllContactsQuery
+import { useGetAllContactsQuery } from '../redux/Contact/ContactSlice'
+import { useGetDocumentsQuery } from '../redux/document/DocumentSlice'
+import { useGetEventsForTodayQuery } from '../redux/event/EventSlice'
+import { useGetNotesQuery } from '../redux/Note/NoteSlice'
+import { useGetEmergencyTasksQuery, useGetOverdueTasksQuery, useGetTaskDueIn3DaysQuery, useGetPendingTasksQuery, useGetTotalTasksQuery } from '../redux/Task/TaskSlice'
+import { useGetAllVisitorsQuery, useGetVisitorsByDayQuery } from '../redux/visitor/visitorSlice'
 
-
-} from '../redux/dashboard/OverviewSlice'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -99,15 +90,15 @@ const Dashboard = () => {
   const {data: allContactsData} = useGetAllContactsQuery()
   // const { data: totalContactsData } = useGetTotalContactsQuery()
   const { data: totalTaskData } = useGetTotalTasksQuery()
-  const { data: totalNotesData } = useGetTotalNotesQuery()
-  const { data: totalDocumentData } = useGetTotalDocumentsQuery()
-  const { data: totalVisitorsData } = useGetTotalVisitorsQuery()
+  const { data: totalNotesData } = useGetNotesQuery()
+  const { data: totalDocumentData } = useGetDocumentsQuery()
+  const { data: totalVisitorsData } = useGetAllVisitorsQuery()
   const { data: emergencyTasksData } = useGetEmergencyTasksQuery()
   const { data: overdueTasksData } = useGetOverdueTasksQuery()
   const { data: tasksDueIn3DaysData } = useGetTaskDueIn3DaysQuery()
   const { data: pendingTasksData } = useGetPendingTasksQuery()
-  const { data: eventForTodayData } = useGetEventForTodayQuery()
-  const { data: visitors4DayData } = useGetVisitors4DayQuery(
+  const { data: eventForTodayData } = useGetEventsForTodayQuery()
+  const { data: visitors4DayData } = useGetVisitorsByDayQuery(
     todaysDate.toISOString().split('T')[0]
   )
   
@@ -139,7 +130,7 @@ useEffect(() => {
   }
 
   if (totalDocumentData) {
-    setTotalDocuments(totalDocumentData.totalDocuments || 0);
+    setTotalDocuments(totalDocumentData.total || 0);
     setDocuments(totalDocumentData.data || []);
   }
 
@@ -297,7 +288,7 @@ const CreateNote = ()=>{
         )}
       </div>
 
-      <AddAndManageButtons inform={"Create Task"} manage={"Manage Tasks"} display={()=>setNewTaskOpen(true)}/>
+      <AddAndManageButtons inform={"Create Task"} manage={"Manage Tasks"} display={()=>setNewTaskOpen(true)} direction={'/task'}/>
 
       {/* Events */}
       <small className='text-2xl mb-10'>Upcoming Events</small>
@@ -306,7 +297,7 @@ const CreateNote = ()=>{
           <UpcomingEvents key={event._id} title={event.title} date={new Date(event.startTime).toTimeString()} venue={event.venue} id={event._id}/>
         )) : <p className='text-gray-500'>No event for today</p>}
       </div>
-      <AddAndManageButtons inform={"Create Events"} manage={"Manage Events"} display={()=> setCreateEventOpen(true)}/>
+      <AddAndManageButtons inform={"Create Events"} manage={"Manage Events"} display={()=> setCreateEventOpen(true)} direction={'/event'}/>
 
       {/* Visitors */}
       <small className='text-2xl block mt-6'>Today's Visitor Log</small>
@@ -319,7 +310,7 @@ const CreateNote = ()=>{
                   }}/>
         )) : <p className='text-gray-500'>No visitor for today</p>}
       </div>
-      <AddAndManageButtons inform={"Create Visitor"} manage={"Manage Visitors"} display={()=> setNewVisitorOpen(true)}/>
+      <AddAndManageButtons inform={"Create Visitor"} manage={"Manage Visitors"} display={()=> setNewVisitorOpen(true)} direction={'/visitor'}/>
 
 
         {/* Contacts */}
@@ -337,7 +328,7 @@ const CreateNote = ()=>{
          
 
          </div>
-          <AddAndManageButtons inform={"Create New Connections"} manage={"Manage Contacts"} display={()=> setNewContacts(true)} />
+          <AddAndManageButtons inform={"Create New Connections"} manage={"Manage Contacts"} display={()=> setNewContacts(true)}  direction={'/contact'}/>
       {/* Notes */}
       <small className='text-2xl block mt-6'>Quick Notes</small>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
@@ -350,7 +341,7 @@ const CreateNote = ()=>{
           }}/>
         )) : <p className='text-gray-500'>No recently edited notes</p>}
       </div>
-      <AddAndManageButtons inform={"Create Note"} manage={"Manage Notes"} display={CreateNote}/>
+      <AddAndManageButtons inform={"Create Note"} manage={"Manage Notes"} display={CreateNote} direction={'/note'}/>
 
       {/* Documents */}
       <small className='text-2xl block mt-6'>Document Summary</small>
@@ -360,7 +351,7 @@ const CreateNote = ()=>{
 updatedAt).toString()}/>
         )) : <p className='text-gray-500'>No recently created or edited documents</p>}
       </div>
-      <AddAndManageButtons inform={"Create Document"} manage={"Manage Documents"} display={()=> setNewDocumentOpen(true)}/>
+      <AddAndManageButtons inform={"Create Document"} manage={"Manage Documents"} display={()=> setNewDocumentOpen(true)} direction={"/document"}/>
 
       {/* Busy Calendar */}
       <div className='mt-10'>

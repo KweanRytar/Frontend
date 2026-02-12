@@ -1,12 +1,16 @@
 import React from 'react'
 import { FaPlus } from "react-icons/fa";
+import { useNavigate } from 'react-router';
 
-const AddAndManageButtons = ({manage, inform, display}) => {
+const AddAndManageButtons = ({manage, inform, display, direction}) => {
+  const navigate = useNavigate();
   return (
     <div className='flex justify-between items-center'>
 
   {/* Manage Notes Button */}
-  <button className='bg-[#00B86B] text-[#FFFFFF] rounded-2xl w-24 hover:bg-[#00995A] dark:hover:bg-[#00B86B] p-2'>
+  <button className='bg-[#00B86B] text-[#FFFFFF] rounded-2xl w-24 hover:bg-[#00995A] dark:hover:bg-[#00B86B] p-2'
+  onClick={()=>navigate(direction)}
+  >
 {  manage
 }  </button>
 

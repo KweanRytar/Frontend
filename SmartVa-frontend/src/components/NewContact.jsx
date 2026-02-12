@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCreateContactMutation } from "../redux/dashboard/OverviewSlice";
+import { useCreateContactMutation } from "../redux/Contact/ContactSlice";
 import { toast } from "react-toastify";
 
 const NewContact = ({ close }) => {

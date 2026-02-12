@@ -110,15 +110,11 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
                 delegate
               )} text-white p-6 rounded-2xl shadow-md`}
             >
-              <h2 className="text-xl font-semibold mb-2">{delegate.name}</h2>
+              <h2 className="text-xl font-semibold mb-2">{delegate?.name}</h2>
               <p className="mb-1">
-                <strong>Email:</strong> {delegate.email}
+                <strong>Email:</strong> {delegate?.email}
               </p>
-              {delegate.phone && (
-                <p className="mb-1">
-                  <strong>Phone:</strong> {delegate.phone}
-                </p>
-              )}
+             
               <p className="mt-2 text-sm opacity-90">
                 Tasks assigned: {delegate.taskCount}
               </p>

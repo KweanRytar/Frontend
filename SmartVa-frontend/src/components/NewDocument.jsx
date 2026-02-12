@@ -1,6 +1,6 @@
 // src/pages/NewDocument.jsx
 import React, { useState } from "react";
-import { useCreateNewDocumentMutation } from "../redux/dashboard/OverviewSlice";
+import {  useCreateDocumentMutation } from "../redux/document/DocumentSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 

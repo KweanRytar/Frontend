@@ -1,6 +1,6 @@
 // src/components/CreateEvent.jsx
 import React, { useState } from "react";
-import { useCreateNewEventMutation } from "../redux/dashboard/OverviewSlice";
+import { useCreateEventMutation } from "../redux/event/EventSlice";
 import {toast} from 'react-toastify'
 
 
@@ -16,7 +16,7 @@ const CreateEvent = ({ close }) => {
     concernedMembers: [{ name: "", email: "" }],
   });
 
-const [createEvent, { isLoading, data}] = useCreateNewEventMutation();
+const [createEvent, { isLoading, data}] = useCreateEventMutation();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

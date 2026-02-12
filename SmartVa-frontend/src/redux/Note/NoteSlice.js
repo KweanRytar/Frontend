@@ -18,42 +18,83 @@ export const noteApi = createApi({
   tagTypes: ['Note'],
 
   endpoints: (builder) => ({
-    // Edit note
+
+  // ===========================
+    // CREATE NOTE
+    // ===========================
+    createNote: builder.mutation({
+      query: (newNote) => ({
+        url: getFullURL('/notes/createnote'),
+        method: 'POST',
+        body: newNote,
+      }),
+      invalidatesTags: [{ type: 'Note', id: 'LIST' }],
+    }),
+
+    // ===========================
+    // GET ALL NOTES
+    // ===========================
+    getNotes: builder.query({
+      query: () => getFullURL('/notes/getallnotes'),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({ type: 'Note', id: _id })),
+              { type: 'Note', id: 'LIST' },
+            ]
+          : [{ type: 'Note', id: 'LIST' }],
+      keepUnusedDataFor: 600,
+    }),
+
+    // ===========================
+    // GET NOTE BY ID
+    // ===========================
+    getNoteById: builder.query({
+      query: (id) => getFullURL(`/notes/${id}`),
+      providesTags: (result, error, id) => [{ type: 'Note', id }],
+    }),
+
+    // ===========================
+    // GET NOTE BY TITLE
+    // ===========================
+    getNoteByTitle: builder.query({
+      query: (title) => getFullURL(`/notes/findnote/${title}`),
+      providesTags: (result) =>
+        result ? [{ type: 'Note', id: result._id }] : [],
+    }),
+
+    // ===========================
+    // EDIT NOTE
+    // ===========================
     editNote: builder.mutation({
       query: ({ id, ...data }) => ({
         url: getFullURL(`/notes/editnote/${id}`),
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Note', id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Note', id },
+        { type: 'Note', id: 'LIST' },
+      ],
     }),
 
-    // Delete note
+    // ===========================
+    // DELETE NOTE
+    // ===========================
     deleteNote: builder.mutation({
       query: (id) => ({
         url: getFullURL(`/notes/deletenote/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Note', id }],
-    }),
-
-    // Get note by ID
-    getNoteById: builder.query({
-      query: (id) => getFullURL(`/notes/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Note', id }],
-    }),
-
-    // Get note by title
-    getNoteByTitle: builder.query({
-      query: (title) => getFullURL(`/notes/findnote/${title}`),
-      providesTags: (result, error, title) => [{ type: 'Note', title }],
+      invalidatesTags: (result, error, id) => [
+        { type: 'Note', id },
+        { type: 'Note', id: 'LIST' },
+      ],
     }),
   }),
 });
 
-
-
-export const { useEditNoteMutation, useGetNoteByTitleQuery, useDeleteNoteMutation,  } = noteApi;
+export const { useEditNoteMutation, useGetNoteByTitleQuery, useDeleteNoteMutation, useCreateNoteMutation, useGetNotesQuery  } = noteApi;
 
 
 export default noteApi
