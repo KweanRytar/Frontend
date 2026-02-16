@@ -32,7 +32,7 @@ const Task = () => {
   const [url, setUrl] = useState()
 
   // === API Calls ===
-  const { data: allTaskData, isLoading: allTaskLoading } = useGetAllTasksQuery({ page, limit });
+  const { data: allTaskData, isLoading: allTaskLoading } = useGetAllTasksQuery();
   const { data: dueTodayData } = useGetTasksDueTodayQuery(today);
   const { data: dueIn72HoursData } = useGetTasksDueIn72HoursQuery();
   const { data: overdueData } = useGetOverdueTasksQuery();

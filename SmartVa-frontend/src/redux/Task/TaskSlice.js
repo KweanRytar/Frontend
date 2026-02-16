@@ -37,7 +37,7 @@ export const taskApi = createApi({
     getAllTasks: builder.query({
       query: () => ({
         url: getFullURL('/task/getAllTasks'),
-        params: { page, limit },
+        
       }),
       providesTags:  [{ type: 'Task', id: 'LIST' }],
     }),
