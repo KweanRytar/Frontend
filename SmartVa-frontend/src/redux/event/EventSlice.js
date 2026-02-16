@@ -38,14 +38,7 @@ export const eventApi = createApi({
     // ===========================
     getEvents: builder.query({
       query: () => getFullURL('/events/'),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ _id }) => ({ type: 'Event', id: _id })),
-              { type: 'Event', id: 'LIST' },
-            ]
-          : [{ type: 'Event', id: 'LIST' }],
-      keepUnusedDataFor: 600, // keeps data in cache for 10 mins
+      providesTags: [{ type: 'Event', id: 'LIST' }],
     }),
 
     // ===========================
@@ -53,13 +46,7 @@ export const eventApi = createApi({
     // ===========================
     getEventsForToday: builder.query({
       query: () => getFullURL('/events/events4DDay'),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ _id }) => ({ type: 'Event', id: _id })),
-              { type: 'Event', id: 'TODAY' },
-            ]
-          : [{ type: 'Event', id: 'TODAY' }],
+      providesTags: [{ type: 'Event', id: 'TODAY' }],
     }),
 
     // ===========================
@@ -67,8 +54,7 @@ export const eventApi = createApi({
     // ===========================
     getEventByName: builder.query({
       query: (name) => getFullURL(`/events/eventName/${name}`),
-      providesTags: (result) =>
-        result ? [{ type: 'Event', id: result._id }] : [],
+      providesTags: [{ type: 'Event', id: `NAME-${name}` }],
     }),
 
     // ===========================
@@ -76,7 +62,7 @@ export const eventApi = createApi({
     // ===========================
     getEventById: builder.query({
       query: (id) => getFullURL(`/events/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Event', id }],
+      providesTags:  [{ type: 'Event', id }],
     }),
 
     // ===========================
@@ -88,7 +74,7 @@ export const eventApi = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
+      invalidatesTags:  [
         { type: 'Event', id },
         { type: 'Event', id: 'LIST' },
         { type: 'Event', id: 'TODAY' },
@@ -103,7 +89,7 @@ export const eventApi = createApi({
         url: getFullURL(`/events/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags:  [
         { type: 'Event', id },
         { type: 'Event', id: 'LIST' },
         { type: 'Event', id: 'TODAY' },
