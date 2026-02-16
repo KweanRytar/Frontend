@@ -36,14 +36,8 @@ export const noteApi = createApi({
     // ===========================
     getNotes: builder.query({
       query: () => getFullURL('/notes/getallnotes'),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ _id }) => ({ type: 'Note', id: _id })),
-              { type: 'Note', id: 'LIST' },
-            ]
-          : [{ type: 'Note', id: 'LIST' }],
-      keepUnusedDataFor: 600,
+      providesTags: [{ type: 'Note', id: 'LIST' }],
+    
     }),
 
     // ===========================
@@ -51,7 +45,7 @@ export const noteApi = createApi({
     // ===========================
     getNoteById: builder.query({
       query: (id) => getFullURL(`/notes/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Note', id }],
+      providesTags: (result, error, {id}) => [{ type: 'Note', id }],
     }),
 
     // ===========================
@@ -59,8 +53,7 @@ export const noteApi = createApi({
     // ===========================
     getNoteByTitle: builder.query({
       query: (title) => getFullURL(`/notes/findnote/${title}`),
-      providesTags: (result) =>
-        result ? [{ type: 'Note', id: result._id }] : [],
+      providesTags: [{ type: 'Note', id: 'LIST' }],
     }),
 
     // ===========================
@@ -86,7 +79,7 @@ export const noteApi = createApi({
         url: getFullURL(`/notes/deletenote/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (result, error, {id}) => [
         { type: 'Note', id },
         { type: 'Note', id: 'LIST' },
       ],

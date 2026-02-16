@@ -24,14 +24,8 @@ export const contactApi = createApi({
     // ===========================
     getAllContacts: builder.query({
       query: () => getFullURL('/contact/getAllContacts'),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ _id }) => ({ type: 'Contact', id: _id })),
-              { type: 'Contact', id: 'LIST' },
-            ]
-          : [{ type: 'Contact', id: 'LIST' }],
-      keepUnusedDataFor: 600,
+      providesTags:  [{ type: 'Contact', id: 'LIST' }],
+   
     }),
 
     // ===========================
@@ -69,7 +63,7 @@ export const contactApi = createApi({
         url: getFullURL(`/contact/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (result, error, {id}) => [
         { type: 'Contact', id },
         { type: 'Contact', id: 'LIST' },
       ],
