@@ -19,7 +19,7 @@ const Busy  = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-  `${baseurl}/allEvents?start=${start}&end=${end}`,
+  `${baseurl}/events/allEvents?start=${start}&end=${end}`,
   { withCredentials: true }
 );
 ;
