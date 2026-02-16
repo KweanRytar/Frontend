@@ -35,17 +35,11 @@ export const taskApi = createApi({
     // GET ALL TASKS (paginated)
     // ===========================
     getAllTasks: builder.query({
-      query: ({ page = 1, limit = 10 } = {}) => ({
+      query: () => ({
         url: getFullURL('/task/getAllTasks'),
         params: { page, limit },
       }),
-      providesTags: (result) =>
-        result?.data
-          ? [
-              ...result.data.map(({ _id }) => ({ type: 'Task', id: _id })),
-              { type: 'Task', id: 'LIST' },
-            ]
-          : [{ type: 'Task', id: 'LIST' }],
+      providesTags:  [{ type: 'Task', id: 'LIST' }],
     }),
 
     // ===========================
@@ -53,7 +47,7 @@ export const taskApi = createApi({
     // ===========================
     getTaskById: builder.query({
       query: (id) => getFullURL(`/task/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Task', id }],
+      providesTags: (result, error, {id}) => [{ type: 'Task', id }],
     }),
 
     // ===========================
@@ -61,49 +55,43 @@ export const taskApi = createApi({
     // ===========================
     getTasksByStatus: builder.query({
       query: (status) => getFullURL(`/task/status/${status}`),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getTasksByPriority: builder.query({
       query: (priority) => getFullURL(`/task/priority/${priority}`),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
     // get pending task
 
     getPendingTasks: builder.query({
       query: () => getFullURL('/task/pending'), 
-      providesTags: (result) => result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [], }),
+      providesTags: [{ type: 'Task', id: 'LIST' }],
+    }),
 
     getTasksByName: builder.query({
       query: (title) => getFullURL(`/task/title/${title}`),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getTasksDueToday: builder.query({
       query: (dueDate) => getFullURL(`/task/due-date/${dueDate}`),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getOverdueTasks: builder.query({
       query: () => getFullURL('/task/overdue'),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getTasksDueIn72Hours: builder.query({
       query: () => getFullURL('/task/due-in-next-72-hours'),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getEmergencyTasks: builder.query({
       query: () => getFullURL('/task/emergency/emergencyTasks'),
-      providesTags: (result) =>
-        result ? result.map(({ _id }) => ({ type: 'Task', id: _id })) : [],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     // ===========================
@@ -111,22 +99,22 @@ export const taskApi = createApi({
     // ===========================
     getAllDelegates: builder.query({
       query: () => getFullURL('/task/delegates/allDelegates'),
-      providesTags: [{ type: 'Task', id: 'ALL_DELEGATES' }],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getDelegateDetails: builder.query({
       query: (delegateEmail) => getFullURL(`/task/delegates/details/${delegateEmail}`),
-      providesTags: [{ type: 'Task', id: 'DELEGATE_DETAILS' }],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     getAllDelegateTasks: builder.query({
       query: () => getFullURL('/task/delegates/allTask'),
-      providesTags: [{ type: 'Task', id: 'DELEGATED_TASKS' }],
+      providesTags: [{ type: 'Task', id: 'LIST' }],
     }),
 
     delegateDetailsById: builder.query({
       query: (id) => getFullURL(`/task/delegate/${id}`),
-      providesTags: (result, error, id) => [{ type: 'Task', id }],
+      providesTags: (result, error, {id}) => [{ type: 'Task', id }],
     }),
 
     // ===========================
@@ -149,7 +137,7 @@ export const taskApi = createApi({
         url: getFullURL(`/task/${id}/mark-completed`),
         method: 'PATCH',
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (result, error, {id}) => [
         { type: 'Task', id },
         { type: 'Task', id: 'LIST' },
       ],
@@ -160,7 +148,7 @@ export const taskApi = createApi({
         url: getFullURL(`/task/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: (result, error, {id}) => [
         { type: 'Task', id },
         { type: 'Task', id: 'LIST' },
       ],
