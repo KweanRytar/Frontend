@@ -294,7 +294,7 @@ const CreateNote = ()=>{
       <small className='text-2xl mb-10'>Upcoming Events</small>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
         {upComingEvents.length > 0 ? upComingEvents.map(event => (
-          <UpcomingEvents key={event._id} title={event.title} date={new Date(event.startTime).toTimeString()} venue={event.venue} id={event._id}/>
+          <UpcomingEvents key={event._id} event={event}/>
         )) : <p className='text-gray-500'>No event for today</p>}
       </div>
       <AddAndManageButtons inform={"Create Events"} manage={"Manage Events"} display={()=> setCreateEventOpen(true)} direction={'/event'}/>
