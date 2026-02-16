@@ -30,7 +30,11 @@ export const eventApi = createApi({
         method: 'POST',
         body: newEvent,
       }),
-      invalidatesTags: [{ type: 'Event', id: 'LIST' }],
+      invalidatesTags: (result, error, { id }) => [
+  { type: 'Event', id },
+  { type: 'Event', id: 'LIST' },
+  { type: 'Event', id: 'TODAY' },
+],
     }),
 
     // ===========================
@@ -54,7 +58,7 @@ export const eventApi = createApi({
     // ===========================
     getEventByName: builder.query({
       query: (name) => getFullURL(`/events/eventName/${name}`),
-      providesTags: [{ type: 'Event', id: `NAME-${name}` }],
+      providesTags:(result, error, {name} )=> [{ type: 'Event', id: `NAME-${name}` }],
     }),
 
     // ===========================
@@ -74,11 +78,11 @@ export const eventApi = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags:  [
-        { type: 'Event', id },
-        { type: 'Event', id: 'LIST' },
-        { type: 'Event', id: 'TODAY' },
-      ],
+      invalidatesTags:  (result, error, { id }) => [
+  { type: 'Event', id },
+  { type: 'Event', id: 'LIST' },
+  { type: 'Event', id: 'TODAY' },
+],
     }),
 
     // ===========================
@@ -89,11 +93,11 @@ export const eventApi = createApi({
         url: getFullURL(`/events/${id}`),
         method: 'DELETE',
       }),
-      invalidatesTags:  [
-        { type: 'Event', id },
-        { type: 'Event', id: 'LIST' },
-        { type: 'Event', id: 'TODAY' },
-      ],
+      invalidatesTags: (result, error, { id }) => [
+  { type: 'Event', id },
+  { type: 'Event', id: 'LIST' },
+  { type: 'Event', id: 'TODAY' },
+],
     }),
   }),
 });
