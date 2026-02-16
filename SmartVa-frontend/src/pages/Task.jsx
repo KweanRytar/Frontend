@@ -269,7 +269,7 @@ const Task = () => {
                         <button
                           className="rounded-2xl border-2 border-gray-500 dark:text-gray-600 p-2 hover:bg-gray-500 hover:text-white"
                           onClick={() => {
-                            setUrl(`/${task._id}`)
+                            setUrl(task._id)
                             setEditData(task);
                             setEditTask(true);
                           }}
