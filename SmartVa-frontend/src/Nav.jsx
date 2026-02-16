@@ -40,7 +40,7 @@ const navigate = useNavigate();
   }
 
 
-  const [displayMenu, setDisplayMenu] = useState(true);
+  const [displayMenu, setDisplayMenu] = useState(false);
   const [profileMenu, setProfileMenu] = useState(false);
   const [displayNotification, setDisplayNotification] = useState(false);
 

@@ -147,7 +147,7 @@ const EditTasks = ({
     };
 
     try {
-      const response = await updateTask({ url, payload }).unwrap();
+      const response = await updateTask({ id: url, payload }).unwrap();
       toast.success(response.message || "Task updated successfully!");
       onCancel();
     } catch (error) {
