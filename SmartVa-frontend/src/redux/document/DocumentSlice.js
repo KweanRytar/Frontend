@@ -77,7 +77,7 @@ export const documentApi = createApi({
     // ===========================
     updateDocument: builder.mutation({
       query: ({ id, updateDocument }) => ({
-        url: getFullURL(`/update/${id}`),
+        url: getFullURL(`/document/update/${id}`),
         method: 'PUT',
         body: updateDocument,
       }),
