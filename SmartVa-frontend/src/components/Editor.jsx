@@ -36,6 +36,15 @@ const theme = {
     italic: "editor-textItalic",
     underline: "editor-textUnderline",
   },
+   list: {
+    ul: "editor-list-ul",
+    ol: "editor-list-ol",
+    listitem: "editor-listItem",
+    nested: {
+      listitem: "editor-nested-listitem",
+    },
+  },
+  
 };
 
 // MAIN CONFIG (Memoized to prevent remount)
