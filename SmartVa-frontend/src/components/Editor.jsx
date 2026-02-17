@@ -8,7 +8,7 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 import { HeadingNode, $createHeadingNode } from "@lexical/rich-text";
-import {HeadingPlugin} from "@lexical/react/LexicalHeadingPlugin";
+
 import { ListNode, ListItemNode } from "@lexical/list";
 import { $generateNodesFromDOM, $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -146,7 +146,7 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
       </div>
 
       {!disableAutoFocus && <AutoFocusPlugin />}
-      <HeadingPlugin />
+  
       <HistoryPlugin />
       <ListPlugin />
       <InsertHeadingPlugin />

@@ -21,9 +21,9 @@ import {
   LuHeading5,
   LuHeading6,
 } from "react-icons/lu";
-import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
+import { $createHeadingNode,  } from "@lexical/rich-text";
 import { $setBlocksType } from "@lexical/selection";
-import { $isRangeSelection } from "lexical";
+import { $isRangeSelection, $getSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { FORMAT_TEXT_COMMAND, UNDO_COMMAND, REDO_COMMAND } from "lexical";
 import {
@@ -101,6 +101,8 @@ const Toolbar = () => {
         <MdSuperscript className="inline text-2xl" />
       </button>
       <select
+       name="heading"
+  id="heading"
         className="px-3 py-1 bg-gray-200 rounded hover:bg-green-500 hover:text-white dark:bg-green-500 dark:text-white"
         onChange={(e) => {
           const level = e.target.value;
