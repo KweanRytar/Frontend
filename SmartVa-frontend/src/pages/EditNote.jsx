@@ -50,7 +50,7 @@ const EditNote = () => {
   return (
     <form onSubmit={handleSubmit} className="p-4">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-center gap-4 items-center mb-4 mt-36 fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
+      <div className="flex flex-col md:flex-row justify-center gap-4 items-center mb-4 mt-26 lg:mt-36 fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center text-blue-500 hover:underline mb-4 cursor-pointer"
@@ -87,7 +87,7 @@ const EditNote = () => {
       </div>
 
       {/* EDITOR */}
-      <div className="mt-60 mb-10">
+      <div className="mt-80  lg:mt-60 mb-10">
         <Editor
           initialHtml={noteData.contentHtml} // ✅ use state, not originalHtml
           onChange={handleEditorChange}

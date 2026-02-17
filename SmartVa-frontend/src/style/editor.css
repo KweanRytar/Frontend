@@ -36,25 +36,20 @@
   color: #374151; /* text-gray-700 */
 }
 
-/* Lists */
-.editor-list-ol {
-  list-style-type: decimal;
-  margin-left: 1.5rem; /* ml-6 */
-  margin-bottom: 0.5rem;
-  color: #1f2937;
+.ContentEditable__root .editor-list-ol {
+  list-style-type: decimal !important;
+  margin-left: 2rem !important;
+  padding-left: 0 !important;
 }
-.editor-list-ul {
-  list-style-type: disc;
-  margin-left: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #1f2937;
+
+.ContentEditable__root .editor-list-ul {
+  list-style-type: disc !important;
+  margin-left: 2rem !important;
+  padding-left: 0 !important;
 }
-.editor-listItem {
-  margin-bottom: 0.25rem; /* mb-1 */
-}
-.editor-listItemChecked {
-  text-decoration: line-through;
-  color: #6b7280; /* text-gray-500 */
+
+.ContentEditable__root .editor-listItem {
+  margin-bottom: 0.25rem;
 }
 .editor-listItemUnchecked {
   color: #1f2937;
