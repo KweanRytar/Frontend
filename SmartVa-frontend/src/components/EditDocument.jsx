@@ -113,7 +113,7 @@ const EditDocument = ({ document, onCancel }) => {
   };
 
   // Submit updated document
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   const updatedBody = {
@@ -131,14 +131,23 @@ const EditDocument = ({ document, onCancel }) => {
     })),
   };
 
+  // ← Add these two lines
+  console.log("updatedBody BEFORE sending:", updatedBody);
+  console.log("updatedBody keys:", Object.keys(updatedBody));
+  console.log("responses length:", updatedBody.responses?.length);
+
+  if (!updatedBody.title || !updatedBody.description || !updatedBody.sender || !updatedBody.type) {
+    toast.error("Missing required fields in form data");
+    return;
+  }
+
   try {
-    console.log("Updating document with data:", updatedBody);
-    await updateDocument({ id: _id,  updatedBody }).unwrap(); // Spread updatedBody
+    await updateDocument({ id: _id, updatedBody }).unwrap();
     toast.success("Document updated successfully!");
     onCancel();
   } catch (err) {
-    console.error(err);
-    toast.error("Failed to update document. Please try again.");
+    console.error("Mutation error:", err);
+    toast.error("Failed to update document. Check console.");
   }
 };
 
