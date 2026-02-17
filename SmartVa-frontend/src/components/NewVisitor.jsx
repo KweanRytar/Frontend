@@ -23,7 +23,7 @@ setVisitorData({
 })
   }
 
-const [createVisitor, {isLoading} ] = useCreateVisitorsMutation()
+const [createVisitor, {isLoading} ] = useCreateVisitorMutation()
 
 const handleSubmit = async (e)=>{
   e.preventDefault();

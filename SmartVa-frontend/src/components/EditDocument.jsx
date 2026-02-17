@@ -132,7 +132,7 @@ const EditDocument = ({ document, onCancel }) => {
   };
 
   try {
-    await updateDocument({ id: _id, ...updatedBody }).unwrap(); // Spread updatedBody
+    await updateDocument({ id: _id, updatedBody: updatedBody }).unwrap(); // Spread updatedBody
     toast.success("Document updated successfully!");
     onCancel();
   } catch (err) {
