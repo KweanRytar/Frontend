@@ -76,10 +76,10 @@ export const documentApi = createApi({
     // UPDATE DOCUMENT
     // ===========================
     updateDocument: builder.mutation({
-      query: ({ id, updateDocument }) => ({
+      query: ({ id, updatedBody }) => ({
         url: getFullURL(`/document/update/${id}`),
         method: 'PUT',
-        body: updateDocument,
+        body: updatedBody,
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: 'Document', id },
