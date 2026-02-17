@@ -51,8 +51,8 @@
 .ContentEditable__root .editor-listItem {
   margin-bottom: 0.25rem;
 }
-.editor-listItemUnchecked {
-  color: #1f2937;
+.ContentEditable__root .editor-listItemUnchecked {
+  color: blue;
 }
 .editor-nested-listitem {
   margin-left: 1rem; /* ml-4 */
