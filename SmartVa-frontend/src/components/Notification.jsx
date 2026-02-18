@@ -25,13 +25,21 @@ const formatTime = (createdAt) => {
 };
 
 
-const Notification = ({ message, id, createdAt }) => {
+const Notification = ({ message, id, createdAt , onDelete}) => {
   const [deleteNotification, { isLoading }] =
     useDeleteNotificationMutation();
 
   const handleDelete = async () => {
     try {
       await deleteNotification(id).unwrap();
+
+      // Update localStorage for new notification count
+      const prevCount = parseInt(localStorage.getItem('prevNotificationCount')) || 0;
+      const newCount = Math.max(prevCount - 1, 0);
+      localStorage.setItem('prevNotificationCount', newCount);
+
+      // Notify parent to update badge if needed
+      if (onDelete) onDelete();
     } catch (error) {
       console.error("Failed to delete notification:", error);
     }

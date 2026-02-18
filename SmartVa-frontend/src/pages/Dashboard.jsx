@@ -303,7 +303,7 @@ const CreateNote = ()=>{
       <small className='text-2xl block mt-6'>Today's Visitor Log</small>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
         {vistor4Day.length > 0 ? vistor4Day.map(visitor => (
-          <Visitors key={visitor._id} name={visitor.name} time={new Date(visitor.createdAt).toTimeString()} purpose={visitor.purpose} details={()=>{
+          <Visitors key={visitor._id} name={visitor.name} time={new Date(visitor.createdAt).toDateString()()} purpose={visitor.message} details={()=>{
                     navigate(`/visitor-details/${visitor._id}`, {
                       state: { visitor },
                     })

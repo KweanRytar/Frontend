@@ -159,7 +159,16 @@ const Nav = ({ isDark, toggleDarkMode }) => {
         <div className='fixed top-16 right-4 z-50 w-80 max-h-96 overflow-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-4'>
           <div className='absolute -top-2 right-6 w-4 h-4 bg-white dark:bg-gray-800 rotate-45 shadow-md'></div>
           {notifications.length ? notifications.map(n => (
-            <Notification key={n._id} message={n.message} id={n._id} createdAt={n.createdAt} />
+            <Notification key={n._id} message={n.message} id={n._id} createdAt={n.createdAt} onDelete={() => {
+    const currentCount = notificationData?.notifications?.length || 0;
+    const prevCount = parseInt(localStorage.getItem('prevNotificationCount')) || 0;
+
+    // Recalculate new notification count
+    if (currentCount < prevCount) {
+      setHasNewNotification(false);
+      localStorage.setItem('prevNotificationCount', currentCount);
+    }
+  }} />
           )) : (
             <p className='dark:text-white'>Hey {userInfo}, your notifications are empty ✨</p>
           )}

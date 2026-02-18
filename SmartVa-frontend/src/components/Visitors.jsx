@@ -50,10 +50,7 @@ const VisitorsCard = ({ name, time, purpose, details }) => {
 
       {/* FOOTER */}
       <div className="mt-4 flex justify-between items-center">
-        {/* Status Badge */}
-        <span className="px-2 py-1 text-[10px] rounded-full font-medium bg-green-100 text-green-700">
-          Scheduled
-        </span>
+      
 
         {/* View Button */}
         <span className="px-2 py-1 text-[10px] rounded-full font-medium bg-[#008235]/20 text-[#008235] flex items-center gap-1">
