@@ -41,7 +41,7 @@ const Nav = ({ isDark, toggleDarkMode }) => {
   const PREV_COUNT_KEY = 'notification_prev_count';
 
   // Load previous count from localStorage on mount
-  const [prevCount, setPrevCount] = useState<number>(() => {
+  const [prevCount, setPrevCount] = useState(() => {
     const saved = localStorage.getItem(PREV_COUNT_KEY);
     return saved ? Number(saved) : 0;
   });
