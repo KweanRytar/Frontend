@@ -38,68 +38,76 @@ const Nav = ({ isDark, toggleDarkMode }) => {
   const [hasNewNotification, setHasNewNotification] = useState(false);
   const [prevNotificationCount, setPrevNotificationCount] = useState(0);
 
-  // useEffect to change the color of the notification icon when a new notification arrives
+  const notifications = notificationData?.notifications ?? [];
+
+  // Detect new notifications
   useEffect(() => {
-    const currentCount = notificationData?.notifications?.length || 0;
-    if (currentCount > prevNotificationCount) {
-      setHasNewNotification(true);
-    }
-
+    const currentCount = notifications.length;
+    if (currentCount > prevNotificationCount) setHasNewNotification(true);
     setPrevNotificationCount(currentCount);
-  }, [notificationData]);
+  }, [notifications]);
 
-  // reset hasnewnotification 
-  const resetNewNotification = () => {
-    setHasNewNotification(false);
-  }
-
+  const resetNewNotification = () => setHasNewNotification(false);
 
   useEffect(() => {
     if (userData?.user) setUserInfo(userData.user.userName);
   }, [userData]);
-
-  const notifications = notificationData?.notifications ?? [];
-  const activeClass = 'bg-green-500 text-white font-bold rounded-2xl px-4 py-2';
 
   const handleLogout = async () => {
     try {
       await logOut().unwrap();
       localStorage.removeItem('isLoggedIn');
       navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch (err) {
+      console.error('Logout failed:', err);
     }
   };
+
+  const activeClass = 'bg-green-500 text-white font-bold rounded-2xl px-4 py-2';
 
   return (
     <>
       {/* MOBILE HEADER */}
-      <header className='fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-[#1E293B] shadow-md'>
-        <div className='flex justify-between p-4 items-center'>
+      <header className='fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-gray-900 shadow-md'>
+        <div className='flex justify-between p-4 items-center relative'>
           <NavLink to="/dashboard" className='text-2xl font-bold text-green-500 flex items-center gap-2'>
             <MdDashboardCustomize /> SmartVa
           </NavLink>
 
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-4 relative'>
             <button onClick={toggleDarkMode} aria-label="Toggle Dark Mode">
               {isDark ? <FaSun /> : <FaMoon />}
             </button>
 
-            <button onClick={() => {
-              resetNewNotification();
-              setDisplayMenu(false);
-              setProfileMenu(false);
-              setDisplayNotification(!displayNotification);
-            }} aria-label="Notifications">
-              <IoIosNotifications className={hasNewNotification ? "text-green-500" : "text-gray-500"}/>
-              {hasNewNotification && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>}
-            </button>
+            <button
+  onClick={() => {
+    resetNewNotification(); // marks notifications as seen
+    setDisplayMenu(false);
+    setProfileMenu(false);
+    setDisplayNotification(!displayNotification);
+  }}
+  className='relative'
+  aria-label="Notifications"
+>
+  <IoIosNotifications className={hasNewNotification ? "text-red-500" : "text-gray-500"} />
 
-            <button onClick={() => {
-              setDisplayMenu(false);
-              setDisplayNotification(false);
-              setProfileMenu(!profileMenu);
-            }} aria-label="Profile">
+  {/* Badge for number of new notifications */}
+  {hasNewNotification && prevNotificationCount > 0 && (
+    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+      {notifications.length - (prevNotificationCount - notifications.length)}
+    </span>
+  )}
+</button>
+
+
+            <button
+              onClick={() => {
+                setDisplayMenu(false);
+                setDisplayNotification(false);
+                setProfileMenu(!profileMenu);
+              }}
+              aria-label="Profile"
+            >
               <MdOutlineAccountCircle />
             </button>
 
@@ -110,14 +118,12 @@ const Nav = ({ isDark, toggleDarkMode }) => {
         </div>
       </header>
 
-      {/* MOBILE MENU (SLIDE-IN) */}
-      <div className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 transform transition-transform duration-300 ease-in-out
+      {/* MOBILE MENU */}
+      <div className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 transform transition-transform duration-300
                       ${displayMenu ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className='text-lg font-bold text-green-500'>Menu</h2>
-          <button onClick={() => setDisplayMenu(false)} aria-label="Close Menu">
-            <MdCancel />
-          </button>
+          <button onClick={() => setDisplayMenu(false)} aria-label="Close Menu"><MdCancel /></button>
         </div>
         <ul className='flex flex-col gap-4 p-4'>
           {menuItems.map(item => (
@@ -133,7 +139,7 @@ const Nav = ({ isDark, toggleDarkMode }) => {
         </ul>
       </div>
 
-      {/* PROFILE MENU WITH ARROW */}
+      {/* PROFILE MENU */}
       {profileMenu && (
         <div className='fixed z-50 top-16 right-4 bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 w-48'>
           <div className='absolute -top-2 right-4 w-4 h-4 bg-white dark:bg-gray-800 rotate-45 shadow-md'></div>
@@ -148,7 +154,7 @@ const Nav = ({ isDark, toggleDarkMode }) => {
         </div>
       )}
 
-      {/* NOTIFICATIONS WITH ARROW */}
+      {/* NOTIFICATIONS */}
       {displayNotification && (
         <div className='fixed top-16 right-4 z-50 w-80 max-h-96 overflow-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-4'>
           <div className='absolute -top-2 right-6 w-4 h-4 bg-white dark:bg-gray-800 rotate-45 shadow-md'></div>
@@ -161,7 +167,7 @@ const Nav = ({ isDark, toggleDarkMode }) => {
       )}
 
       {/* DESKTOP NAVBAR */}
-      <header className='hidden md:flex fixed top-0 w-full z-50 bg-white dark:bg-[#1E293B] shadow-md px-8 py-4 items-center justify-between'>
+      <header className='hidden md:flex fixed top-0 w-full z-50 bg-white dark:bg-gray-900 shadow-md px-8 py-4 items-center justify-between'>
         <NavLink to="/dashboard" className='text-2xl font-bold text-green-500 flex items-center gap-2'>
           <MdDashboardCustomize /> SmartVa
         </NavLink>
@@ -173,7 +179,8 @@ const Nav = ({ isDark, toggleDarkMode }) => {
               to={item.to}
               className={({ isActive }) => isActive ? activeClass : 'hover:text-blue-500 flex items-center gap-1'}
             >
-              <item.icon className='lg:hidden text-green-500' /> <span className='hidden lg:inline'>{item.label}</span>
+              <item.icon className='lg:hidden text-green-500' />
+              <span className='hidden lg:inline'>{item.label}</span>
             </NavLink>
           ))}
 
@@ -181,13 +188,26 @@ const Nav = ({ isDark, toggleDarkMode }) => {
             {isDark ? <FaSun /> : <FaMoon />}
           </button>
 
-          <button onClick={() => {
-            setDisplayMenu(false);
-            setProfileMenu(false);
-            setDisplayNotification(!displayNotification);
-          }}>
-            <IoIosNotifications />
-          </button>
+     <button
+  onClick={() => {
+    resetNewNotification(); // marks notifications as seen
+    setDisplayMenu(false);
+    setProfileMenu(false);
+    setDisplayNotification(!displayNotification);
+  }}
+  className='relative'
+  aria-label="Notifications"
+>
+  <IoIosNotifications className={hasNewNotification ? "text-red-500" : "text-gray-500"} />
+
+  {/* Badge for number of new notifications */}
+  {hasNewNotification && prevNotificationCount > 0 && (
+    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+      {notifications.length - (prevNotificationCount - notifications.length)}
+    </span>
+  )}
+</button>
+
 
           <button onClick={() => {
             setDisplayMenu(false);
