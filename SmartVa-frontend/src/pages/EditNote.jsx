@@ -53,7 +53,7 @@ const EditNote = () => {
   return (
     <form className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white" onSubmit={handleSubmit}>
       {/* FIXED HEADER */}
-      <div className="fixed  top-24 md:top-36  left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="fixed  top-14 md:top-24  left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* TITLE INPUT */}
         <input
@@ -95,7 +95,7 @@ const EditNote = () => {
       </div>
 
       {/* EDITOR */}
-      <div className="pt-[140px] p-4 md:p-6">
+      <div className="pt-[100px] p-4 md:p-6">
         <Editor
           initialHtml={noteData.contentHtml}
           onChange={handleEditorChange}
