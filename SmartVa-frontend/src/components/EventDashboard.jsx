@@ -2,32 +2,36 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const EventDashboard = ({ eventsData }) => {
-  const allEvents = eventsData?.events || [];
-  const eventsIn30Minutes = eventsData?.eventsIn30Minutes || [];
-  const eventsIn24Hours = eventsData?.eventsIn24Hours || [];
-  const eventsIn7Days = eventsData?.eventsIn7Days || [];
+  const allEvents       = eventsData?.events         || [];
+  const urgent30min     = eventsData?.eventsIn30Minutes || [];
+  const next24Hours     = eventsData?.eventsIn24Hours   || [];
+  const next7Days       = eventsData?.eventsIn7Days     || [];
 
   const getPriorityStyles = (type) => {
     switch (type) {
       case "urgent":
         return {
-          badge: "bg-red-100 text-red-600",
-          border: "border-red-200",
+          badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+          border: "border-red-200 dark:border-red-800/60",
+          bg: "bg-red-50/40 dark:bg-red-950/20",
         };
       case "soon":
         return {
-          badge: "bg-amber-100 text-amber-600",
-          border: "border-amber-200",
+          badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+          border: "border-amber-200 dark:border-amber-800/60",
+          bg: "bg-amber-50/40 dark:bg-amber-950/20",
         };
       case "week":
         return {
-          badge: "bg-emerald-100 text-emerald-600",
-          border: "border-emerald-200",
+          badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+          border: "border-emerald-200 dark:border-emerald-800/60",
+          bg: "bg-emerald-50/40 dark:bg-emerald-950/20",
         };
       default:
         return {
-          badge: "bg-blue-100 text-blue-600",
-          border: "border-blue-200",
+          badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+          border: "border-blue-200 dark:border-blue-800/60",
+          bg: "bg-blue-50/40 dark:bg-blue-950/20",
         };
     }
   };
@@ -37,16 +41,17 @@ const EventDashboard = ({ eventsData }) => {
 
     return (
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`bg-white dark:bg-gray-900 border ${styles.border} 
-                    rounded-2xl p-6 shadow-sm hover:shadow-lg 
-                    transition-all duration-300`}
+        transition={{ duration: 0.35 }}
+        className={`
+          rounded-2xl border ${styles.border} ${styles.bg}
+          p-5 shadow-sm hover:shadow-md transition-all duration-300
+        `}
       >
         {/* Header */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+        <div className="mb-4 pb-3 border-b border-gray-200/60 dark:border-gray-700/50">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             {title}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -54,29 +59,34 @@ const EventDashboard = ({ eventsData }) => {
           </p>
         </div>
 
-        {/* Content */}
+        {/* Events list */}
         {events.length === 0 ? (
-          <div className="flex items-center justify-center py-10 text-gray-400 text-sm">
-            No events available.
+          <div className="py-8 text-center text-gray-400 dark:text-gray-500 text-sm italic">
+            No events in this timeframe
           </div>
         ) : (
-          <div className="space-y-4 max-h-[350px] overflow-y-auto pr-2">
+          <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
             {events.map((event) => (
               <motion.div
                 key={event._id}
-                whileHover={{ scale: 1.02 }}
-                className="bg-gray-50 dark:bg-gray-800 
-                           rounded-xl p-4 flex flex-col gap-3 
-                           transition-all duration-200"
+                whileHover={{ scale: 1.015, x: 2 }}
+                className="
+                  bg-white dark:bg-gray-800/80
+                  rounded-xl p-4 border border-gray-200/70 dark:border-gray-700/60
+                  transition-all duration-200
+                "
               >
-                {/* Title */}
-                <div>
-                  <h4 className="font-semibold text-gray-800 dark:text-white">
+                <div className="mb-2">
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
                     {event.title}
                   </h4>
-
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(event.startTime).toDateString()} •{" "}
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {new Date(event.startTime).toLocaleDateString([], {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    •{" "}
                     {new Date(event.startTime).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -84,16 +94,14 @@ const EventDashboard = ({ eventsData }) => {
                   </p>
                 </div>
 
-                {/* Creator Info */}
-                <div className="flex flex-wrap gap-2 text-xs">
+                <div className="flex flex-wrap gap-2 text-xs mt-3">
                   <span
-                    className={`px-3 py-1 rounded-full font-medium ${styles.badge}`}
+                    className={`px-2.5 py-1 rounded-full font-medium ${styles.badge}`}
                   >
-                    {event.creatorName}
+                    {event.creatorName || "Unknown"}
                   </span>
-
-                  <span className="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                    {event.creatorEmail}
+                  <span className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                    {event.creatorEmail || "—"}
                   </span>
                 </div>
               </motion.div>
@@ -105,44 +113,50 @@ const EventDashboard = ({ eventsData }) => {
   };
 
   return (
-    <div className="min-h-screen px-4 md:px-10 py-10 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-      {/* Page Title */}
-      <div className="mb-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
-          Event Dashboard
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
-          Overview of your scheduled events and priorities.
+    <div className="w-full">
+      {/* Optional small header – you can remove if redundant in Profile */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+          Your Scheduled Events
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Upcoming priorities and all scheduled activities
         </p>
       </div>
 
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Responsive grid – adapts from 1 → 2 → 3–4 columns */}
+      <div className="
+        grid grid-cols-1 
+        md:grid-cols-2 
+        lg:grid-cols-2 
+        xl:grid-cols-4 
+        gap-5 lg:gap-6
+      ">
         {renderEventCard(
-          eventsIn30Minutes,
-          "Urgent (Next 30 Minutes)",
-          "Immediate attention required.",
+          urgent30min,
+          "Next 30 Minutes",
+          "Requires immediate attention",
           "urgent"
         )}
 
         {renderEventCard(
-          eventsIn24Hours,
+          next24Hours,
           "Next 24 Hours",
-          "Prepare for these upcoming events.",
+          "Prepare today",
           "soon"
         )}
 
         {renderEventCard(
-          eventsIn7Days,
+          next7Days,
           "Next 7 Days",
-          "Start planning ahead.",
+          "Medium-term planning",
           "week"
         )}
 
         {renderEventCard(
           allEvents,
-          "All Scheduled Events",
-          "Complete overview of all events.",
+          "All Events",
+          "Complete history & schedule",
           "all"
         )}
       </div>

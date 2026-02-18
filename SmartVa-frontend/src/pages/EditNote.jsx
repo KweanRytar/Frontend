@@ -51,9 +51,9 @@ const EditNote = () => {
   };
 
   return (
-    <form className="min-h-screen bg-gray-50 dark:bg-gray-900" onSubmit={handleSubmit}>
+    <form className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white" onSubmit={handleSubmit}>
       {/* FIXED HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="fixed  top-36 md:top-44 left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* TITLE INPUT */}
         <input
@@ -62,7 +62,7 @@ const EditNote = () => {
           onChange={(e) => setNoteData({ ...noteData, title: e.target.value })}
           placeholder="Note Title"
           className="w-full md:flex-1 p-3 rounded-xl border border-gray-300 dark:border-gray-700 
-                     bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
         {/* ACTION BUTTONS */}

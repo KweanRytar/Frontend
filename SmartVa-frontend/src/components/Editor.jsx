@@ -140,12 +140,12 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="bg-green-400 dark:bg-gray-700 p-6 rounded-2xl shadow-md mx-auto mb-20 md:mb-30 lg:mb-40 w-11/12 md:w-3/4 lg:w-1/2">
+      <div className="bg-green-400 dark:bg-gray-700 p-6 rounded-2xl shadow-md mx-auto mb-20 md:mb-30 lg:mb-40 w-11/12 md:w-3/4 lg:w-1/2 dark:text-white">
         <ToolBar />
 
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="p-4 bg-white dark:bg-[#1E293B] text-gray-800 dark:text-gray-200 rounded shadow outline-none min-h-[150px]" />
+            <ContentEditable className="p-4 bg-white dark:bg-[#1E293B] text-gray-800 dark:text-white rounded shadow outline-none min-h-[150px]" />
           }
           placeholder={
             <div className="text-gray-400 pointer-events-none">
