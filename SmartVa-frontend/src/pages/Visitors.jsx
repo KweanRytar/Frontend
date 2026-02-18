@@ -39,9 +39,9 @@ const Visitors = () => {
   const visitorsByMonth = useGetVisitorsByMonthQuery(filterValue, {
     skip: filterType !== "month" || !filterValue,
   });
-  const visitorsByWeek = useGetVisitorsByWeekQuery(undefined, {
-    skip: filterType !== "week",
-  });
+  // const visitorsByWeek = useGetVisitorsByWeekQuery(undefined, {
+  //   skip: filterType !== "week",
+  // });
 
   const [deleteVisitor] = useDeleteVisitorMutation();
 
@@ -70,10 +70,10 @@ const Visitors = () => {
       return visitorsByDay.data?.visitors || [];
     }
 
-    // WEEK FILTER (BACKEND)
-    if (filterType === "week") {
-      return visitorsByWeek.data?.visitors || [];
-    }
+    // // WEEK FILTER (BACKEND)
+    // if (filterType === "week") {
+    //   return visitorsByWeek.data?.visitors || [];
+    // }
 
     // MONTH FILTER (BACKEND)
     if (filterType === "month" && filterValue) {
@@ -97,7 +97,7 @@ const Visitors = () => {
     allVisitorsData,
     visitorsByName.data,
     visitorsByDay.data,
-    visitorsByWeek.data,
+    // visitorsByWeek.data,
     visitorsByMonth.data,
     loadingAll,
   ]);

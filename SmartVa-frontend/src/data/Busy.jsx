@@ -90,8 +90,8 @@ const Busy  = () => {
             // Month view → red dot with hover popup
             return (
               <div className="relative group">
-                <div className="w-3 h-3 bg-blue-600 rounded-full mx-auto my-1"></div>
-                <div className="hidden group-hover:block absolute z-10 bg-white text-red-500 p-2 border shadow-md rounded-md text-sm">
+                <div className="w-3 h-3 bg-[#00b86b] rounded-full mx-auto my-1"></div>
+                <div className="hidden group-hover:block absolute z-10 bg-[#dbfce7] text-[#008235] p-2 border shadow-md rounded-md text-sm">
                   <strong>{arg.event.title}</strong>
                   <br />
                   {new Date(arg.event.start).toLocaleTimeString()} -{" "}

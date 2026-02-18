@@ -33,7 +33,7 @@ const NewDocument = ({ close }) => {
     respondedAt: new Date().toISOString().slice(0, 10),
   });
 
-  const [createNewDocument, { isLoading }] = useCreateNewDocumentMutation();
+  const [createNewDocument, { isLoading }] = useCreateDocumentMutation();
 
   // Handle document input changes
   const handleChange = (e) => {

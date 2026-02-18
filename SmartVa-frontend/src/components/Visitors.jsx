@@ -1,26 +1,67 @@
-import React from 'react'
+import React from "react";
 import { IoIosContact, IoIosTime } from "react-icons/io";
-import { Link } from 'react-router';
 
+const VisitorsCard = ({ name, time, purpose, details }) => {
+  const formattedTime = new Date(time).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-export const Visitors  = ({name, time, purpose, details}) => {
   return (
-     <div className='flex gap-10 items-center bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-6'>
-    <div className='relative bg-green-300 rounded-2xl p-6 h-22 w-22 mt-4'><IoIosContact  className='absolute top-4 left-4 md:left-2 bottom-4 text-6xl md:text-5xl' />
-    </div>
-    <div className='flex flex-col gap-4'>
-        <strong className='text-green-600'>{name}</strong>
-    <small> <IoIosTime  className=' inline mr-4 md:mr-2'/>
-     {`${time}`} </small>
-    <small> 
-    {purpose}</small>
-    <button className='rounded-3xl border-gray-500 bg-[#00b86b] p-2 text-white cursor-pointer text-center'
-    onClick={()=>details()}
-    >View</button>
-    </div>
-    
+    <div
+      onClick={details}
+      className="cursor-pointer group
+                 bg-white dark:bg-gray-800
+                 border border-gray-200 dark:border-gray-700
+                 rounded-2xl p-4
+                 shadow-sm hover:shadow-md
+                 transition-all duration-200
+                 flex flex-col justify-between"
+    >
+      {/* TOP SECTION */}
+      <div className="flex items-start gap-3">
+        {/* Icon */}
+        <div
+          className="flex-shrink-0 w-10 h-10 rounded-xl
+                     bg-[#008235]/10 text-[#008235]
+                     flex items-center justify-center"
+        >
+          <IoIosContact className="text-xl" />
         </div>
-  )
-}
 
-export default Visitors
+        {/* Visitor Info */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+            {name}
+          </h3>
+
+          <div className="mt-2 space-y-1 text-xs text-gray-500 dark:text-gray-400">
+            {/* Time */}
+            <div className="flex items-center gap-2">
+              <IoIosTime className="text-base" />
+              <span>{formattedTime}</span>
+            </div>
+
+            {/* Purpose */}
+            <div className="truncate">{purpose}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="mt-4 flex justify-between items-center">
+        {/* Status Badge */}
+        <span className="px-2 py-1 text-[10px] rounded-full font-medium bg-green-100 text-green-700">
+          Scheduled
+        </span>
+
+        {/* View Button */}
+        <span className="px-2 py-1 text-[10px] rounded-full font-medium bg-[#008235]/20 text-[#008235] flex items-center gap-1">
+          View
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export default VisitorsCard;

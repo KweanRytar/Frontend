@@ -238,7 +238,7 @@ const CreateNote = ()=>{
       <h1 className='text-3xl font-bold mt-22  mb-4'>Dashboard</h1>
       
       <small className='block mb-4 text-2xl text-white bg-green-500 p-4 rounded-md text-center'>
-        {`Welcome back ${userName}`}
+        {`Welcome back ${userName.charAt(0).toUpperCase() + userName.slice(1)}! Here's a quick overview of your day.`}
       </small>
 
       {/* Overview cards */}

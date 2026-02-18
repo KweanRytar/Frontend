@@ -55,7 +55,7 @@ const CreateNote = () => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4">
-      <div className="flex flex-col justify-center gap-10 md:flex-row items-center mb-4 mt-36 fixed top-0 left-0 right-0 bg-[#FFFFFF] dark:bg-[#1E293B] text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
+      <div className="flex flex-col justify-center gap-4 md:gap-10 md:flex-row items-center mb-4 mt-10  md:mt-36 fixed top-0 left-0 right-0 bg-[#FFFFFF] dark:bg-[#1E293B] text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
          <button
                   onClick={() => navigate(-1)}
                   className="flex items-center text-blue-500 hover:underline mb-4 cursor-pointer"
@@ -83,7 +83,7 @@ const CreateNote = () => {
       </button>
       </div>
      
-<div className="mb-10 mt-64">
+<div className="mb-10 mt-36 md:mt-64">
     <Editor onChange={handleEditorChange} />
 </div>
     

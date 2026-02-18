@@ -66,7 +66,7 @@ const NoteDetails = ({ note, close }) => {
         <div className="px-5 sm:px-8 pt-6 pb-4 
                         border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl sm:text-2xl font-semibold 
-                         text-blue-600 dark:text-blue-400 break-words">
+                         text-[#008235] dark:text-[#a4f5c2] break-words">
             {note.title}
           </h2>
         </div>
@@ -103,7 +103,7 @@ const NoteDetails = ({ note, close }) => {
           <button
             onClick={close}
             className="px-4 py-2 rounded-xl 
-                       bg-blue-600 hover:bg-blue-700 
+                       bg-[#008235] hover:bg-[#0cfb6c]
                        text-white text-sm sm:text-base
                        font-medium transition duration-200 shadow-md"
           >

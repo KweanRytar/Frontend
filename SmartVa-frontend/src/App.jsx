@@ -77,7 +77,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/delegate-details/:email" element={<DelegateDetails />} />
-          <Route path="/note-details/:id" element={<NoteDetails />} />
+      
           <Route path="/create-note" element={<CreateNote />} />
           <Route path="/document-details/:id" element={<DocumentDetails />} />
           <Route path="/visitor-details/:id" element={<VisitorDetails />} />

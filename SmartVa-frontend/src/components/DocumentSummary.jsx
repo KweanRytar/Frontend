@@ -1,54 +1,65 @@
 import React from "react";
 import { IoDocumentSharp } from "react-icons/io5";
 
-const DocumentSummary = ({ title, time, sender, type }) => {
-  const styles =
-    type === "incoming"
-      ? {
-          bg: "bg-blue-100",
-          text: "text-blue-700",
-          badge: "bg-blue-100 text-blue-700",
-          label: "Incoming",
-        }
-      : {
-          bg: "bg-green-100",
-          text: "text-green-700",
-          badge: "bg-green-100 text-green-700",
-          label: "Outgoing",
-        };
+const DocumentSummary = ({ title, time, sender, type, onClick }) => {
+  const isIncoming = type === "incoming";
 
-  // truncate title safely
-  const shortenTitle = (text, max = 50) =>
+  const styles = {
+    icon: isIncoming
+      ? "bg-blue-100 text-blue-600"
+      : "bg-green-100 text-green-600",
+    badge: isIncoming
+      ? "bg-blue-100 text-blue-700"
+      : "bg-green-100 text-green-700",
+    label: isIncoming ? "Incoming" : "Outgoing",
+  };
+
+  const shortenTitle = (text, max = 45) =>
     text.length > max ? text.slice(0, max) + "..." : text;
 
   return (
-    <div className="flex flex-col items-center gap-3 bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-sm hover:shadow-md transition w-fit">
-      
-      {/* Icon */}
-      <div
-        className={`relative rounded-2xl p-4 h-20 w-20 flex items-center justify-center ${styles.bg}`}
-      >
-        <IoDocumentSharp className={`text-4xl ${styles.text}`} />
-      </div>
+    <div
+      onClick={onClick}
+      className="cursor-pointer group
+                 bg-white dark:bg-gray-800
+                 border border-gray-200 dark:border-gray-700
+                 rounded-2xl p-4
+                 shadow-sm hover:shadow-md
+                 hover:-translate-y-0.5
+                 transition-all duration-200"
+    >
+      <div className="flex items-start gap-3">
+        
+        {/* Icon */}
+        <div
+          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${styles.icon}`}
+        >
+          <IoDocumentSharp className="text-lg" />
+        </div>
 
-      {/* Content */}
-      <div className="flex flex-col gap-1 text-center">
-        <h4 className="font-semibold text-gray-800 dark:text-gray-100 line-clamp-1">
-          {shortenTitle(title)}
-        </h4>
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+            {shortenTitle(title)}
+          </h4>
 
-        <div className="text-xs text-gray-500 dark:text-gray-300">
-          <span>{time}</span>
-          <span className="block truncate">From: {sender}</span>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
+            {sender}
+          </p>
+
+          <div className="flex items-center justify-between mt-3">
+            <span className="text-xs text-gray-400">
+              {time}
+            </span>
+
+            <span
+              className={`text-[10px] px-2 py-1 rounded-full font-medium ${styles.badge}`}
+            >
+              {styles.label}
+            </span>
+          </div>
         </div>
       </div>
-
-      {/* Type Badge */}
-      <span
-        className={`text-xs px-3 py-1 rounded-full font-medium ${styles.badge}`}
-      >
-        {styles.label}
-      </span>
     </div>
   );
 };

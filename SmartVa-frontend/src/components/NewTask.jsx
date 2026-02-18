@@ -258,7 +258,7 @@ const NewTask = ({ close }) => {
                 <div>
                   <p className="font-semibold">Delegates Emails</p>
                   {subtask.delegate.map((email, delegateIndex) => (
-                    <div key={delegateIndex} className="flex gap-2 mb-2 items-center">
+                    <div key={delegateIndex} className="flex flex-col md:flex-row gap-2 mb-2 items-center">
                       <input
                         type="email"
                         placeholder="Delegate Email"

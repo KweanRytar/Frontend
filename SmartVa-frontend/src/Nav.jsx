@@ -130,6 +130,7 @@ const navigate = useNavigate();
             <NavLink
             to="/contact"
             className={({ isActive }) => isActive ? activeClass : 'ml-4 hover:text-blue-500'}
+            onClick={() => setDisplayMenu(false)}
           >
             <BsPeopleFill className='inline mr-2 text-green-500' />
            Contact
