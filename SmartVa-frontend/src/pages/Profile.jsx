@@ -2,8 +2,11 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
+import { useGetUserInfoQuery } from "../redux/dashboard/OverviewSlice";
+
+
 import {
-  useGetUserInfoQuery,
+
   useGetSupervisorsQuery,
   useGetEventsByMemberEmailQuery,
   useLogOutMutation,
