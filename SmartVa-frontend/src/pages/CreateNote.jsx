@@ -1,11 +1,10 @@
-// src/pages/Note.jsx (or CreateNote.jsx depending on your structure)
 import React, { useState } from "react";
 import Editor from "../components/Editor";
 import { useCreateNoteMutation } from "../redux/Note/NoteSlice";
 import { FaArrowLeft } from "react-icons/fa";
+import { AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router";
-
 
 const CreateNote = () => {
   const [noteData, setNoteData] = useState({
@@ -15,80 +14,84 @@ const CreateNote = () => {
   });
 
   const navigate = useNavigate();
-  const [createNewNote] = useCreateNoteMutation( );
+  const [createNewNote] = useCreateNoteMutation();
 
   const handleEditorChange = (content) => {
     setNoteData((prev) => ({
       ...prev,
-      ...content, // updates both contentHtml & contentText
+      ...content,
     }));
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    if (
+      !noteData.title.trim() &&
+      !noteData.contentHtml.trim() &&
+      !noteData.contentText.trim()
+    ) {
+      toast.info("Cannot save an empty note");
+      return;
+    }
 
-  // Skip if title & both contents are EMPTY
-  if (
-    !noteData.title.trim() &&
-    !noteData.contentHtml.trim() &&
-    !noteData.contentText.trim()
-  ) {
-    toast.info("Cannot save an empty note");
-    return; // Stop here
-  }
+    try {
+      const response = await createNewNote(noteData).unwrap();
+      setNoteData({ title: "", contentHtml: "", contentText: "" });
+      toast.success(response.message);
 
-  try {
-    const response = await createNewNote(noteData).unwrap();
-    setNoteData({ title: "", contentHtml: "", contentText: "" });
-    toast.success(response.message);
-
-    // navigate back to previous page after few seconds
-    setTimeout(() => {
-      navigate(-1);
-    }, 1000);
-
-  } catch (error) {
-    toast.error(error?.data?.message || "Error creating note");
-  }
-};
-
+      setTimeout(() => navigate(-1), 1000);
+    } catch (error) {
+      toast.error(error?.data?.message || "Error creating note");
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4">
-      <div className="flex flex-col justify-center gap-4 md:gap-10 md:flex-row items-center mb-4 mt-10  md:mt-36 fixed top-0 left-0 right-0 bg-[#FFFFFF] dark:bg-[#1E293B] text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
-         <button
-                  onClick={() => navigate(-1)}
-                  className="flex items-center text-blue-500 hover:underline mb-4 cursor-pointer"
-                >
-                  <FaArrowLeft className="mr-2" /> Back
-                </button>
-         <input
-        type="text"
-        value={noteData.title}
-        onChange={(e) => setNoteData({ ...noteData, title: e.target.value })}
-        placeholder="Note Title"
-        className="p-2 w-3xl border rounded"
-      />
-      <button  className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
-        <Link to="/">
-        Cancel
-      </Link>
-      </button>
-      
-      <button
-        type="submit"
-        className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
-      >
-        Save 
-      </button>
-      </div>
-     
-<div className="mb-10 mt-36 md:mt-64">
-    <Editor onChange={handleEditorChange} />
-</div>
-    
+    <form className="min-h-screen bg-gray-50 dark:bg-gray-900" onSubmit={handleSubmit}>
+      {/* FIXED HEADER */}
+      <div className="fixed top-0 left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        
+        {/* TITLE */}
+        <input
+          type="text"
+          value={noteData.title}
+          onChange={(e) => setNoteData({ ...noteData, title: e.target.value })}
+          placeholder="Note Title"
+          className="w-full md:flex-1 p-3 rounded-xl border border-gray-300 dark:border-gray-700 
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
 
-      
+        {/* ACTION BUTTONS */}
+        <div className="flex gap-3 flex-wrap md:flex-nowrap mt-2 md:mt-0">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition"
+          >
+            <FaArrowLeft /> Back
+          </button>
+
+          <button
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition"
+          >
+            <Link to="/" className="flex items-center gap-2">
+              <AiOutlineClose /> Cancel
+            </Link>
+          </button>
+
+          <button
+            type="submit"
+            className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-medium transition"
+          >
+            <AiOutlineSave /> Save
+          </button>
+        </div>
+      </div>
+
+      {/* EDITOR */}
+      <div className="pt-[140px] p-4 md:p-6">
+        <Editor onChange={handleEditorChange} />
+      </div>
     </form>
   );
 };

@@ -4,6 +4,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useEditNoteMutation } from "../redux/Note/NoteSlice";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
+import { AiOutlineSave, AiOutlineClose } from "react-icons/ai";
 
 const EditNote = () => {
   const navigate = useNavigate();
@@ -22,80 +23,86 @@ const EditNote = () => {
   const handleEditorChange = (content) => {
     setNoteData((prev) => ({
       ...prev,
-      ...content, // expects { contentHtml, contentText }
+      ...content,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!noteData.title.trim() && !noteData.contentHtml.trim() && !noteData.contentText.trim()) {
+      toast.info("Cannot save an empty note");
+      return;
+    }
+
     try {
-      const res = await editNote({
+      await editNote({
         id: noteData._id,
         title: noteData.title,
         contentHtml: noteData.contentHtml,
         contentText: noteData.contentText,
       }).unwrap();
 
-     
       toast.success("Updated!");
-      // navigate back to previous page after few seconds
-      setTimeout(() => {
-        navigate(-1);
-      }, 1000);
+      setTimeout(() => navigate(-1), 1000);
     } catch (err) {
       toast.error(err?.data?.message || "Error updating note");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4">
-      {/* Header */}
-      <div className="flex flex-col justify-center gap-4 md:gap-10 md:flex-row items-center mb-4 mt-10  md:mt-36 fixed top-0 left-0 right-0 bg-[#FFFFFF] dark:bg-[#1E293B] text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-blue-500 hover:underline mb-4 cursor-pointer"
-        >
-          <FaArrowLeft className="mr-2" /> Back
-        </button>
-
+    <form className="min-h-screen bg-gray-50 dark:bg-gray-900" onSubmit={handleSubmit}>
+      {/* FIXED HEADER */}
+      <div className="fixed top-0 left-0 right-0 z-10 bg-white dark:bg-[#1E293B] border-b border-gray-200 dark:border-gray-700 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        
+        {/* TITLE INPUT */}
         <input
           type="text"
           value={noteData.title}
-          onChange={(e) =>
-            setNoteData({ ...noteData, title: e.target.value })
-          }
+          onChange={(e) => setNoteData({ ...noteData, title: e.target.value })}
           placeholder="Note Title"
-          className="p-2 w-2/6 md:w-3/4 border rounded"
+          className="w-full md:flex-1 p-3 rounded-xl border border-gray-300 dark:border-gray-700 
+                     bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
-        <div className="flex gap-2">
-          <Link
-            to="/note"
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        {/* ACTION BUTTONS */}
+        <div className="flex gap-3 flex-wrap md:flex-nowrap mt-2 md:mt-0">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition"
           >
-            Cancel
-          </Link>
+            <FaArrowLeft /> Back
+          </button>
+
+          <button
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium transition"
+          >
+            <Link to="/note" className="flex items-center gap-2">
+              <AiOutlineClose /> Cancel
+            </Link>
+          </button>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-medium transition"
           >
-            {isLoading ? "Saving..." : "Save"}
+            <AiOutlineSave /> {isLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
 
       {/* EDITOR */}
-      <div className="mb-10 mt-36 md:mt-64">
+      <div className="pt-[140px] p-4 md:p-6">
         <Editor
-          initialHtml={noteData.contentHtml} // ✅ use state, not originalHtml
+          initialHtml={noteData.contentHtml}
           onChange={handleEditorChange}
           disableAutoFocus={true}
         />
       </div>
     </form>
-
   );
 };
 
