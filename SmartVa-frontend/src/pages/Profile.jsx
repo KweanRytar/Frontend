@@ -1,17 +1,16 @@
 // src/pages/Profile.jsx
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
 import { useGetUserInfoQuery } from "../redux/dashboard/OverviewSlice";
 
-
 import {
-
   useGetSupervisorsQuery,
   useGetEventsByMemberEmailQuery,
   useLogOutMutation,
-} from "../redux/Profile/ProfileSlice"; // adjust path if needed
+} from "../redux/Profile/ProfileSlice";
 import EventDashboard from "../components/EventDashboard";
+import SupervisorDetail from "./SupervisorDetail";   // ← ensure this import exists
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -36,7 +35,13 @@ const Profile = () => {
   const supervisors = supervisorsData?.supervisors || [];
 
   // ────────────────────────────────────────────────
-  //  Compute task overview stats (across ALL supervisors)
+  //  Modal state – added only what's needed
+  // ────────────────────────────────────────────────
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
+
+  // ────────────────────────────────────────────────
+  //  Compute task overview stats (unchanged)
   // ────────────────────────────────────────────────
   const taskStats = useMemo(() => {
     let total = 0;
@@ -52,7 +57,6 @@ const Profile = () => {
         if (task.status === "completed") completed++;
         else if (task.status === "in-progress") inProgress++;
         else if (task.status === "pending") {
-          // You can improve this logic if you have dueDate
           const due = new Date(task.dueDate);
           if (!isNaN(due) && due < new Date()) overdue++;
         }
@@ -70,6 +74,18 @@ const Profile = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  // Open modal when supervisor card is clicked
+  const handleSupervisorClick = (supervisor) => {
+    setSelectedSupervisor(supervisor);
+    setShowModal(true);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedSupervisor(null);
   };
 
   return (
@@ -128,12 +144,12 @@ const Profile = () => {
         {/* ================= MAIN CONTENT ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
-          {/* LEFT – Supervisors & Tasks (2/3 width on desktop) */}
+          {/* LEFT – Supervisors & Tasks */}
           <div className="lg:col-span-2 space-y-8">
 
             <h2 className="text-2xl font-semibold">Supervisors & Tasks</h2>
 
-            {/* ── Task Overview Stats ── */}
+            {/* Task Overview Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <StatCard label="Total Tasks" value={taskStats.total} color="bg-emerald-100 dark:bg-emerald-900/30" />
               <StatCard label="In Progress" value={taskStats.inProgress} color="bg-blue-100 dark:bg-blue-900/30" />
@@ -141,7 +157,7 @@ const Profile = () => {
               <StatCard label="Overdue" value={taskStats.overdue} color="bg-red-100 dark:bg-red-900/30" />
             </div>
 
-            {/* ── Supervisors List ── */}
+            {/* Supervisors List – now clickable */}
             {supervisorsLoading ? (
               <p className="text-gray-500 dark:text-gray-400 animate-pulse">Loading supervisors...</p>
             ) : supervisorsError ? (
@@ -151,8 +167,9 @@ const Profile = () => {
                 {supervisors.map((supervisor) => (
                   <div
                     key={supervisor.supervisorId}
+                    onClick={() => handleSupervisorClick(supervisor)}
                     className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 
-                               rounded-xl p-5 shadow-sm hover:shadow-md transition-all"
+                               rounded-xl p-5 shadow-sm hover:shadow-md transition-all cursor-pointer"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div>
@@ -181,7 +198,7 @@ const Profile = () => {
               </div>
             )}
 
-            {/* ── Detailed Tasks (like previous modal content) ── */}
+            {/* Detailed Tasks */}
             {supervisors.length > 0 && (
               <div className="mt-10">
                 <h3 className="text-xl font-semibold mb-5">All Assigned Tasks</h3>
@@ -200,7 +217,7 @@ const Profile = () => {
             )}
           </div>
 
-          {/* RIGHT – Assigned Events (1/3 width on desktop) */}
+          {/* RIGHT – Assigned Events */}
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Assigned Events</h2>
 
@@ -211,12 +228,31 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* ================= MODAL ================= */}
+      {showModal && selectedSupervisor && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 
+                       rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6"
+          >
+            <SupervisorDetail
+              supervisor={selectedSupervisor}
+              currentUserEmail={email}
+              closeDetail={closeModal}
+            />
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
 
 // ────────────────────────────────────────────────
-//  Small helper components
+//  Small helper components (unchanged)
 // ────────────────────────────────────────────────
 function StatCard({ label, value, color }) {
   return (
