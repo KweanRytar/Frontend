@@ -50,7 +50,7 @@ const EditNote = () => {
   return (
     <form onSubmit={handleSubmit} className="p-4">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-center gap-4 items-center mb-4 mt-4 lg:mt-36 fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
+      <div className="flex justify-center gap-4 items-center mb-4 mt-4 lg:mt-36 fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 z-10 p-4 border-b">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center text-blue-500 hover:underline mb-4 cursor-pointer"
@@ -65,7 +65,7 @@ const EditNote = () => {
             setNoteData({ ...noteData, title: e.target.value })
           }
           placeholder="Note Title"
-          className="p-2 w-full md:w-3/4 border rounded"
+          className="p-2 w-2/6 md:w-3/4 border rounded"
         />
 
         <div className="flex gap-2">

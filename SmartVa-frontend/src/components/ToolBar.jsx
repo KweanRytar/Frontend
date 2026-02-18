@@ -21,7 +21,7 @@ import {
   LuHeading5,
   LuHeading6,
 } from "react-icons/lu";
-import { $createHeadingNode,  } from "@lexical/rich-text";
+import { $createHeadingNode } from "@lexical/rich-text";
 import { $setBlocksType } from "@lexical/selection";
 import { $isRangeSelection, $getSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -55,25 +55,42 @@ const Toolbar = () => {
       <button
         type="button"
         className="px-3 py-1 bg-gray-200 rounded hover:bg-blue-500 hover:text-white dark:bg-blue-500 dark:text-white"
-        onClick={() =>
-          editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
-        }
+        onClick={() => {
+          editor.update(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+            }
+          });
+        }}
       >
         <MdFormatListBulletedAdd className="inline text-2xl" />
       </button>
       <button
         type="button"
         className="px-3 py-1 bg-gray-200 rounded hover:bg-blue-500 hover:text-white dark:bg-blue-500 dark:text-white"
-        onClick={() =>
-          editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
-        }
+        onClick={() => {
+          editor.update(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+            }
+          });
+        }}
       >
         <MdFormatListNumberedRtl className="inline text-2xl" />
       </button>
       <button
         type="button"
         className="px-3 py-1 bg-gray-200 rounded hover:bg-red-500 hover:text-white dark:bg-red-500 dark:text-white"
-        onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)}
+        onClick={() => {
+          editor.update(() => {
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+            }
+          });
+        }}
       >
         <MdOutlinePlaylistRemove className="inline text-2xl" />
       </button>
@@ -101,8 +118,8 @@ const Toolbar = () => {
         <MdSuperscript className="inline text-2xl" />
       </button>
       <select
-       name="heading"
-  id="heading"
+        name="heading"
+        id="heading"
         className="px-3 py-1 bg-gray-200 rounded hover:bg-green-500 hover:text-white dark:bg-green-500 dark:text-white"
         onChange={(e) => {
           const level = e.target.value;
