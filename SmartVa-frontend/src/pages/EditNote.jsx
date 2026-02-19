@@ -95,7 +95,7 @@ const EditNote = () => {
       </div>
 
       {/* EDITOR */}
-      <div className="pt-32 md:pt-40 p-4 md:p-6">
+      <div className="pt-44 md:pt-48 p-4 md:p-6">
         <Editor
           initialHtml={noteData.contentHtml}
           onChange={handleEditorChange}
