@@ -114,8 +114,8 @@ useEffect(() => {
  if(userData?.user) setUserName(userData?.user?.userName || '')
 
 
-  if (visitors4DayData) setVisitor4Day(visitors4DayData.visitors || []);
-  if (eventForTodayData) setUpcomingEvents(eventForTodayData.events || []);
+  if (visitors4DayData) setVisitor4Day(visitors4DayData?.visitors || []);
+  if (eventForTodayData) setUpcomingEvents(eventForTodayData?.events || []);
   if (pendingTasksData) setPendingTasks(pendingTasksData?.tasks || []);
   if (tasksDueIn3DaysData) setTasksDueIn3Days(tasksDueIn3DaysData?.tasks || []);
   if (overdueTasksData) setOverdueTasks(overdueTasksData?.tasks || []);
@@ -156,6 +156,7 @@ useEffect(() => {
   eventForTodayData,
   visitors4DayData,
   allContactsData,
+  
   
 ]);
 
@@ -293,8 +294,9 @@ const CreateNote = ()=>{
       {/* Events */}
       <small className='text-2xl mb-10'>Upcoming Events</small>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {upComingEvents.length > 0 ? upComingEvents.map(event => (
+        {upComingEvents?.length > 0 ? upComingEvents.map(event => (
           <UpcomingEvents key={event._id} event={event}/>
+         
         )) : <p className='text-gray-500'>No event for today</p>}
       </div>
       <AddAndManageButtons inform={"Create Events"} manage={"Manage Events"} display={()=> setCreateEventOpen(true)} direction={'/event'}/>

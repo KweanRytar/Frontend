@@ -12,6 +12,8 @@ const UpcomingEvents = ({ event }) => {
     "MMM D, YYYY • h:mm A"
   );
 
+  console.log("Event:", event);
+
   const isPast = dayjs(event.startTime).isBefore(dayjs());
 
   return (

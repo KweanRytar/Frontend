@@ -49,7 +49,7 @@ export const eventApi = createApi({
     // GET EVENTS FOR TODAY
     // ===========================
     getEventsForToday: builder.query({
-      query: () => getFullURL('/events/events4DDay'),
+      query: () => getFullURL('/events/events4DDay/'),
       providesTags: [{ type: 'Event', id: 'TODAY' }],
     }),
 

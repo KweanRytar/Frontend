@@ -89,7 +89,7 @@ const CreateNote = () => {
       </div>
 
       {/* EDITOR */}
-      <div className="pt-[100px] p-4 md:p-6">
+      <div className="pt-32 md:pt-40 p-4 md:p-6">
         <Editor onChange={handleEditorChange} />
       </div>
     </form>
