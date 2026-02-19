@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import SignupBackground from '../assets/rgisterBestOption.jpg';
 import axios from "axios";
 
 const SignUp = () => {
@@ -33,7 +34,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center dark:bg-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      style={{ backgroundImage: `url(${SignupBackground})` }}>
+        <div className="absolute inset-0 bg-emerald-900/40 backdrop-blur-sm"></div>
       <div className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-green-500">Register</h2>
         {message && <p className="mb-4 text-sm text-red-500">{message}</p>}

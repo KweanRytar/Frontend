@@ -56,7 +56,7 @@ const handleSubmit = async (e) => {
   return (
 <div
   className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-  style={{ backgroundImage: `url(${backgroundImage})` }}
+  style={{ backgroundImage: `url(${loginBackground})` }}
 >
   <div className="absolute inset-0 bg-emerald-900/40 backdrop-blur-sm"></div>
 

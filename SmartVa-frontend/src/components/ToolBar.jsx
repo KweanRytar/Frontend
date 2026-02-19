@@ -37,7 +37,7 @@ const Toolbar = () => {
   const [editor] = useLexicalComposerContext();
 
   return (
-    <div className="grid grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
+    <div className=" grid grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
       <button
         type="button"
         className="py-1 bg-gray-200 rounded hover:bg-green-500 hover:text-white dark:bg-green-500 dark:text-white"

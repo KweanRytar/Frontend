@@ -1,381 +1,277 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Components
-import NoteDetails from '../components/NoteDetails'
-import Overview from '../components/Overview'
-import TodayTask from '../components/TodayTask'
-import UpcomingEvents from '../components/UpcomingEvents'
-import Visitors from '../components/Visitors'
-import QuickNotes from '../components/QuickNotes'
-import AddAndManageButtons from '../components/AddAndManageButtons'
-import DocumentSummary from '../components/DocumentSummary'
-import Busy from '../data/Busy'
-import NewTask from '../components/NewTask'
-import CreateEvent from '../components/CreateEvent'
-import NewVisitor from '../components/NewVisitor'
-import NewDocument from '../components/NewDocument'
-import NewContact from '../components/NewContact'
-import ContactCard from '../components/ContactCard'
-import ContactDetailsCard from '../components/ContactDetailsCard'
-import { useGetUserInfoQuery } from '../redux/dashboard/OverviewSlice'
-import { Navigate } from 'react-router-dom'
- 
+import Overview from "../components/Overview";
+import TodayTask from "../components/TodayTask";
+import UpcomingEvents from "../components/UpcomingEvents";
+import Visitors from "../components/Visitors";
+import QuickNotes from "../components/QuickNotes";
+import DocumentSummary from "../components/DocumentSummary";
+import AddAndManageButtons from "../components/AddAndManageButtons";
+import Busy from "../data/Busy";
 
-
-// Redux queries (RTK Query hooks)
-import { useGetAllContactsQuery } from '../redux/Contact/ContactSlice'
-import { useGetDocumentsQuery } from '../redux/document/DocumentSlice'
-import { useGetEventsForTodayQuery } from '../redux/event/EventSlice'
-import { useGetNotesQuery } from '../redux/Note/NoteSlice'
-import { useGetEmergencyTasksQuery, useGetOverdueTasksQuery,  useGetPendingTasksQuery, useGetTasksDueIn72HoursQuery, useGetAllTasksQuery } from '../redux/Task/TaskSlice'
-import { useGetAllVisitorsQuery, useGetVisitorsByDayQuery } from '../redux/visitor/visitorSlice'
-
-import { useNavigate } from 'react-router-dom'
-
+// Redux
+import { useGetUserInfoQuery } from "../redux/dashboard/OverviewSlice";
+import { useGetAllContactsQuery } from "../redux/Contact/ContactSlice";
+import { useGetDocumentsQuery } from "../redux/document/DocumentSlice";
+import { useGetEventsForTodayQuery } from "../redux/event/EventSlice";
+import { useGetNotesQuery } from "../redux/Note/NoteSlice";
+import {
+  useGetEmergencyTasksQuery,
+  useGetOverdueTasksQuery,
+  useGetPendingTasksQuery,
+  useGetTasksDueIn72HoursQuery,
+  useGetAllTasksQuery,
+} from "../redux/Task/TaskSlice";
+import { useGetAllVisitorsQuery, useGetVisitorsByDayQuery } from "../redux/visitor/visitorSlice";
 
 const Dashboard = () => {
-  // ====== STATE ======
-   const navigate = useNavigate()
-  const todaysDate = new Date();
+  const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0];
 
-  const [noteTodisplay, setNoteToDisplay]= useState()
+  // ================= API =================
+  const { data: userData } = useGetUserInfoQuery();
+  const { data: contactsData } = useGetAllContactsQuery();
+  const { data: taskTotalData } = useGetAllTasksQuery();
+  const { data: notesData } = useGetNotesQuery();
+  const { data: documentsData } = useGetDocumentsQuery();
+  const { data: visitorsTotalData } = useGetAllVisitorsQuery();
+  const { data: eventsTodayData } = useGetEventsForTodayQuery();
+  const { data: visitorsTodayData } = useGetVisitorsByDayQuery(today);
 
- 
-  const {data: userData} = useGetUserInfoQuery()
+  const { data: emergencyData } = useGetEmergencyTasksQuery();
+  const { data: overdueData } = useGetOverdueTasksQuery();
+  const { data: pendingData } = useGetPendingTasksQuery();
+  const { data: dueSoonData } = useGetTasksDueIn72HoursQuery();
 
-  const [totalContact, setTotalContact] = useState()
-  const [totalTask, setTotalTask] = useState()
-  const [totalNotes, setTotalNotes] = useState()
-  const [totalDocuments, setTotalDocuments] = useState()
-  const [username, setUsername] = useState()
-  const [totalVisitors, setTotalVisitors] = useState()
-  const [newTaskOpen, setNewTaskOpen] = useState(false)
-  const [createEventOpen, setCreateEventOpen] = useState(false)
-  const [newVisitorOpen, setNewVisitorOpen] = useState(false)
-  const [newDocumentOpen, setNewDocumentOpen] = useState(false)
-  const [newContacts, setNewContacts] = useState(false)
-  const [allContacts, setAllContacts] = useState()
-  const [contacts, setContacts] = useState()
-  const [viewContactDetails, setViewContactDetails] = useState(false)
-  const [recentContacts, setRecentContact] = useState()
-  
-  const [noteDetails, setNoteDetails] = useState(false) 
-  const [emergencyTasks, setEmergencyTasks] = useState([])
-  const [overdueTasks, setOverdueTasks] = useState([])
-  const [pendingTasks, setPendingTasks] = useState([])
-  const [tasksDueIn3Days, setTasksDueIn3Days] = useState([])
-  const [upComingEvents, setUpcomingEvents] = useState([])
-  const [vistor4Day, setVisitor4Day] = useState([])
-  const [currentContact, setCurrentContact] = useState()
+  // ================= DERIVED STATE =================
+  const userName = userData?.user?.userName || "";
 
-  const [notes, setNotes] = useState([])
-  const [latestNotes, setLatestNotes] = useState([])
+  const emergencyTasks = emergencyData?.tasks || [];
+  const overdueTasks = overdueData?.tasks || [];
+  const pendingTasks = pendingData?.tasks || [];
+  const dueSoonTasks = dueSoonData?.tasks || [];
 
-  const [documents, setDocuments] = useState([])
-  const [latestDocuments, setLatestDocuments] = useState([])
+  const eventsToday = eventsTodayData?.events || [];
+  const visitorsToday = visitorsTodayData?.visitors || [];
+  const contacts = contactsData?.contacts || [];
+  const notes = notesData?.notes || [];
+  const documents = documentsData?.data || [];
 
-  const [randomNumber, setRandomNumber] = useState()
-  const [userName, setUserName] = useState('')
+  // ================= FILTER LAST 7 DAYS =================
+  const last7DaysFilter = (items) => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    return items.filter((item) => {
+      const created = new Date(item.createdAt);
+      const updated = new Date(item.updatedAt);
+      return created >= sevenDaysAgo || updated >= sevenDaysAgo;
+    });
+  };
 
+  const recentContacts = useMemo(() => last7DaysFilter(contacts), [contacts]);
+  const recentNotes = useMemo(() => last7DaysFilter(notes), [notes]);
+  const recentDocuments = useMemo(() => last7DaysFilter(documents), [documents]);
 
-  // Task categories for rotation
-  const taskCategory = [
-    'Red Zone Items',
-    'Deadline Missed',
-    'Awaiting Action',
-    'Next 3 Days'
-  ]
+  // ================= PRIORITY TASK ORDER =================
+  const priorityTasks = [
+    ...emergencyTasks,
+    ...overdueTasks,
+    ...pendingTasks,
+    ...dueSoonTasks,
+  ].slice(0, 5);
 
-  // ====== API HOOKS ======
-  const {data: allContactsData} = useGetAllContactsQuery()
-  // const { data: totalContactsData } = useGetTotalContactsQuery()
-  const { data: totalTaskData } = useGetAllTasksQuery()
-  const { data: totalNotesData } = useGetNotesQuery()
-  const { data: totalDocumentData } = useGetDocumentsQuery()
-  const { data: totalVisitorsData } = useGetAllVisitorsQuery()
-  const { data: emergencyTasksData } = useGetEmergencyTasksQuery()
-  const { data: overdueTasksData } = useGetOverdueTasksQuery()
-  const { data: tasksDueIn3DaysData } = useGetTasksDueIn72HoursQuery()
-  const { data: pendingTasksData } = useGetPendingTasksQuery()
-  const { data: eventForTodayData } = useGetEventsForTodayQuery()
-  const { data: visitors4DayData } = useGetVisitorsByDayQuery(
-    todaysDate.toISOString().split('T')[0]
-  )
-  
-
-
-  // ====== SYNC DATA TO STATE ======
-useEffect(() => {
-  if (allContactsData) {
-    setAllContacts(allContactsData.totalContacts);
-    setContacts(allContactsData.contacts);
-  }
-
- if(userData?.user) setUserName(userData?.user?.userName || '')
-
-
-  if (visitors4DayData) setVisitor4Day(visitors4DayData?.visitors || []);
-  if (eventForTodayData) setUpcomingEvents(eventForTodayData?.events || []);
-  if (pendingTasksData) setPendingTasks(pendingTasksData?.tasks || []);
-  if (tasksDueIn3DaysData) setTasksDueIn3Days(tasksDueIn3DaysData?.tasks || []);
-  if (overdueTasksData) setOverdueTasks(overdueTasksData?.tasks || []);
-  if (emergencyTasksData) setEmergencyTasks(emergencyTasksData?.tasks || []);
-
-  // ✅ Removed totalContactsData line
-  if (totalTaskData) setTotalTask(totalTaskData.totalTasks || 0);
-
-  if (totalNotesData) {
-    setTotalNotes(totalNotesData.totalNotes || 0);
-    setNotes(totalNotesData.notes || []);
-  }
-
-  if (totalDocumentData) {
-    setTotalDocuments(totalDocumentData.total || 0);
-    setDocuments(totalDocumentData.data || []);
-  }
-
-  if (totalVisitorsData)
-    setTotalVisitors(totalVisitorsData.total || 0);
-
-  // Random number generator to rotate task category every 3 mins
-  setRandomNumber(Math.floor(Math.random() * 4));
-  const interval = setInterval(() => {
-    setRandomNumber(Math.floor(Math.random() * 4));
-  }, 180000);
-
-  return () => clearInterval(interval);
-}, [
-  totalNotesData,
-  totalTaskData,
-  totalDocumentData,
-  totalVisitorsData,
-  emergencyTasksData,
-  overdueTasksData,
-  tasksDueIn3DaysData,
-  pendingTasksData,
-  eventForTodayData,
-  visitors4DayData,
-  allContactsData,
-  
-  
-]);
-
-
-
-  // ====== HELPERS ======
-
-  // Format date into hh:mm AM/PM
-  const dateConversion = (date) => {
-    const originalHour = date.getHours()
-    const hours = originalHour % 12 || 12
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const dayTime = originalHour >= 12 ? 'PM' : 'AM'
-    return `${hours}:${minutes} ${dayTime}`
-
-  }
-
-
-  // recently created Contacts
-   // ✅ Memoized filtered contacts (last 7 days)
-const filteredContacts = useMemo(() => {
-  if (!contacts) return [];
-  const now = new Date();
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(now.getDate() - 7);
-
-  return contacts.filter(contact => {
-    const createdAt = new Date(contact.createdAt);
-    const updatedAt = new Date(contact.updatedAt);
-    return createdAt >= sevenDaysAgo || updatedAt >= sevenDaysAgo;
-  });
-}, [contacts]);
-
-
-  // Recently edited notes (last 7 days)
-  const recentlyEditedNotes = () => {
-    const now = new Date()
-    const sevenDaysAgo = new Date()
-    sevenDaysAgo.setDate(now.getDate() - 7)
-
-    return notes.filter(note => {
-      const createdAt = new Date(note.createdAt)
-      const updatedAt = new Date(note.updatedAt)
-      return createdAt >= sevenDaysAgo || updatedAt >= sevenDaysAgo
-    })
-  }
-
-  // Recently edited documents (last 7 days)
-  const recentlyEditedDocuments = () => {
-    const today = new Date()
-    const sevenDaysAgo = new Date()
-    sevenDaysAgo.setDate(today.getDate() - 7)
-
-    return documents.filter(document => {
-      const createdAt = new Date(document.createdAt)
-      const updatedAt = new Date(document.updatedAt)
-      return createdAt >= sevenDaysAgo || updatedAt >= sevenDaysAgo
-    })
-  }
-
-
-
-
- // ====== UPDATE LATEST NOTES & DOCUMENTS ======
-useEffect(() => {
-  setLatestNotes(Array.isArray(notes) ? recentlyEditedNotes() : [])
-  setLatestDocuments(Array.isArray(documents) ? recentlyEditedDocuments() : [])
-}, [notes, documents])
-
-
-const CreateNote = ()=>{
- 
-
-  navigate('/create-note')
-}
-
-  // ====== JSX ======
+  // ================= JSX =================
   return (
-    <div className='bg-gray-100 min-h-screen p-8 dark:bg-gray-800 dark:text-white mt-10 md:mt-0'>
-      <h1 className='text-3xl font-bold mt-22  mb-4'>Dashboard</h1>
-      
-      <small className='block mb-4 text-2xl text-white bg-green-500 p-4 rounded-md text-center'>
-        {`Welcome back ${userName.charAt(0).toUpperCase() + userName.slice(1)}! Here's a quick overview of your day.`}
-      </small>
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
 
-      {/* Overview cards */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6 mb-12'>
-        <Overview name={'Contacts'} total={allContacts}/>
-        <Overview name={'Tasks'} total={totalTask}/>
-        <Overview name={'Notes'} total={totalNotes}/>
-        <Overview name={'Documents'} total={totalDocuments}/>
-        <Overview name={'Visitors'} total={totalVisitors}/>
+      {/* ===== HERO HEADER ===== */}
+      <div className="bg-emerald-600 text-white rounded-2xl p-6 shadow-lg mb-12">
+        <h1 className="text-2xl md:text-3xl font-semibold">
+          Welcome back, {userName.charAt(0).toUpperCase() + userName.slice(1)}
+        </h1>
+        <p className="text-sm opacity-90 mt-1">
+          Here’s your operational overview for today.
+        </p>
       </div>
 
-      {/* Task Categories (rotates every 3 mins) */}
-      <small className='text-2xl'>{taskCategory[randomNumber]}</small>
+      {/* ===== KPI SECTION ===== */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+        <Overview name="Contacts" total={contactsData?.totalContacts || 0} />
+        <Overview name="Tasks" total={taskTotalData?.totalTasks || 0} />
+        <Overview name="Notes" total={notesData?.totalNotes || 0} />
+        <Overview name="Documents" total={documentsData?.total || 0} />
+        <Overview name="Visitors" total={visitorsTotalData?.total || 0} />
+      </div>
 
-      {/* Emergency / Overdue / Pending / Next 3 Days tasks */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {randomNumber === 0 && (
-          emergencyTasks.length > 0 ?
-            emergencyTasks.map(task => (
-              <TodayTask key={task._id} title={task.title} dueDate={new Date(task.dueDate).toISOString()} id={task._id}/>
+      {/* ===== PRIORITY + EVENTS ===== */}
+      <div className="grid lg:grid-cols-3 gap-6 mb-12">
+
+        {/* Priority Tasks */}
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Priority Tasks
+          </h2>
+
+          {priorityTasks.length > 0 ? (
+            priorityTasks.map((task) => (
+              <TodayTask
+                key={task._id}
+                title={task.title}
+                dueDate={new Date(task.dueDate).toLocaleString()}
+                id={task._id}
+              />
             ))
-            : <p className="text-gray-500">No emergency task</p>
-        )}
+          ) : (
+            <p className="text-gray-500">No urgent tasks 🎉</p>
+          )}
 
-        {randomNumber === 1 && (
-          overdueTasks?.length > 0 ?
-            overdueTasks.map(task => (
-              <TodayTask key={task._id} title={task.title} dueDate={new Date(task.dueDate)} id={task._id}/>
+          <div className="mt-4">
+            <AddAndManageButtons
+              inform="Create Task"
+              manage="Manage Tasks"
+              display={() => navigate("/task")}
+              direction="/task"
+            />
+          </div>
+        </div>
+
+        {/* Today's Events */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Today’s Events
+          </h2>
+
+          {eventsToday.length > 0 ? (
+            eventsToday.slice(0, 3).map((event) => (
+              <UpcomingEvents key={event._id} event={event} />
             ))
-            : <p className='text-gray-500'>No overdue task</p>
-        )}
+          ) : (
+            <p className="text-gray-500">No events scheduled</p>
+          )}
 
-        {randomNumber === 2 && (
-          pendingTasks?.length > 0 ?
-            pendingTasks.map(task => (
-              <TodayTask key={task._id} title={task.title} dueDate={new Date(task.dueDate).toLocaleString()} id={task._id}/>
-            ))
-            : <p className='text-gray-500'>No pending task</p>
-        )}
-
-        {randomNumber === 3 && (
-          tasksDueIn3Days?.length > 0 ?
-            tasksDueIn3Days.map(task => (
-              <TodayTask key={task._id} title={task.title} dueDate={new Date(task.dueDate).toLocaleString()} id={task._id}/>
-            ))
-            : <p className='text-gray-500'>No task due in next 72 hours</p>
-        )}
-      </div>
-
-      <AddAndManageButtons inform={"Create Task"} manage={"Manage Tasks"} display={()=>setNewTaskOpen(true)} direction={'/task'}/>
-
-      {/* Events */}
-      <small className='text-2xl mb-10'>Upcoming Events</small>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {upComingEvents?.length > 0 ? upComingEvents.map(event => (
-          <UpcomingEvents key={event._id} event={event}/>
-         
-        )) : <p className='text-gray-500'>No event for today</p>}
-      </div>
-      <AddAndManageButtons inform={"Create Events"} manage={"Manage Events"} display={()=> setCreateEventOpen(true)} direction={'/event'}/>
-
-      {/* Visitors */}
-      <small className='text-2xl block mt-6'>Today's Visitor Log</small>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {vistor4Day.length > 0 ? vistor4Day.map(visitor => (
-          <Visitors key={visitor._id} name={visitor.name} time={new Date(visitor.createdAt).toDateString()} purpose={visitor.message} details={()=>{
-                    navigate(`/visitor-details/${visitor._id}`, {
-                      state: { visitor },
-                    })
-                  }}/>
-        )) : <p className='text-gray-500'>No visitor for today</p>}
-      </div>
-      <AddAndManageButtons inform={"Create Visitor"} manage={"Manage Visitors"} display={()=> setNewVisitorOpen(true)} direction={'/visitor'}/>
-
-
-        {/* Contacts */}
-         <small className='text-2xl block mt-6'>Newest Connections</small>
-         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {
-          allContacts > 0 ? filteredContacts.map(
-            contact => (
-             < ContactCard key={contact._id} companyName={contact.companyName} email={contact.email} name={contact.name} position={contact.position} phoneNumber={contact.phoneNumber} time={contact.createdAt} displayDetails={()=>{
-              setCurrentContact(contact)
-              setViewContactDetails(true)}}/>
-            )
-          ) : <p className='text-gray-500'>No recent contacts </p>
-        }
-         
-
-         </div>
-          <AddAndManageButtons inform={"Create New Connections"} manage={"Manage Contacts"} display={()=> setNewContacts(true)}  direction={'/contact'}/>
-      {/* Notes */}
-      <small className='text-2xl block mt-6'>Quick Notes</small>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10 mt-6'>
-        {latestNotes.length > 0 ? latestNotes.map(note => (
-          <QuickNotes key={note._id} time={new Date(note.createdAt).toDateString()} title={note.title} shortendDescription={note.contentText.length > 50 ? note.contentText.substring(0, 50) + '...' : note.description} details={()=>{
-            setNoteToDisplay(note)
-            setNoteDetails(true)
-
-
-          }}/>
-        )) : <p className='text-gray-500'>No recently edited notes</p>}
-      </div>
-      <AddAndManageButtons inform={"Create Note"} manage={"Manage Notes"} display={CreateNote} direction={'/note'}/>
-
-      {/* Documents */}
-      <small className='text-2xl block mt-6'>Document Summary</small>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-10 mt-6 justify-between gap-6'>
-        {latestDocuments.length > 0 ? latestDocuments.map(document => (
-          <DocumentSummary key={document._id} title={document.title} sender={document.sender} type={document.type} time={new Date(document.
-updatedAt).toString()}/>
-        )) : <p className='text-gray-500'>No recently created or edited documents</p>}
-      </div>
-      <AddAndManageButtons inform={"Create Document"} manage={"Manage Documents"} display={()=> setNewDocumentOpen(true)} direction={"/document"}/>
-
-      {/* Busy Calendar */}
-      <div className='mt-10'>
-        <small className="text-2xl font-bold mb-4">Events</small>
-        <div className='overflow-x-auto max-w-full'>
-          <Busy />
+          <div className="mt-4">
+            <AddAndManageButtons
+              inform="Create Event"
+              manage="Manage Events"
+              display={() => navigate("/event")}
+              direction="/event"
+            />
+          </div>
         </div>
       </div>
 
-{ newTaskOpen && <NewTask close={()=>setNewTaskOpen(false)} />}
-{ createEventOpen && <CreateEvent close={()=>setCreateEventOpen(false)} />}
-{newVisitorOpen && <NewVisitor close={()=>setNewVisitorOpen(false)} />}
-{newDocumentOpen && <NewDocument close={()=>setNewDocumentOpen(false)}/>}
-{newContacts && <NewContact close={()=> setNewContacts(false)}/>}
+      {/* ===== OPERATIONS (Visitors + Contacts) ===== */}
+      <div className="grid lg:grid-cols-2 gap-6 mb-12">
 
-{viewContactDetails && <ContactDetailsCard contact={currentContact} unDisplayDetails={()=>{
-  setViewContactDetails(false)
-}} />}
-{noteDetails && <NoteDetails close={()=>{setNoteDetails(false)}} note={noteTodisplay} />}
+        {/* Visitors */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Today’s Visitors
+          </h2>
 
+          {visitorsToday.length > 0 ? (
+            visitorsToday.slice(0, 4).map((visitor) => (
+              <Visitors
+                key={visitor._id}
+                name={visitor.name}
+                time={new Date(visitor.createdAt).toDateString()}
+                purpose={visitor.message}
+                details={() =>
+                  navigate(`/visitor-details/${visitor._id}`, {
+                    state: { visitor },
+                  })
+                }
+              />
+            ))
+          ) : (
+            <p className="text-gray-500">No visitors today</p>
+          )}
+        </div>
+
+        {/* Contacts */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Recent Contacts
+          </h2>
+
+          {recentContacts.length > 0 ? (
+            recentContacts.slice(0, 4).map((contact) => (
+              <div
+                key={contact._id}
+                className="p-3 rounded-xl border border-gray-200 dark:border-gray-700 mb-3"
+              >
+                <p className="font-medium">{contact.name}</p>
+                <p className="text-sm text-gray-500">{contact.email}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No recent contacts</p>
+          )}
+        </div>
+      </div>
+
+      {/* ===== NOTES + DOCUMENTS ===== */}
+      <div className="grid lg:grid-cols-2 gap-6 mb-12">
+
+        {/* Notes */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Recently Edited Notes
+          </h2>
+
+          {recentNotes.length > 0 ? (
+            recentNotes.slice(0, 4).map((note) => (
+              <QuickNotes
+                key={note._id}
+                time={new Date(note.createdAt).toDateString()}
+                title={note.title}
+                shortendDescription={
+                  note.contentText?.length > 50
+                    ? note.contentText.substring(0, 50) + "..."
+                    : note.contentText
+                }
+              />
+            ))
+          ) : (
+            <p className="text-gray-500">No recent notes</p>
+          )}
+        </div>
+
+        {/* Documents */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+            Recently Updated Documents
+          </h2>
+
+          {recentDocuments.length > 0 ? (
+            recentDocuments.slice(0, 4).map((doc) => (
+              <DocumentSummary
+                key={doc._id}
+                title={doc.title}
+                sender={doc.sender}
+                type={doc.type}
+                time={new Date(doc.updatedAt).toLocaleString()}
+              />
+            ))
+          ) : (
+            <p className="text-gray-500">No recent documents</p>
+          )}
+        </div>
+      </div>
+
+      {/* ===== CALENDAR ===== */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-emerald-600 mb-4">
+          Event Calendar
+        </h2>
+        <div className="overflow-x-auto">
+          <Busy />
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

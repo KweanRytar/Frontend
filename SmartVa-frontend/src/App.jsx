@@ -47,7 +47,7 @@ function App() {
   }, [isDark]);
 
   // Pages that should NOT show Nav
-  const publicPaths = ["/signup", "/login", "/reset-password", "/verify-email"];
+  const publicPaths = ["/signup", "/login", "/reset-password", "/verify-email" , "/"];
   const isPublic = publicPaths.includes(location.pathname);
 
   return (
