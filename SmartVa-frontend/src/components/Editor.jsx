@@ -46,6 +46,7 @@ const theme = {
       listitem: "editor-nested-listitem",
     },
   },
+   root: "editor-root text-gray-900 dark:text-gray-100", 
   
 };
 
@@ -145,7 +146,11 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
 
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="p-4 bg-white dark:bg-[#1E293B] text-gray-800 dark:text-white rounded shadow outline-none min-h-[150px]" />
+            <ContentEditable className=" p-4
+  bg-white dark:bg-[#1E293B]
+  text-gray-900 dark:text-gray-100 !important
+  rounded shadow outline-none min-h-[150px]
+" />
           }
           placeholder={
             <div className="text-gray-400 pointer-events-none">

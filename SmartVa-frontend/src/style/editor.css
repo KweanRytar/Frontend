@@ -152,3 +152,19 @@
 .dark .editor-tableCell:hover {
   background-color: #4b5563;
 }
+/* Make sure these exist and are strong enough */
+.editor-root,
+.editor-paragraph {
+  color: inherit;           /* or explicit: #111827 in light, #f1f5f9 in dark */
+}
+
+.dark .editor-paragraph {
+  color: #f1f5f9;           /* slate-100 or gray-100 */
+}
+
+/* Or if you prefer Tailwind-only in CSS: */
+@layer components {
+  .editor-paragraph {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+}
