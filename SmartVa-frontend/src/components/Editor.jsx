@@ -29,6 +29,9 @@ const theme = {
     h1: "editor-heading-h1",
     h2: "editor-heading-h2",
     h3: "editor-heading-h3",
+    h4: "editor-heading-h4",
+    h5: "editor-heading-h5",
+    h6: "editor-heading-h6",
   },
   paragraph: "editor-paragraph",
   text: {
@@ -148,7 +151,7 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
           contentEditable={
             <ContentEditable className=" p-4
   bg-white dark:bg-[#1E293B]
-  text-gray-900 dark:text-gray-100 !important
+   text-gray-900 dark:text-gray-100 !important
   rounded shadow outline-none min-h-[150px]
 " />
           }

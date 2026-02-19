@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import loginBackground from '../assets/LoginSmartvaOption2.jpg';
 // import { useDispatch } from "react-redux";
 // import { loginUser } from "../redux/user/userActions";
 import { useGetUserInfoQuery } from "../redux/dashboard/OverviewSlice";
@@ -53,8 +54,14 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center dark:bg-gray-800">
-      <div className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-md w-full max-w-md">
+<div
+  className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+  style={{ backgroundImage: `url(${backgroundImage})` }}
+>
+  <div className="absolute inset-0 bg-emerald-900/40 backdrop-blur-sm"></div>
+
+
+      <div className="relative bg-white/90 dark:bg-gray-700/90 p-8 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-green-500">Login</h2>
         {message && <p className={login ? 'text-green-500 mb-6 text-sm': 'mb-4 text-sm text-red-500'}>{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">

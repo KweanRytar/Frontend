@@ -159,12 +159,9 @@
 }
 
 .dark .editor-paragraph {
-  color: #f1f5f9;           /* slate-100 or gray-100 */
+  color: #f1f5f9  !important;           /* slate-100 or gray-100 */
 }
 
-/* Or if you prefer Tailwind-only in CSS: */
-@layer components {
-  .editor-paragraph {
-    @apply text-gray-900 dark:text-gray-100;
-  }
+.dark .editor-paragraph span[data-lexical-text="true"] {
+  color: #f1f5f9;           /* Ensure inline styles also adapt */
 }

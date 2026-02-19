@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import LandingPage from './pages/LandingPage';
 
 // Protected pages
 import Dashboard from "./pages/Dashboard";
@@ -63,6 +64,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/" element={<LandingPage />} />
 
         {/* -------- PROTECTED ROUTES -------- */}
         <Route element={<ProtectedRouteFallback />}>
