@@ -6,8 +6,8 @@ const QuickNotes = ({ time, title, shortendDescription, details }) => {
 
   return (
     <div
-      onClick={details}
-      className="cursor-pointer group
+    
+      className=" group
                  bg-white dark:bg-gray-800
                  border border-gray-200 dark:border-gray-700
                  rounded-2xl p-4
@@ -42,7 +42,9 @@ const QuickNotes = ({ time, title, shortendDescription, details }) => {
           Quick Note
         </span>
 
-        <span className="text-[10px] px-2 py-1 rounded-full bg-[#008235]/20 text-[#008235] font-medium">
+        <span className="cursor-pointer text-[10px] px-2 py-1 rounded-full bg-[#008235]/20 text-[#008235] font-medium"
+        onClick={()=>details()}
+        >
           View
         </span>
       </div>
