@@ -87,7 +87,7 @@ const Nav = ({ isDark, toggleDarkMode }) => {
   return (
     <>
       {/* MOBILE HEADER */}
-      <header className='fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-gray-900 shadow-md'>
+      <header className='fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-gray-900 shadow-md flex items-center justify-between'>
         <div className='flex p-4 items-center relative'>
           <NavLink to="/dashboard" className='text-2xl font-bold text-green-500 flex items-center gap-2'>
             <MdDashboardCustomize /> SmartVa

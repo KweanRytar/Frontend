@@ -64,7 +64,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage isDark={isDark} toggleDarkMode={toggleDarkMode} />} />
 
         {/* -------- PROTECTED ROUTES -------- */}
         <Route element={<ProtectedRouteFallback />}>

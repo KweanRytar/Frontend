@@ -129,7 +129,7 @@ const Dashboard = () => {
   const [showNewContactModal, setShowNewContactModal] = useState(false);
 
   return (
-    <div className="top-10 bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
+    <div className="top-20 bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
 
       {/* HERO */}
       <div className="bg-emerald-600 text-white rounded-2xl p-6 shadow-lg mb-12">
@@ -176,7 +176,7 @@ const Dashboard = () => {
       )}
     </div>
 
-    <div className="mt-4 w-full flex flex-col sm:flex-row gap-2">
+    <div className="mt-4">
       <AddAndManageButtons
         inform="Create Task"
         manage="Manage Tasks"
@@ -202,7 +202,7 @@ const Dashboard = () => {
       )}
     </div>
 
-    <div className="mt-4 w-full flex flex-col sm:flex-row gap-2">
+    <div className="mt-4">
       <AddAndManageButtons
         inform="Create Event"
         manage="Manage Events"
@@ -281,7 +281,7 @@ const Dashboard = () => {
 </div>
 
       {/* ===== NOTES + DOCUMENTS ===== */}
-      <div className="grid lg:grid-cols-2 gap-6 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
 
         {/* Notes */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
@@ -352,8 +352,10 @@ const Dashboard = () => {
        
       </div>
 
+    
+    </div>
       {/* ===== CALENDAR ===== */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
+      <div className=" w-full bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm ">
         <h2 className="text-lg font-semibold text-emerald-600 mb-4">
           Event Calendar
         </h2>
@@ -361,6 +363,10 @@ const Dashboard = () => {
           <Busy />
         </div>
       </div>
+
+
+
+
       {/* modals */}
       {selectedContact && (
         <ContactDetailsCard 
@@ -416,7 +422,6 @@ const Dashboard = () => {
           close={() => setShowNewVisitorModal(false)}
         />
       )}
-    </div>
     </div>
   );
 };

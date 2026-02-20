@@ -10,18 +10,13 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
   const [showOverdue, setShowOverdue] = useState(false);
   const [showPending, setShowPending] = useState(false);
 
-  // Load delegates from Redux query
   useEffect(() => {
-    if (delegatesData?.delegates) {
-      setDelegates(delegatesData.delegates);
-    }
+    if (delegatesData?.delegates) setDelegates(delegatesData.delegates);
   }, [delegatesData]);
 
-  // Filtering logic
   const filteredDelegates = useMemo(() => {
     let filtered = [...delegates];
 
-    // Search
     if (searchTerm) {
       filtered = filtered.filter(
         (d) =>
@@ -29,24 +24,20 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
           d.email?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
-    // Filter by overdue or pending
     if (showOverdue) filtered = filtered.filter((d) => d.overdue);
     if (showPending) filtered = filtered.filter((d) => d.pending);
 
     return filtered;
   }, [delegates, searchTerm, showOverdue, showPending]);
 
-  // Badge color
   const getDelegateColor = (delegate) => {
-    if (delegate.overdue) return "bg-red-400";
-    if (delegate.pending) return "bg-yellow-400";
-    return "bg-green-400";
+    if (delegate.overdue) return "bg-red-200 dark:bg-red-600";
+    if (delegate.pending) return "bg-yellow-200 dark:bg-yellow-600";
+    return "bg-green-200 dark:bg-green-600";
   };
 
   if (isLoading)
     return <p className="text-center mt-10">Loading delegates...</p>;
-
   if (error)
     return (
       <p className="text-center mt-10 text-red-500">
@@ -55,22 +46,22 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
     );
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8 dark:bg-gray-800 dark:text-white mt-10 md:mt-16">
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-around items-center bg-white dark:bg-gray-700 p-4 gap-2 rounded-2xl shadow-md">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md">
-          <IoIosArrowBack
-            className="text-2xl cursor-pointer"
-            onClick={() => {
-              delegateview();
-              taskView();
-            }}
-          />
+      <div className="flex flex-col sm:flex-row justify-start items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md">
+        <button
+          className="flex items-center justify-center p-2 rounded-md bg-green-500 text-white hover:bg-green-600"
+          onClick={() => {
+            delegateview();
+            taskView();
+          }}
+        >
+          <IoIosArrowBack className="text-2xl" />
         </button>
 
         <button
-          className={`text-white rounded-md px-4 py-2 cursor-pointer ${
-            showOverdue ? "bg-red-500" : "bg-green-500"
+          className={`px-4 py-2 rounded-2xl font-medium text-white transition ${
+            showOverdue ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
           }`}
           onClick={() => setShowOverdue(!showOverdue)}
         >
@@ -78,8 +69,8 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
         </button>
 
         <button
-          className={`text-white rounded-md px-4 py-2 cursor-pointer ${
-            showPending ? "bg-yellow-500" : "bg-green-500"
+          className={`px-4 py-2 rounded-2xl font-medium text-white transition ${
+            showPending ? "bg-yellow-500 hover:bg-yellow-600" : "bg-green-500 hover:bg-green-600"
           }`}
           onClick={() => setShowPending(!showPending)}
         >
@@ -88,52 +79,53 @@ const DelegatesView = ({ delegateview, taskView, newTask }) => {
       </div>
 
       {/* Search */}
-      <div className="bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md mt-6">
         <input
           type="text"
-          placeholder="Search for a delegate"
-          className="w-full p-2 focus:outline-none"
+          placeholder="Search for a delegate..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
         />
       </div>
 
       {/* Delegates List */}
-      <div className="grid  lg:grid-cols-4 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
         {filteredDelegates.length === 0 ? (
-          <p className="text-center text-gray-500">No delegates found.</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 col-span-full">
+            No delegates found.
+          </p>
         ) : (
           filteredDelegates.map((delegate, index) => (
             <div
               key={index}
-              className={`${getDelegateColor(
+              className={`p-6 rounded-2xl shadow-md flex flex-col justify-between ${getDelegateColor(
                 delegate
-              )} text-white p-6 rounded-2xl shadow-md`}
+              )}`}
             >
-              <h2 className="text-xl font-semibold mb-2">{delegate?.name}</h2>
-              <p className="mb-1">
-                <strong>Email:</strong> {delegate?.email}
-              </p>
-             
-              <p className="mt-2 text-sm opacity-90">
-                Tasks assigned: {delegate.taskCount}
-              </p>
+              <div>
+                <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white truncate">
+                  {delegate?.name}
+                </h2>
+                <p className="mb-1 text-gray-700 dark:text-gray-200">
+                  <strong>Email:</strong> {delegate?.email}
+                </p>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  Tasks assigned: {delegate.taskCount}
+                </p>
+              </div>
 
-              <div className="flex justify-around mt-4">
+              <div className="flex flex-wrap justify-between gap-2 mt-4">
                 <Link
                   to={`/delegate-details/${encodeURIComponent(delegate.email)}`}
-                  className="px-4 py-2 rounded-xl font-medium shadow-sm 
-                    bg-white text-gray-800 border border-gray-300 
-                    hover:bg-gray-100 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
+                  className="px-4 py-2 rounded-xl font-medium shadow-sm bg-white text-gray-800 border border-gray-300 hover:bg-gray-100 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 transition"
                 >
                   View
                 </Link>
 
                 <button
-                  className="px-4 py-2 rounded-xl font-medium shadow-sm 
-                    bg-green-500 text-white 
-                    hover:bg-green-600 active:bg-green-700"
                   onClick={() => newTask()}
+                  className="px-4 py-2 rounded-xl font-medium shadow-sm bg-green-500 text-white hover:bg-green-600 active:bg-green-700 transition"
                 >
                   Assign Task
                 </button>

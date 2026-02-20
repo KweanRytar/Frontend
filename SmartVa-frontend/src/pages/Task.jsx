@@ -1,72 +1,50 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { IoPeople } from "react-icons/io5";
 import { MdAddTask } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import NewTask from "../components/NewTask.jsx";
 import EditTasks from "../components/EditTasks.jsx";
-import { Link } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal.jsx";
 import DelegatesView from "../components/DelegatesView.jsx";
 
 import {
   useGetEmergencyTasksQuery,
   useGetTasksDueTodayQuery,
-
   useGetTasksDueIn72HoursQuery,
   useGetOverdueTasksQuery,
-
-
   useGetTasksByNameQuery,
- 
   useDeleteTaskMutation,
   useGetAllTasksQuery,
 } from "../redux/Task/TaskSlice.js";
-import { toast } from "react-toastify";
 
 const Task = () => {
-  // Pagination state
-  const [page, setPage] = useState(1);
-  const [limit] = useState(10);
-
   const today = new Date().toISOString();
-  const [url, setUrl] = useState()
+  const [taskView, setTaskView] = useState(true);
+  const [delegateView, setDelegateView] = useState(false);
+  const [createNewTask, setCreateNewTask] = useState(false);
+  const [editTask, setEditTask] = useState(false);
+  const [editData, setEditData] = useState({});
+  const [url, setUrl] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeButton, setActiveButton] = useState("All");
+  const [status, setStatus] = useState("");
+  const [priority, setPriority] = useState("");
 
-  // === API Calls ===
-  const { data: allTaskData, isLoading: allTaskLoading } = useGetAllTasksQuery();
+  const { data: allTaskData } = useGetAllTasksQuery();
   const { data: dueTodayData } = useGetTasksDueTodayQuery(today);
   const { data: dueIn72HoursData } = useGetTasksDueIn72HoursQuery();
   const { data: overdueData } = useGetOverdueTasksQuery();
   const { data: emergencyData } = useGetEmergencyTasksQuery();
-  
   const [deleteTask] = useDeleteTaskMutation();
+  const { data: taskByNameData } = useGetTasksByNameQuery(searchTerm, { skip: !searchTerm });
 
-  // Live search API (auto fetches as user types)
-  const [searchTerm, setSearchTerm] = useState("");
-  const { data: taskByNameData } = useGetTasksByNameQuery(searchTerm, {
-    skip: !searchTerm, // Skip API call if no search term
-  });
+  const buttons = ["All", "Due Today", "Overdue", "Emergency", "72HRS Due"];
 
-  // === Local state ===
-  const [taskView, setTaskView] = useState(true);
-  const [delegateView, setDelegateView] = useState(false);
-  const [creatNewTask, setCreateNewTask] = useState(false);
-  const [editTask, setEditTask] = useState(false);
-  const [priority, setPriority] = useState("");
-  const [status, setStatus] = useState("");
-  const [activeButton, setActiveButton] = useState("All")
-  const [deleteMessage, setDeleteMessage] = useState("");
-
-  // Edit modal states
-  const [editData, setEditData] = useState({});
-
-  // === Determine which dataset to show based on active filters ===
   const filteredTasks = useMemo(() => {
-    // 1️⃣ If user is typing in search, show search results
-    if (searchTerm && taskByNameData) {
-      return taskByNameData?.tasks || [];
-    }
-
-    // 2️⃣ If user clicks top buttons
+    if (searchTerm && taskByNameData) return taskByNameData.tasks || [];
     switch (activeButton) {
       case "Due Today":
         return dueTodayData?.tasks || [];
@@ -90,129 +68,107 @@ const Task = () => {
     taskByNameData,
   ]);
 
-  // === Additional filter by status/priority (client-side only for now) ===
   const finalFilteredTasks = useMemo(() => {
     let filtered = [...filteredTasks];
-    if (status) {
-      filtered = filtered.filter(
-        (task) => task.status?.toLowerCase() === status.toLowerCase()
-      );
-    }
-    if (priority) {
-      filtered = filtered.filter(
-        (task) => task.priority?.toLowerCase() === priority.toLowerCase()
-      );
-    }
+    if (status) filtered = filtered.filter(task => task.status?.toLowerCase() === status.toLowerCase());
+    if (priority) filtered = filtered.filter(task => task.priority?.toLowerCase() === priority.toLowerCase());
     return filtered;
   }, [filteredTasks, status, priority]);
 
-  // Top buttons
-  const buttons = ["All", "Due Today", "Overdue", "Emergency", "72HRS Due"];
-
   const handlingDelete = async (taskId) => {
-  try {
-    const res = await deleteTask(taskId).unwrap();
-    toast.success(res.message || "Task deleted successfully");
-
-
-
-
-
-  } catch (error) {
-    return error?.data?.message || "Failed to delete";
-  }
-};
-
+    try {
+      const res = await deleteTask(taskId).unwrap();
+      toast.success(res.message || "Task deleted successfully");
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to delete");
+    }
+  };
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8 dark:bg-gray-800 dark:text-white mt-10 md:mt-16">
-      {/* Header with "Tasks" title and + button */}
-      <div className="flex justify-around mb-4">
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
+      {/* Header Buttons */}
+      <div className="flex flex-col sm:flex-row justify-start gap-4 mb-6">
         <button
-          className="bg-green-500 rounded-2xl cursor-pointer p-2 text-white"
+          className={`flex items-center gap-2 px-4 py-2 rounded-2xl bg-green-500 text-white`}
           onClick={() => {
             setTaskView(true);
             setDelegateView(false);
           }}
         >
-          <MdAddTask className="inline text-white dark:text-black" />
-          <span className="block text-white">Tasks</span>
+          <MdAddTask />
+          Tasks
         </button>
 
         <button
-          className="rounded-2xl h-16 p-2 cursor-pointer bg-green-500"
+          className={`flex items-center gap-2 px-4 py-2 rounded-2xl bg-green-500 text-white`}
           onClick={() => {
             setTaskView(false);
             setDelegateView(true);
           }}
         >
-          <IoPeople className="inline text-white dark:text-black" />
-          <span className="block text-white">Delegates</span>
+          <IoPeople />
+          Delegates
         </button>
 
         <button
-          className="rounded-2xl h-16 p-2 cursor-pointer bg-green-500"
-          onClick={() => setCreateNewTask(!creatNewTask)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-2xl bg-green-500 text-white`}
+          onClick={() => setCreateNewTask(!createNewTask)}
         >
-          <FaPlus className="inline text-white dark:text-black" />
-          <span className="ml-2 text-white block">New Task</span>
+          <FaPlus />
+          New Task
         </button>
       </div>
 
-      {/* === TASK VIEW === */}
+      {/* TASK VIEW */}
       {taskView && (
-        <section>
-          {/* Search input */}
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md">
+        <section className="flex flex-col gap-6">
+          {/* Search */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md">
             <input
               type="text"
               placeholder="Search tasks..."
-              className="w-full p-2 focus:outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
 
-          {/* Filter buttons + dropdown filters */}
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {buttons.map((button) => (
+          {/* Filters */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md flex flex-col gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {buttons.map((btn) => (
                 <button
-                  key={button}
-                  className={`rounded-2xl border-2 border-gray-400 w-full p-2 h-14 hover:bg-green-900 hover:border-0 ${
-                    activeButton === button ? "bg-green-500 text-white" : ""
-                  }`}
+                  key={btn}
                   onClick={() => {
-                    setActiveButton(button);
-                    setSearchTerm(""); // Reset search when switching filter
+                    setActiveButton(btn);
+                    setSearchTerm("");
                   }}
+                  className={`px-3 py-2 rounded-2xl border-2 border-gray-300 w-full transition ${
+                    activeButton === btn ? "bg-green-500 text-white border-0" : "bg-white dark:bg-gray-700 text-gray-700 dark:text-white"
+                  }`}
                 >
-                  {button}
+                  {btn}
                 </button>
               ))}
             </div>
 
-            {/* Dropdown filters */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            {/* Dropdowns */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-2">
               <select
-                id="status"
-                name="status"
                 value={status}
-                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none dark:bg-green-500 dark:text-white"
                 onChange={(e) => setStatus(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:bg-green-500 dark:text-white"
               >
-                <option value="">Select Status</option>
+                <option value="">Status</option>
                 <option value="pending">Pending</option>
                 <option value="completed">Completed</option>
-                <option value="inprogress">Inprogress</option>
+                <option value="inprogress">In Progress</option>
               </select>
 
               <select
-                id="priority"
-                name="priority"
                 value={priority}
-                className="border border-gray-300 rounded-md p-2 w-full focus:outline-none dark:bg-green-500 dark:text-white"
                 onChange={(e) => setPriority(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:bg-green-500 dark:text-white"
               >
                 <option value="">Priority</option>
                 <option value="high">High</option>
@@ -222,97 +178,84 @@ const Task = () => {
             </div>
           </div>
 
-          {/* Section header */}
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-6 flex justify-between">
-            <h1 className="font-bold">{activeButton}</h1>
-            <small className="font-bold cursor-pointer">Sort: Due Date</small>
-          </div>
-
-          {/* === TASK LIST === */}
-          <div className="bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md mt-6 grid md:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(250px,1fr))]  gap-6">
+          {/* Task Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {finalFilteredTasks.length === 0 ? (
-              <p className="text-center text-gray-500">No tasks found.</p>
+              <p className="text-center text-gray-500 dark:text-gray-400 col-span-full">
+                No tasks found.
+              </p>
             ) : (
               finalFilteredTasks.map((task) => (
-                <div key={task._id} className="bg-[#f2f3f5] p-6 rounded-3xl">
-                  <div className="dark:border-gray-600 py-4 flex justify-between">
-                    <h1 className="text-gray-600 dark:text-gray-400">{task.title}</h1>
-                    <button
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        task.priority === "high"
-                          ? "bg-red-200 text-red-800"
-                          : task.priority === "medium"
-                          ? "bg-yellow-200 text-yellow-800"
-                          : "bg-green-200 text-green-800"
-                      }`}
-                    >
+                <div key={task._id} className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-md flex flex-col justify-between">
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-semibold text-gray-800 dark:text-gray-200 truncate">{task.title}</h3>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      task.priority === "high"
+                        ? "bg-red-200 text-red-800"
+                        : task.priority === "medium"
+                        ? "bg-yellow-200 text-yellow-800"
+                        : "bg-green-200 text-green-800"
+                    }`}>
                       {task.priority}
-                    </button>
+                    </span>
                   </div>
 
-                  <div>
-                    <div className="">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Due: {new Date(task.dueDate).toLocaleDateString()}
-                      </p>
+                  {/* Info */}
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    Due: {new Date(task.dueDate).toLocaleDateString()}
+                  </p>
 
-                      <div className="flex gap-2 mt-2 ">
-                        {/* View */}
-                        <Link
-                          to={`/task-details/${encodeURIComponent(task._id)}`}
-                          className="rounded-2xl border-2 border-gray-500 dark:text-gray-600 p-2 hover:bg-gray-500 hover:text-white"
-                        >
-                          View
-                        </Link>
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <Link
+                      to={`/task-details/${task._id}`}
+                      className="px-3 py-1 rounded-2xl border border-gray-400 hover:bg-green-500 hover:text-white transition"
+                    >
+                      View
+                    </Link>
 
-                        {/* Edit */}
-                        <button
-                          className="rounded-2xl border-2 border-gray-500 dark:text-gray-600 p-2 hover:bg-gray-500 hover:text-white"
-                          onClick={() => {
-                            setUrl(task._id)
-                            setEditData(task);
-                            setEditTask(true);
-                          }}
-                        >
-                          Edit
-                        </button>
+                    <button
+                      className="px-3 py-1 rounded-2xl border border-gray-400 hover:bg-green-500 hover:text-white transition"
+                      onClick={() => {
+                        setEditData(task);
+                        setUrl(task._id);
+                        setEditTask(true);
+                      }}
+                    >
+                      Edit
+                    </button>
 
-                        {/* Delete */}
-                       <DeleteModal
-  handlingDelete={() => handlingDelete(task._id)}
-  dialogMessage={`Are you sure you want to delete ${task.title}?`}
-/>
-                      </div>
-                    </div>
+                    <DeleteModal
+                      handlingDelete={() => handlingDelete(task._id)}
+                      dialogMessage={`Are you sure you want to delete ${task.title}?`}
+                    />
+                  </div>
 
-                    {/* Delegates */}
+                  {/* Delegates */}
+                  {task.delegate?.length > 0 && (
                     <div className="mt-2">
-                      {task.delegate?.map((user) => (
-                        <div key={user.userId} className="flex items-center space-x-2">
-                          <span className="font-semibold dark:text-gray-600">{user.name}</span>
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {user.email}
-                          </span>
+                      {task.delegate.map((user) => (
+                        <div key={user.userId} className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                          <span>{user.name}</span>
+                          <span>{user.email}</span>
                         </div>
                       ))}
                     </div>
+                  )}
 
-                    {/* Status */}
-                    <div className="mt-2">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          task.status === "In Progress"
-                            ? "bg-yellow-200 text-yellow-800"
-                            : task.status === "Completed"
-                            ? "bg-green-200 text-green-800"
-                            : "bg-red-200 text-red-500"
-                        }`}
-                      >
-                        {task.status}
-                      </span>
-                    </div>
+                  {/* Status */}
+                  <div className="mt-2">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      task.status === "In Progress"
+                        ? "bg-yellow-200 text-yellow-800"
+                        : task.status === "Completed"
+                        ? "bg-green-200 text-green-800"
+                        : "bg-red-200 text-red-800"
+                    }`}>
+                      {task.status}
+                    </span>
                   </div>
-                  <hr className="my-4 border-t-4 border-green-400 dark:border-green-600 rounded-full" />
                 </div>
               ))
             )}
@@ -320,29 +263,10 @@ const Task = () => {
         </section>
       )}
 
-      {/* === MODALS === */}
-      {creatNewTask && <NewTask close={() => setCreateNewTask(false)} />}
-{console.log(editData)}
-      
-      {editTask && (
-  <>
-   
-    <EditTasks
-      {...editData}
-      url={url}
-      onCancel={() => setEditTask(false)}
-    />
-  </>
-)}
-
-
-      {delegateView && (
-        <DelegatesView
-          delegateview={() => setDelegateView(false)}
-          taskView={() => setTaskView(true)}
-          newTask={() => setCreateNewTask(true)}
-        />
-      )}
+      {/* MODALS */}
+      {createNewTask && <NewTask close={() => setCreateNewTask(false)} />}
+      {editTask && <EditTasks {...editData} url={url} onCancel={() => setEditTask(false)} />}
+      {delegateView && <DelegatesView delegateview={() => setDelegateView(false)} taskView={() => setTaskView(true)} newTask={() => setCreateNewTask(true)} />}
     </div>
   );
 };
