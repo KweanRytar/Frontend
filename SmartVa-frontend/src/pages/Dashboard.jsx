@@ -129,7 +129,7 @@ const Dashboard = () => {
   const [showNewContactModal, setShowNewContactModal] = useState(false);
 
   return (
-    <div className="top-20 bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
+    <div className=" top-48 bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
 
       {/* HERO */}
       <div className="bg-emerald-600 text-white rounded-2xl p-6 shadow-lg mb-12">
@@ -323,10 +323,10 @@ const Dashboard = () => {
           </h2>
 
           {recentDocuments.length > 0 ? (
-            recentDocuments.slice(0, 4).map((doc) => (
+            recentDocuments.slice(0, 10).map((doc) => (
               <div
   key={doc._id}
-  onClick={() => setSelectedDocument(doc)}
+  onClick={() => navigate(`/document-details/${doc._id}`, { state: { doc } })}
   className="cursor-pointer"
 >
   <DocumentSummary
@@ -410,12 +410,7 @@ const Dashboard = () => {
   />
 )}
 
-{selectedDocument && (
-  <DocumentDetails
-    document={selectedDocument}
-    close={() => setSelectedDocument(null)}
-  />
-)}
+
 
       {showNewVisitorModal && (
         <NewVisitor 

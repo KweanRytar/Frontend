@@ -86,66 +86,93 @@ const Nav = ({ isDark, toggleDarkMode }) => {
 
   return (
     <>
-      {/* MOBILE HEADER */}
-      <header className='fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-gray-900 shadow-md flex items-center justify-between'>
-        <div className='flex p-4 items-center relative'>
-          <NavLink to="/dashboard" className='text-2xl font-bold text-green-500 flex items-center gap-2'>
-            <MdDashboardCustomize /> SmartVa
-          </NavLink>
+     {/* menu header */}
+     {/* MOBILE HEADER */}
+<header className="fixed top-0 left-0 w-full z-50 md:hidden bg-white dark:bg-gray-900 shadow-md">
+  <div className="flex items-center justify-between p-4">
+    
+    {/* LEFT: Logo */}
+    <NavLink
+      to="/dashboard"
+      className="text-2xl font-bold text-green-500 flex items-center gap-2"
+    >
+      <MdDashboardCustomize />
+      SmartVa
+    </NavLink>
 
-          <div className='flex items-center gap-4 relative'>
-            <button onClick={toggleDarkMode} aria-label="Toggle Dark Mode">
-              {isDark ? <FaSun className="text-yellow-300" /> : <FaMoon className="text-gray-700" />}
-            </button>
+    {/* RIGHT: Icons */}
+    <div className="flex items-center gap-4">
+      
+      {/* Dark Mode */}
+      <button onClick={toggleDarkMode} aria-label="Toggle Dark Mode">
+        {isDark ? (
+          <FaSun className="text-yellow-300 text-xl" />
+        ) : (
+          <FaMoon className="text-gray-700 text-xl" />
+        )}
+      </button>
 
-            <button
-              onClick={() => {
-                resetNewIndicator();
-                setDisplayNotification(!displayNotification);
-                setDisplayMenu(false);
-                setProfileMenu(false);
-              }}
-              className="relative text-2xl"
-              aria-label="Notifications"
-            >
-              <IoIosNotifications
-                className={
-                  hasNewNotification
-                    ? "text-green-500"
-                    : isDark
-                    ? "text-gray-300"
-                    : "text-gray-600"
-                }
-              />
+      {/* Notifications */}
+      <button
+        onClick={() => {
+          resetNewIndicator();
+          setDisplayNotification(!displayNotification);
+          setDisplayMenu(false);
+          setProfileMenu(false);
+        }}
+        className="relative text-2xl"
+        aria-label="Notifications"
+      >
+        <IoIosNotifications
+          className={
+            hasNewNotification
+              ? "text-green-500"
+              : isDark
+              ? "text-gray-300"
+              : "text-gray-600"
+          }
+        />
 
-              {hasNewNotification && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-                  +
-                </span>
-              )}
-            </button>
+        {hasNewNotification && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
+            +
+          </span>
+        )}
+      </button>
 
-            <button
-              onClick={() => {
-                setDisplayMenu(false);
-                setDisplayNotification(false);
-                setProfileMenu(!profileMenu);
-              }}
-              aria-label="Profile"
-            >
-              <MdOutlineAccountCircle className={isDark ? "text-gray-300" : "text-gray-700"} />
-            </button>
+      {/* Profile */}
+      <button
+        onClick={() => {
+          setDisplayMenu(false);
+          setDisplayNotification(false);
+          setProfileMenu(!profileMenu);
+        }}
+        aria-label="Profile"
+      >
+        <MdOutlineAccountCircle
+          className={`${isDark ? "text-gray-300" : "text-gray-700"} text-2xl`}
+        />
+      </button>
 
-            <button onClick={() => setDisplayMenu(!displayMenu)} aria-label="Menu">
-              {displayMenu ? (
-                <MdCancel className={isDark ? "text-gray-300" : "text-gray-700"} />
-              ) : (
-                <GiHamburgerMenu className={isDark ? "text-gray-300" : "text-gray-700"} />
-              )}
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Hamburger */}
+      <button
+        onClick={() => setDisplayMenu(!displayMenu)}
+        aria-label="Menu"
+      >
+        {displayMenu ? (
+          <MdCancel
+            className={`${isDark ? "text-gray-300" : "text-gray-700"} text-2xl`}
+          />
+        ) : (
+          <GiHamburgerMenu
+            className={`${isDark ? "text-gray-300" : "text-gray-700"} text-2xl`}
+          />
+        )}
+      </button>
+
+    </div>
+  </div>
+</header>
 
       {/* MOBILE MENU */}
       <div
