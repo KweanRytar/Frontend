@@ -1,9 +1,13 @@
 import React from 'react'
 
+
 import LandingPageNavBar from '../components/LandingPageNavBar'
 import Features from '../components/Features'
+import UseCases from '../components/UseCases'
+import FAQ from '../components/FAQ.JSX'
+import Pricing from '../components/Pricing'
 import overviewPlaceHolder from '../assets/rgisterBestOption.jpg'
-import { FaCircle } from 'react-icons/fa'
+import { FaCircle, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa'
 
 const LandingPage = ({isDark, toggleDarkMode}) => {
   const pinkBulletedPoints = [
@@ -123,8 +127,73 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
             </div>
 </section>
 
-      <section id='#features' className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-20 max-w-3xl py-2 rounded-full  px-4'>
+      <section id='features' className=' mt-20 max-w-3xl py-2 rounded-full  px-4'>
         <Features  />
+      </section>
+      <section id='use-cases' className=' mt-20 max-w-3xl py-2 rounded-full  px-4' >
+<UseCases/>
+
+      </section>
+      <section id='pricing' className=' mt-20 max-w-3xl py-2 rounded-full  px-4'>
+        <Pricing/>
+      </section>
+      <section id='faq' className=' mt-20 max-w-3xl py-2 rounded-full  px-4'>
+<FAQ/>
+      </section>
+      <section id='footer'>
+<footer className="bg-gray-950 text-gray-400 pt-20 pb-10">
+  <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+
+    {/* Brand */}
+    <div>
+      <h2 className="text-2xl font-bold text-white mb-4">
+        Smart<span className="text-emerald-500">VA</span>
+      </h2>
+      <p className="text-sm max-w-md">
+        A structured productivity workspace built for modern assistants
+        and administrative teams. Organize everything in one place.
+      </p>
+    </div>
+    <div className="flex gap-4 mt-6 text-lg">
+              <FaTwitter className="hover:text-white cursor-pointer" />
+              <FaLinkedin className="hover:text-white cursor-pointer" />
+              <FaInstagram className="hover:text-white cursor-pointer" />
+              <FaGithub className="hover:text-white cursor-pointer" />
+            </div>
+
+    {/* Product Links */}
+    <div>
+      <h4 className="text-white font-semibold mb-4">Product</h4>
+      <ul className="space-y-3 text-sm">
+        <li>
+          <a href="#features" className="hover:text-white transition">
+            Features
+          </a>
+        </li>
+        <li>
+          <a href="#use-cases" className="hover:text-white transition">
+            Use Cases
+          </a>
+        </li>
+        <li>
+          <a href="#pricing" className="hover:text-white transition">
+            Pricing
+          </a>
+        </li>
+        <li>
+          <a href="#faq" className="hover:text-white transition">
+            FAQ
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {/* Divider */}
+  <div className="border-t border-gray-800 mt-16 pt-6 text-center text-sm text-gray-500">
+    © {new Date().getFullYear()} SmartVA. All rights reserved.
+  </div>
+</footer>
       </section>
       
     </div>
