@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { FiPlus, FiMinus } from 'react-icons/fi'
 
-const Faq = () => {
-
- const faqs = [
+const Questions = () => {
+  const faqs = [
   {
     question: "Is SmartVA really 100% free?",
     answer: "Yes. SmartVA is completely free with no hidden charges, no trials, and no feature restrictions."
@@ -196,4 +195,14 @@ const Faq = () => {
   )
 }
 
-export default Faq
+export default Questions
+
+
+
+
+
+
+
+
+
+
