@@ -83,7 +83,7 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
 
   </div>
   {/* Problem Intro */}
-          <div className="mt-20 max-w-3xl">
+          <div className="mt-20 max-w-3xl py-2 rounded-full inline-block px-4">
             <h2 className="text-2xl md:text-3xl font-bold">
               Tired of juggling multiple productivity apps?
             </h2>
@@ -95,7 +95,7 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
           </div>
 
           {/* Problem vs Solution Columns */}
-          <div className="mt-12 grid md:grid-cols-2 gap-12">
+          <div className="mt-12 grid md:grid-cols-2 gap-12 ">
             
             {/* Problems */}
             <div className="space-y-5">
@@ -123,7 +123,7 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
             </div>
 </section>
 
-      <section id='#features'>
+      <section id='#features' className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-20 max-w-3xl py-2 rounded-full  px-4'>
         <Features  />
       </section>
       
