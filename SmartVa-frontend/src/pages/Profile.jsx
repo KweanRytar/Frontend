@@ -41,7 +41,7 @@ const Profile = () => {
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
 
   // ────────────────────────────────────────────────
-  //  Compute task overview stats (unchanged)
+  //  Compute task overview stats 
   // ────────────────────────────────────────────────
   const taskStats = useMemo(() => {
     let total = 0;
@@ -222,7 +222,7 @@ const Profile = () => {
             <h2 className="text-2xl font-semibold">Assigned Events</h2>
 
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 
-                           rounded-2xl p-5 shadow-sm">
+                           rounded-2xl p-5 shadow-sm flex flex-col gap-4 ">
               <EventDashboard eventsData={eventsData} />
             </div>
           </div>
@@ -252,7 +252,7 @@ const Profile = () => {
 };
 
 // ────────────────────────────────────────────────
-//  Small helper components (unchanged)
+//  Small helper components 
 // ────────────────────────────────────────────────
 function StatCard({ label, value, color }) {
   return (

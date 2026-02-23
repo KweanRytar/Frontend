@@ -129,7 +129,7 @@ const Dashboard = () => {
   const [showNewContactModal, setShowNewContactModal] = useState(false);
 
   return (
-    <div className=" top-48 bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
+    <div className=" min-h-screen bg-gray-50 dark:bg-gray-950 dark:text-white pt-20 md:pt-16 pb-12 px-4 sm:px-6 lg:px-8">
 
       {/* HERO */}
       <div className="bg-emerald-600 text-white rounded-2xl p-6 shadow-lg mb-12">

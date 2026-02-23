@@ -85,7 +85,7 @@ const Task = () => {
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 md:p-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 dark:text-white pt-20 md:pt-16 pb-12 px-4 sm:px-6 lg:px-8">
       {/* Header Buttons */}
       <div className="flex flex-col sm:flex-row justify-start gap-4 mb-6">
         <button

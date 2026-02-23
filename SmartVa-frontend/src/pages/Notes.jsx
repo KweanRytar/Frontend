@@ -118,12 +118,9 @@ const handleDelete = async (id) => {
                 >
                   Edit
                 </button>
+                
                 <DeleteModal handlingDelete={()=> handleDelete(note._id)}  dialogMessage={`Are you sure you want to delete ${note.title}?`}/>
-                {/* <button className="rounded-md cursor-pointer border-2 border-red-500 dark:text-white p-2 hover:text-white hover:bg-red-500 mt-2 mr-2"
-                onClick={()=>handleDelete(note._id)}
-                >
-                  Delete
-                </button> */}
+                
               </div>
             </li>
           ))}

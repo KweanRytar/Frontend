@@ -80,7 +80,47 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
       </div>
 
     </div>
+
   </div>
+  {/* Problem Intro */}
+          <div className="mt-20 max-w-3xl">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              Tired of juggling multiple productivity apps?
+            </h2>
+
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
+              SmartVa replaces scattered tools with one structured,
+              centralized dashboard.
+            </p>
+          </div>
+
+          {/* Problem vs Solution Columns */}
+          <div className="mt-12 grid md:grid-cols-2 gap-12">
+            
+            {/* Problems */}
+            <div className="space-y-5">
+              {pinkBulletedPoints.map((point, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <FaCircle className="text-red-300 mt-1 text-xs" />
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {point}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Solutions */}
+            <div className="space-y-5">
+              {lightGreenBulletedPoints.map((point, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <FaCircle className="text-emerald-400 mt-1 text-xs" />
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {point}
+                  </p>
+                </div>
+              ))}
+            </div>
+            </div>
 </section>
 
       <section id='#features'>

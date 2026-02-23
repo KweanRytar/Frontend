@@ -127,9 +127,7 @@ const EventDashboard = ({ eventsData }) => {
       {/* Responsive grid – adapts from 1 → 2 → 3–4 columns */}
       <div className="
         grid grid-cols-1 
-        md:grid-cols-2 
-        lg:grid-cols-2 
-        xl:grid-cols-4 
+        
         gap-5 lg:gap-6
       ">
         {renderEventCard(
