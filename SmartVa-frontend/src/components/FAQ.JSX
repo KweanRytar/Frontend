@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FiPlus, FiMinus } from 'react-icons/fi'
 
-const FAQ = () => {
+const Faq = () => {
 
  const faqs = [
   {
@@ -196,4 +196,4 @@ const FAQ = () => {
   )
 }
 
-export default FAQ
+export default Faq

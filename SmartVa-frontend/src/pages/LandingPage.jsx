@@ -4,7 +4,7 @@ import React from 'react'
 import LandingPageNavBar from '../components/LandingPageNavBar'
 import Features from '../components/Features'
 import UseCases from '../components/UseCases'
-import FAQ from '../components/FAQ.JSX'
+import Faq from '../components/Faq.jsx'
 import Pricing from '../components/Pricing'
 import overviewPlaceHolder from '../assets/rgisterBestOption.jpg'
 import { FaCircle, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa'
@@ -138,7 +138,7 @@ const LandingPage = ({isDark, toggleDarkMode}) => {
         <Pricing/>
       </section>
       <section id='faq' className=' mt-20 max-w-3xl py-2 rounded-full  px-4'>
-<FAQ/>
+<Faq/>
       </section>
       <section id='footer'>
 <footer className="bg-gray-950 text-gray-400 pt-20 pb-10">
