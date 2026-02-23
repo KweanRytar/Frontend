@@ -4,14 +4,12 @@ import html2pdf from "html2pdf.js";
 const NoteDetails = ({ note, close }) => {
   const modalRef = useRef(null);
 
-  // Lock background scroll + ESC close
+  // Lock scroll + ESC close
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
     const handleEsc = (e) => {
-      if (e.key === "Escape") {
-        close();
-      }
+      if (e.key === "Escape") close();
     };
 
     document.addEventListener("keydown", handleEsc);
@@ -29,15 +27,18 @@ const NoteDetails = ({ note, close }) => {
     }
   };
 
-  // 🔥 Download as PDF
+  // ✅ SAFE PDF DOWNLOAD (NO OKLCH CRASH)
   const handleDownload = () => {
     const element = document.getElementById("document2Download");
 
     const opt = {
       margin: 0.5,
-      filename: `${note.title || "note"}.pdf`,
+      filename: `${note?.title || "note"}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: {
+        scale: 2,
+        backgroundColor: "#ffffff", // VERY IMPORTANT
+      },
       jsPDF: {
         unit: "in",
         format: "a4",
@@ -58,38 +59,42 @@ const NoteDetails = ({ note, close }) => {
     >
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-900 
-                   w-full max-w-3xl 
-                   max-h-[90vh] 
-                   overflow-hidden
-                   rounded-2xl shadow-2xl 
-                   border border-gray-200 dark:border-gray-700
-                   flex flex-col"
+        className="bg-white w-full max-w-3xl max-h-[90vh] 
+                   overflow-hidden rounded-2xl shadow-2xl 
+                   border border-gray-300 flex flex-col"
       >
-        {/* ===================== */}
-        {/* CONTENT TO DOWNLOAD */}
-        {/* ===================== */}
+        {/* ========================= */}
+        {/* PDF SAFE CONTENT AREA */}
+        {/* ========================= */}
         <div
           id="document2Download"
           className="flex flex-col flex-1 overflow-hidden"
+          style={{
+            backgroundColor: "#ffffff",
+            color: "#000000",
+          }}
         >
           {/* Header */}
-          <div className="px-6 sm:px-10 pt-8 pb-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-semibold text-[#008235] break-words">
+          <div
+            className="px-8 pt-8 pb-4 border-b"
+            style={{ borderColor: "#cccccc" }}
+          >
+            <h2
+              className="text-2xl font-semibold break-words"
+              style={{ color: "#008235" }}
+            >
               {note.title}
             </h2>
           </div>
 
           {/* Scrollable Body */}
           <div
-            className="px-6 sm:px-10 py-6 
-                       overflow-y-auto 
-                       text-gray-700 dark:text-gray-300 
-                       leading-relaxed text-base"
+            className="px-8 py-6 overflow-y-auto leading-relaxed text-base"
+            style={{ color: "#000000" }}
           >
             {note.contentHtml ? (
               <div
-                className="prose dark:prose-invert max-w-none break-words"
+                className="max-w-none break-words"
                 dangerouslySetInnerHTML={{ __html: note.contentHtml }}
               />
             ) : (
@@ -99,11 +104,16 @@ const NoteDetails = ({ note, close }) => {
             )}
           </div>
 
-          {/* SmartVA Footer */}
-          <div className="px-6 sm:px-10 py-4 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500">
+          {/* Footer (Will appear in PDF) */}
+          <div
+            className="px-8 py-4 border-t text-sm"
+            style={{
+              borderColor: "#cccccc",
+              color: "#555555",
+            }}
+          >
             <p>
-              Generated from <strong>SmartVA</strong> — Productivity Tool for
-              Administrative Assistants
+              Generated from <strong>SmartVA</strong> — Productivity Tool
             </p>
             <p>
               Created: {new Date(note.createdAt).toLocaleDateString()}
@@ -114,22 +124,19 @@ const NoteDetails = ({ note, close }) => {
           </div>
         </div>
 
-        {/* ===================== */}
+        {/* ========================= */}
         {/* ACTION BUTTONS (NOT IN PDF) */}
-        {/* ===================== */}
+        {/* ========================= */}
         <div
-          className="px-6 sm:px-10 py-4 
-                     border-t border-gray-200 dark:border-gray-700 
-                     flex flex-col sm:flex-row 
-                     sm:items-center sm:justify-end gap-3
-                     bg-gray-50 dark:bg-gray-800"
+          className="px-8 py-4 border-t flex justify-end gap-3"
+          style={{ borderColor: "#e5e5e5", backgroundColor: "#f9f9f9" }}
         >
           <button
             onClick={handleDownload}
             className="px-4 py-2 rounded-xl 
-                       bg-[#a4f5c2] hover:bg-[#7fe8a9]
-                       text-white
-                       font-medium transition duration-200 shadow-md"
+           bg-gray-900 hover:bg-black
+           text-white font-medium 
+           transition duration-200 shadow-md"
           >
             Download PDF
           </button>
@@ -138,8 +145,8 @@ const NoteDetails = ({ note, close }) => {
             onClick={close}
             className="px-4 py-2 rounded-xl 
                        bg-[#008235] hover:bg-[#0cfb6c]
-                       text-white
-                       font-medium transition duration-200 shadow-md"
+                       text-white font-medium 
+                       transition duration-200 shadow-md"
           >
             Close
           </button>
