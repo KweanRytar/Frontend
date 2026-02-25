@@ -18,11 +18,11 @@ import {
   COMMAND_PRIORITY_LOW,
 } from "lexical";
 
-import ToolBar from './ToolBar';
+import ToolBar from "./ToolBar";
 import INSERT_HEADING_COMMAND from "../commands/headingCommand";
 import "../style/editor.css";
 
-// THEME
+// ─── THEME ────────────────────────────────────────────────────────────────────
 const theme = {
   heading: {
     h1: "editor-heading-h1",
@@ -43,9 +43,7 @@ const theme = {
     ol: "editor-list-ol",
     listitem: "editor-listItem",
     listItemUnchecked: "editor-listItemUnchecked",
-    nested: {
-      listitem: "editor-nested-listitem",
-    },
+    nested: { listitem: "editor-nested-listitem" },
   },
   root: "editor-root text-gray-900 dark:text-gray-100",
 };
@@ -57,9 +55,7 @@ const createEditorConfig = () => ({
   nodes: [HeadingNode, ListNode, ListItemNode, TableNode, TableCellNode, TableRowNode],
 });
 
-// ---------------------- //
-// LoadInitialHtmlPlugin
-// ---------------------- //
+// ─── PLUGINS ──────────────────────────────────────────────────────────────────
 const LoadInitialHtmlPlugin = ({ initialHtml }) => {
   const [editor] = useLexicalComposerContext();
   const loaded = useRef(false);
@@ -80,9 +76,6 @@ const LoadInitialHtmlPlugin = ({ initialHtml }) => {
   return null;
 };
 
-// ---------------------- //
-// InsertHeadingPlugin
-// ---------------------- //
 const InsertHeadingPlugin = () => {
   const [editor] = useLexicalComposerContext();
 
@@ -107,9 +100,6 @@ const InsertHeadingPlugin = () => {
   return null;
 };
 
-// ---------------------- //
-// UpdateListenerPlugin
-// ---------------------- //
 const UpdateListenerPlugin = ({ onChange }) => {
   const [editor] = useLexicalComposerContext();
 
@@ -126,47 +116,81 @@ const UpdateListenerPlugin = ({ onChange }) => {
   return null;
 };
 
-// ---------------------- //
-// Editor Component
-// ---------------------- //
+// ─── EDITOR ───────────────────────────────────────────────────────────────────
 const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
   const editorConfig = useMemo(() => createEditorConfig(), []);
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      {/* Outer wrapper: fixed height, flex column, no overflow */}
-      <div className="
-        flex flex-col
-        bg-green-400 dark:bg-gray-700
-        rounded-2xl shadow-md
-        mx-auto mb-20 md:mb-30 lg:mb-40
-        w-11/12 md:w-3/4 lg:w-1/2
-        dark:text-white
-        overflow-hidden
-        h-[520px]
-      ">
-        {/* Toolbar: sticky, never scrolls away */}
-        <div className="flex-shrink-0 sticky top-0 z-10 rounded-t-2xl bg-green-400 dark:bg-gray-700 border-b border-green-300 dark:border-gray-600">
+      {/*
+        ┌─ Outer shell ────────────────────────────────────────────────────────┐
+        │  • flex-col so toolbar + scroll area stack vertically                │
+        │  • overflow-hidden clips children — DO NOT put overflow-y here       │
+        │  • h-[calc(100vh-280px)] = full viewport minus:                      │
+        │      – app nav bar (~56px / md:112px)                               │
+        │      – EditNote fixed header (~80px / md:80px)                      │
+        │      – EditNote pt padding (~56px / md:48px)                        │
+        │    Tweak the constant if your nav bar height differs.               │
+        └──────────────────────────────────────────────────────────────────────┘
+      */}
+      <div
+        className="
+          flex flex-col
+          bg-green-400 dark:bg-gray-700
+          rounded-2xl shadow-md
+          mx-auto
+          w-11/12 md:w-3/4 lg:w-1/2
+          dark:text-white
+          overflow-hidden
+          h-[calc(100vh-280px)]
+          min-h-[380px]
+        "
+      >
+        {/*
+          ── Toolbar ────────────────────────────────────────────────────────────
+          flex-shrink-0 → never squished by the growing content below
+          No sticky/position needed because the outer shell clips overflow;
+          the toolbar naturally stays at the top.
+        */}
+        <div className="flex-shrink-0 bg-green-400 dark:bg-gray-700 border-b border-green-300 dark:border-gray-600 rounded-t-2xl">
           <ToolBar />
         </div>
 
-        {/* Scrollable content area */}
-        <div >
+        {/*
+          ── Scroll container ───────────────────────────────────────────────────
+          THIS is the element that scrolls — not ContentEditable.
+          
+          • flex-1        → fills all remaining height after the toolbar
+          • overflow-y-auto → shows a scrollbar when content exceeds height
+          • relative      → REQUIRED: Lexical renders the placeholder with
+                            `position: absolute`, so it needs a positioned
+                            ancestor or it escapes to a random parent.
+        */}
+        <div className="relative flex-1 overflow-y-auto">
           <RichTextPlugin
             contentEditable={
               <ContentEditable
                 className="
                   bg-white dark:bg-[#1E293B]
                   text-gray-900 dark:text-gray-100
-                  rounded shadow outline-none
-                  min-h-[150px] h-full
+                  outline-none
                   p-4 w-full
-                  flex-1 overflow-y-auto 
+                  min-h-full
                 "
+                /*
+                  min-h-full makes the editable at least as tall as the scroll
+                  container so clicking anywhere in the empty space focuses it.
+                  Do NOT add overflow-y-auto here — Lexical ignores it and it
+                  breaks the scroll chain.
+                */
               />
             }
             placeholder={
-              <div className="absolute top-8 left-8 text-gray-400 pointer-events-none select-none">
+              /*
+                top-4 left-4 aligns with the p-4 padding on ContentEditable.
+                Anchors to the `relative` scroll wrapper above.
+              */
+              <div className="absolute top-4 left-4 text-gray-400 pointer-events-none select-none">
                 Enter some text...
               </div>
             }
