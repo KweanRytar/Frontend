@@ -8,7 +8,6 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
 import { HeadingNode, $createHeadingNode } from "@lexical/rich-text";
-
 import { ListNode, ListItemNode } from "@lexical/list";
 import { $generateNodesFromDOM, $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -39,21 +38,18 @@ const theme = {
     italic: "editor-textItalic",
     underline: "editor-textUnderline",
   },
-   list: {
+  list: {
     ul: "editor-list-ul",
     ol: "editor-list-ol",
     listitem: "editor-listItem",
-   listItemUnchecked: "editor-listItemUnchecked",
-
+    listItemUnchecked: "editor-listItemUnchecked",
     nested: {
       listitem: "editor-nested-listitem",
     },
   },
-   root: "editor-root text-gray-900 dark:text-gray-100", 
-  
+  root: "editor-root text-gray-900 dark:text-gray-100",
 };
 
-// MAIN CONFIG (Memoized to prevent remount)
 const createEditorConfig = () => ({
   namespace: "MyEditor",
   theme,
@@ -70,14 +66,11 @@ const LoadInitialHtmlPlugin = ({ initialHtml }) => {
 
   useEffect(() => {
     if (!initialHtml || loaded.current) return;
-
     loaded.current = true;
-
     editor.update(() => {
       const parser = new DOMParser();
       const dom = parser.parseFromString(initialHtml, "text/html");
       const nodes = $generateNodesFromDOM(editor, dom);
-
       const root = $getRoot();
       root.clear();
       nodes.forEach((node) => root.append(node));
@@ -125,10 +118,7 @@ const UpdateListenerPlugin = ({ onChange }) => {
       editorState.read(() => {
         const text = $getRoot().getTextContent();
         const html = $generateHtmlFromNodes(editor);
-        onChange({
-          contentText: text,
-          contentHtml: html,
-        });
+        onChange({ contentText: text, contentHtml: html });
       });
     });
   }, [editor, onChange]);
@@ -144,28 +134,47 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="bg-green-400 dark:bg-gray-700 p-6 rounded-2xl shadow-md mx-auto mb-20 md:mb-30 lg:mb-40 w-11/12 md:w-3/4 lg:w-1/2 dark:text-white">
-        <ToolBar />
+      {/* Outer wrapper: fixed height, flex column, no overflow */}
+      <div className="
+        flex flex-col
+        bg-green-400 dark:bg-gray-700
+        rounded-2xl shadow-md
+        mx-auto mb-20 md:mb-30 lg:mb-40
+        w-11/12 md:w-3/4 lg:w-1/2
+        dark:text-white
+        overflow-hidden
+        h-[520px]
+      ">
+        {/* Toolbar: sticky, never scrolls away */}
+        <div className="flex-shrink-0 sticky top-0 z-10 rounded-t-2xl bg-green-400 dark:bg-gray-700 border-b border-green-300 dark:border-gray-600">
+          <ToolBar />
+        </div>
 
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className=" p-4
-  bg-white dark:bg-[#1E293B]
-   text-gray-900 dark:text-gray-100 !important
-  rounded shadow outline-none min-h-[150px]
-" />
-          }
-          placeholder={
-            <div className="text-gray-400 pointer-events-none">
-              Enter some text...
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto p-4">
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable
+                className="
+                  bg-white dark:bg-[#1E293B]
+                  text-gray-900 dark:text-gray-100
+                  rounded shadow outline-none
+                  min-h-[150px] h-full
+                  p-4 w-full
+                "
+              />
+            }
+            placeholder={
+              <div className="absolute top-8 left-8 text-gray-400 pointer-events-none select-none">
+                Enter some text...
+              </div>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+        </div>
       </div>
 
       {!disableAutoFocus && <AutoFocusPlugin />}
-  
       <HistoryPlugin />
       <ListPlugin />
       <InsertHeadingPlugin />
