@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { MdClose, MdMoveUp, MdMoveDown, MdDarkMode, MdLightMode } from "react-icons/md";
+import { MdClose,  MdDarkMode, MdLightMode } from "react-icons/md";
 
 
 const LandingPageNavBar = ({isDark, toggleDarkMode}) => {
@@ -105,6 +105,13 @@ const LandingPageNavBar = ({isDark, toggleDarkMode}) => {
           </div>
 
           {/* Mobile Toggle */}
+          <button className="md:hidden text-gray-800 dark:text-white">
+             {isDark ? (
+              <MdLightMode size={22} className="cursor-pointer" onClick={toggleDarkMode} />
+            ) : (
+              <MdDarkMode size={22} className="cursor-pointer" onClick={toggleDarkMode} />
+            )}
+          </button>
           <button
             onClick={() => setViewMenu(!viewMenu)}
             className="md:hidden text-gray-800 dark:text-white"
@@ -158,21 +165,6 @@ const LandingPageNavBar = ({isDark, toggleDarkMode}) => {
           </div>
         </div>
 
-{/* navigation button to top and bottom */}
-        <div className="absolute bottom-5 right-5 flex flex-col gap-3">
-          <a
-            href="#hero"
-            className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white p-3 rounded-full shadow-md transition"
-          >
-            <MdMoveUp size={20} />
-          </a>
-          <a
-            href="#footer"
-            className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white p-3 rounded-full shadow-md transition"
-          >
-            <MdMoveDown size={20} />
-          </a>
-        </div>
 
       </div>
     </>
