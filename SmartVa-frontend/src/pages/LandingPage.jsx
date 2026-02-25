@@ -85,7 +85,7 @@ const LandingPage = ({ isDark, toggleDarkMode }) => {
           </div>
 
           {/* Problem Intro */}
-          <div className="mt-20 px-0">
+          <div className="mt-10 px-0">
             <h2 className="text-2xl md:text-3xl font-bold">
               Tired of juggling multiple productivity apps?
             </h2>
@@ -95,7 +95,7 @@ const LandingPage = ({ isDark, toggleDarkMode }) => {
           </div>
 
           {/* Problem vs Solution Columns */}
-          <div className="mt-12 grid md:grid-cols-2 gap-12">
+          <div className="mt-10 grid md:grid-cols-2 gap-12">
             <div className="space-y-5">
               {pinkBulletedPoints.map((point, index) => (
                 <div key={index} className="flex items-start gap-3">
@@ -118,22 +118,22 @@ const LandingPage = ({ isDark, toggleDarkMode }) => {
       </section>
 
       {/* FEATURES - full width, no max-w-3xl constraint */}
-      <section id="features" className="mt-20">
+      <section id="features" className="mt-10">
         <Features />
       </section>
 
       {/* USE CASES */}
-      <section id="use-cases" className="mt-20 container mx-auto px-6">
+      <section id="use-cases" className="mt-10 container mx-auto px-6">
         <UseCases />
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className="mt-20 container mx-auto px-6">
+      <section id="pricing" className="mt-10 container mx-auto px-6">
         <Pricing />
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="mt-20 container mx-auto px-6">
+      <section id="faq" className="mt-10 container mx-auto px-6">
         <Questions />
       </section>
 

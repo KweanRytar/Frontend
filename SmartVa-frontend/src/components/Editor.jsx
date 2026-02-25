@@ -151,7 +151,7 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
         </div>
 
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div >
           <RichTextPlugin
             contentEditable={
               <ContentEditable
@@ -161,6 +161,7 @@ const Editor = ({ initialHtml, onChange, disableAutoFocus = false }) => {
                   rounded shadow outline-none
                   min-h-[150px] h-full
                   p-4 w-full
+                  flex-1 overflow-y-auto 
                 "
               />
             }
