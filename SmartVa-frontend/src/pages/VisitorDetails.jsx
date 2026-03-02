@@ -194,7 +194,7 @@ const VisitorDetails = () => {
           <form
             onSubmit={handleSendMessage}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full p-6"
+            className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
           >
             <h2 className="text-2xl font-bold mb-2">
               Send Message
@@ -244,7 +244,7 @@ const VisitorDetails = () => {
       {/* Send Reminder Modal */}
       {viewReminderModal && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
           onClick={() => setViewReminderModal(false)}
         >
           <form

@@ -276,8 +276,13 @@ if(viewMessageModal || viewReminderModal) return;
       <p className="text-gray-600 dark:text-gray-400 mb-6">Send a reminder to {receiverName}</p>
     <input type="text" placeholder="reason" value={reason} onChange={(e)=>setReason(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
     <input type="datetime-local" placeholder="time" value={time} onChange={(e)=>setTime(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
+  
+  <div className="flex justify-between mt-4">
     <button type="submit" className="bg-blue-500 text-white p-2 rounded-md" disabled={isSendingReminder}>Send</button>
     <button type="button" onClick={()=>setViewReminderModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
+  </div>
+  
+    
     </div>
   </form>
 )}
