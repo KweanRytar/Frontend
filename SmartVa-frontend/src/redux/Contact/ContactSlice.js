@@ -77,6 +77,8 @@ export const contactApi = createApi({
       providesTags: [{ type: 'Contact', id: 'LIST' }],
     }),
 
+
+
     // ===========================
     // GET CONTACT BY COMPANY
     // ===========================

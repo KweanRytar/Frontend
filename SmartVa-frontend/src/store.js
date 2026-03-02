@@ -11,6 +11,7 @@ import noteApi from "./redux/Note/NoteSlice";
 import documentApi from "./redux/document/DocumentSlice";
 import visitorApi from "./redux/visitor/visitorSlice";
 import eventApi from "./redux/event/EventSlice";
+import generalMessageApi from "./redux/General/generalMessage";
 
 // If you also have normal reducers (not RTK Query), import them separately
 // import someReducer from './redux/someSlice'
@@ -26,7 +27,7 @@ const store = configureStore({
     [visitorApi.reducerPath]: visitorApi.reducer,
     [eventApi.reducerPath]: eventApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
-
+    [generalMessageApi.reducerPath]: generalMessageApi.reducer,
     // Normal reducers (if any)
     // some: someReducer,
   },
@@ -39,7 +40,8 @@ const store = configureStore({
       documentApi.middleware,
       visitorApi.middleware,
       eventApi.middleware,
-      profileApi.middleware
+      profileApi.middleware,
+      generalMessageApi.middleware
     ),
 });
 
