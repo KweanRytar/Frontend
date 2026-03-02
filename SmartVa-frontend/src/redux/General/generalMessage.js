@@ -35,3 +35,5 @@ export const generalMessageApi = createApi({
 });
 
 export const { useSendGeneralMessageMutation, useSendGeneralReminderMutation } = generalMessageApi;
+
+export default generalMessageApi;
