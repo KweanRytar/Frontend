@@ -5,6 +5,7 @@ import { useGetVisitorByIdQuery,useDeleteVisitorMutation } from "../redux/visito
 import EditVisitor from "../components/EditVisitor";
 import DeleteModal from "../components/DeleteModal";
 import { useSendGeneralMessageMutation, useSendGeneralReminderMutation } from "../redux/General/generalMessage";
+import { toast } from "react-toastify";
 
 
 const VisitorDetails = () => {
@@ -143,35 +144,39 @@ const [receiverName, setReceiverName] = useState("");
             handleDeleteVisitor(visitor._id)
             navigate(-1)
           }} />
-        <div className="flex gap-3 flex-wrap">
-            <button
-              className="px-4 py-2 rounded-xl 
-                         bg-gray-200 dark:bg-gray-700
-                         text-gray-700 dark:text-gray-200
-                         text-sm font-medium transition hover:bg-gray-300"
-             onClick={()=>{
-              setViewMessageModal(true);
-              setVisitorName(visitor.name);
-              setVisitorEmail(visitor.email);
-             }}
-            >
-              Send Email
-            </button>
+       <div className="flex gap-3 flex-wrap mt-2">
+  <button
+    onClick={() => {
+      setViewMessageModal(true);
+      setVisitorName(visitor.name);
+      setVisitorEmail(visitor.email);
+    }}
+    className="px-5 py-2.5 rounded-xl 
+               bg-green-500 
+               text-white text-sm font-semibold 
+               shadow-md transition-all duration-300 
+               hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5
+               active:scale-95"
+  >
+    Send Email
+  </button>
 
-            <button
-              className="px-4 py-2 rounded-xl 
-                         bg-gray-200 dark:bg-gray-700
-                         text-gray-700 dark:text-gray-200
-                         text-sm font-medium transition hover:bg-gray-300"
-              onClick={() => {
-                setViewReminderModal(true);
-                setReceiverName(visitor.name);
-                setReceiverEmail(visitor.email);
-              }}
-            >
-              Send Reminder
-            </button>
-          </div>
+  <button
+    onClick={() => {
+      setViewReminderModal(true);
+      setReceiverName(visitor.name);
+      setReceiverEmail(visitor.email);
+    }}
+    className="px-5 py-2.5 rounded-xl 
+               bg-purple-500 
+               text-white text-sm font-semibold 
+               shadow-md transition-all duration-300 
+               hover:bg-purple-600 hover:shadow-lg hover:-translate-y-0.5
+               active:scale-95"
+  >
+    Send Reminder
+  </button>
+</div>
         </div>
       </div>
      {editVisitor && (
@@ -187,6 +192,7 @@ const [receiverName, setReceiverName] = useState("");
         <input type="text" placeholder="title" value={messageTitle} onChange={(e)=>setMessageTitle(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
         <textarea placeholder="message" value={message} onChange={(e)=>setMessage(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md h-24" />
         <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Send</button>
+        <button type="button" onClick={()=>setViewMessageModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
         </div>
       </form>
      )}
@@ -198,6 +204,7 @@ const [receiverName, setReceiverName] = useState("");
           <input type="text" placeholder="reason" value={reason} onChange={(e)=>setReason(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
           <input type="datetime-local" placeholder="time" value={time} onChange={(e)=>setTime(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
           <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Send</button>
+          <button type="button" onClick={()=>setViewReminderModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
         </div>
       </form>
     )}

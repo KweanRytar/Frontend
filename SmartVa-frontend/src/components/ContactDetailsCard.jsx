@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { MdCancel } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import EditContact from "./EditContact";
@@ -65,7 +66,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
       const response = await sendGeneralMessage({
         title: messageTitle,
         message,
-        contactEmail,
+        email: contactEmail,
       }).unwrap();
       toast.success(response?.message);
       setViewMessageModal(false);
@@ -172,10 +173,12 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
                 setViewMessageModal(true);
                 setContactEmail(contact.email);
               }}
-              className="px-4 py-2 rounded-xl 
-                         bg-gray-200 dark:bg-gray-700
-                         text-gray-700 dark:text-gray-200
-                         text-sm font-medium transition hover:bg-gray-300"
+              className="px-5 py-2.5 rounded-xl 
+              bg-green-500 
+              text-white text-sm font-semibold 
+              shadow-md transition-all duration-300 
+              hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5
+              active:scale-95"
             >
               Send Email
             </button>
@@ -186,10 +189,12 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
                 setReceiverEmail(contact.email);
                 setReceiverName(contact.name);
               }}
-              className="px-4 py-2 rounded-xl 
-                         bg-gray-200 dark:bg-gray-700
-                         text-gray-700 dark:text-gray-200
-                         text-sm font-medium transition hover:bg-gray-300"
+              className="px-5 py-2.5 rounded-xl 
+               bg-purple-500 
+               text-white text-sm font-semibold 
+               shadow-md transition-all duration-300 
+               hover:bg-purple-600 hover:shadow-lg hover:-translate-y-0.5
+               active:scale-95"
             >
               Send Reminder
             </button>
@@ -235,6 +240,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
             >
               Send
             </button>
+            <button type="button" onClick={()=>setViewMessageModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
           </div>
         </form>
       )}
@@ -246,6 +252,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
     <input type="text" placeholder="reason" value={reason} onChange={(e)=>setReason(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
     <input type="datetime-local" placeholder="time" value={time} onChange={(e)=>setTime(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
     <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Send</button>
+    <button type="button" onClick={()=>setViewReminderModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
     </div>
   </form>
 )}
