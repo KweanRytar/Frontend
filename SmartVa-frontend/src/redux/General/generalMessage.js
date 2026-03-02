@@ -15,7 +15,7 @@ export const generalMessageApi = createApi({
     endpoints: (builder) => ({
         sendGeneralMessage: builder.mutation({
             query: (message) => ({
-                url: getFullURL('/general/general-message'),
+                url: getFullURL('/general/send-general-message'),
                 method: 'POST',
                 body: message,
             }),
