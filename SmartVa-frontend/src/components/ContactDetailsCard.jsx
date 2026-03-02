@@ -24,6 +24,8 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
   const [viewReminderModal, setViewReminderModal] = useState(false);
   const [sendGeneralMessage] = useSendGeneralMessageMutation();
   const [sendGeneralReminder] = useSendGeneralReminderMutation();
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [isSendingReminder, setIsSendingReminder] = useState(false);
   // Prevent scroll + ESC close
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -62,6 +64,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
   // handle send message
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    setIsSendingMessage(true);
     try {
       const response = await sendGeneralMessage({
         title: messageTitle,
@@ -70,14 +73,17 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
       }).unwrap();
       toast.success(response?.message);
       setViewMessageModal(false);
+      setIsSendingMessage(false);
     } catch (error) {
       toast.error(error?.data?.message || "Failed to send message");
+      setIsSendingMessage(false);
     }
   };
 
   // handle send reminder
   const handleSendReminder = async (e) => {
     e.preventDefault();
+    setIsSendingReminder(true);
     try {
       const response = await sendGeneralReminder({
         reason,
@@ -87,8 +93,10 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
       }).unwrap();
       toast.success(response?.message);
       setViewReminderModal(false);
+      setIsSendingReminder(false);
     } catch (error) {
       toast.error(error?.data?.message || "Failed to send reminder");
+      setIsSendingReminder(false);
     }
   };
   
@@ -167,7 +175,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
             />
           </div>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap flex-col lg:flex-row">
             <button
               onClick={() => {
                 setViewMessageModal(true);
@@ -179,6 +187,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
               shadow-md transition-all duration-300 
               hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5
               active:scale-95"
+              disabled={isSendingMessage}
             >
               Send Email
             </button>
@@ -195,6 +204,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
                shadow-md transition-all duration-300 
                hover:bg-purple-600 hover:shadow-lg hover:-translate-y-0.5
                active:scale-95"
+              disabled={isSendingReminder}
             >
               Send Reminder
             </button>
@@ -237,6 +247,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
             <button
               type="submit"
               className="bg-blue-500 text-white p-2 rounded-md mt-4"
+              disabled={isSendingMessage}
             >
               Send
             </button>
@@ -251,7 +262,7 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
       <p className="text-gray-600 dark:text-gray-400 mb-6">Send a reminder to {receiverName}</p>
     <input type="text" placeholder="reason" value={reason} onChange={(e)=>setReason(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
     <input type="datetime-local" placeholder="time" value={time} onChange={(e)=>setTime(e.target.value)}  className="w-full p-2 border border-gray-300 rounded-md" />
-    <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Send</button>
+    <button type="submit" className="bg-blue-500 text-white p-2 rounded-md" disabled={isSendingReminder}>Send</button>
     <button type="button" onClick={()=>setViewReminderModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
     </div>
   </form>
