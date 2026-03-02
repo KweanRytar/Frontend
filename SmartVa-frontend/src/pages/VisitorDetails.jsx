@@ -220,7 +220,7 @@ const VisitorDetails = () => {
               required
             />
 
-            <div className="flex gap-3 mt-4">
+            <div className="flex justify-between mt-4">
               <button
                 type="submit"
                 disabled={isSendingMessage}
@@ -276,7 +276,7 @@ const VisitorDetails = () => {
               required
             />
 
-            <div className="flex gap-3 mt-4">
+            <div className="flex justify-between mt-4">
               <button
                 type="submit"
                 disabled={isSendingReminder}

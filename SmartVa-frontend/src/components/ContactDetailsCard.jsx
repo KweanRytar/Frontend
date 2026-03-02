@@ -22,10 +22,14 @@ const ContactDetailsCard = ({ contact, unDisplayDetails }) => {
   const [viewEditContacts, setViewEditContacts] = useState(false);
   const [viewMessageModal, setViewMessageModal] = useState(false);
   const [viewReminderModal, setViewReminderModal] = useState(false);
-  const [sendGeneralMessage] = useSendGeneralMessageMutation();
-  const [sendGeneralReminder] = useSendGeneralReminderMutation();
-  const [isSendingMessage, setIsSendingMessage] = useState(false);
-  const [isSendingReminder, setIsSendingReminder] = useState(false);
+
+
+  const [sendGeneralMessage, { isLoading: isSendingMessage }] =
+    useSendGeneralMessageMutation();
+  const [sendGeneralReminder, { isLoading: isSendingReminder }] =
+    useSendGeneralReminderMutation();
+
+  
   // Prevent scroll + ESC close
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -66,7 +70,7 @@ if(viewMessageModal || viewReminderModal) return;
   // handle send message
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    setIsSendingMessage(true);
+  
     try {
       const response = await sendGeneralMessage({
         title: messageTitle,
@@ -75,10 +79,10 @@ if(viewMessageModal || viewReminderModal) return;
       }).unwrap();
       toast.success(response?.message);
       setViewMessageModal(false);
-      setIsSendingMessage(false);
+      
     } catch (error) {
       toast.error(error?.data?.message || "Failed to send message");
-      setIsSendingMessage(false);
+    
     }
   };
 
@@ -177,7 +181,7 @@ if(viewMessageModal || viewReminderModal) return;
             />
           </div>
 
-          <div className="flex gap-3 flex-wrap flex-col lg:flex-row">
+          <div className="flex  flex-wrap flex-col lg:flex-row">
             <button
               onClick={() => {
                 setViewMessageModal(true);
@@ -226,7 +230,7 @@ if(viewMessageModal || viewReminderModal) return;
         <form
         onClick={(e)=>e.stopPropagation()}
           onSubmit={handleSendMessage}
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
         >
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full p-6 relative">
             <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-white">
@@ -248,7 +252,9 @@ if(viewMessageModal || viewReminderModal) return;
               onChange={(e) => setMessage(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md h-24"
             />
-            <button
+            <div className="flex justify-between mt-4">
+
+               <button
               type="submit"
               className="bg-blue-500 text-white p-2 rounded-md mt-4"
               disabled={isSendingMessage}
@@ -256,11 +262,13 @@ if(viewMessageModal || viewReminderModal) return;
               Send
             </button>
             <button type="button" onClick={()=>setViewMessageModal(false)} className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
+            </div>
+           
           </div>
         </form>
       )}
 {viewReminderModal && (
-  <form onSubmit={handleSendReminder}  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  <form onSubmit={handleSendReminder}  className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
   onClick={(e)=>e.stopPropagation()}
   >
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full p-6 relative">
