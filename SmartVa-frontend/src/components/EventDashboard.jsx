@@ -1,25 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-  export const renderAllevent = ()=>{
-      const allEvents       = eventsData?.events         || [];
-    return (  renderEventCard(
-          allEvents,
-          "All Events",
-          "Complete history & schedule",
-          "all"
-        ))
-  }
-
 const EventDashboard = ({ eventsData }) => {
-
+  const allEvents       = eventsData?.events         || [];
   const urgent30min     = eventsData?.eventsIn30Minutes || [];
   const next24Hours     = eventsData?.eventsIn24Hours   || [];
   const next7Days       = eventsData?.eventsIn7Days     || [];
-
-
-
-
 
   const getPriorityStyles = (type) => {
     switch (type) {
@@ -49,9 +35,6 @@ const EventDashboard = ({ eventsData }) => {
         };
     }
   };
-
-  // EXPORT FUNCTION TO RENDER RENDEREVENTCARD FOR ALLEVENTS
-
 
   const renderEventCard = (events, title, description, type) => {
     const styles = getPriorityStyles(type);
@@ -168,7 +151,12 @@ const EventDashboard = ({ eventsData }) => {
           "week"
         )}
 
-      
+        {renderEventCard(
+          allEvents,
+          "All Events",
+          "Complete history & schedule",
+          "all"
+        )}
       </div>
     </div>
   );
