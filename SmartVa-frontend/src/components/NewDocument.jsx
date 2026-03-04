@@ -312,7 +312,7 @@ const NewDocument = ({ close }) => {
               />
 
               {/* Needs Further Response, Type, ReceptionMode */}
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex flex-col flex-wrap lg:flex-row items-center gap-4 mt-2">
                 <label className="flex items-center gap-2">
                   <input
                     type="checkbox"
